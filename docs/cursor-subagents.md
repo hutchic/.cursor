@@ -13,9 +13,7 @@ Subagents are specialized AI assistants that Cursor's agent can delegate tasks t
 - **Specialized expertise**: Configure subagents with custom prompts, tool access, and models for domain-specific tasks.
 - **Reusability**: Define custom subagents and use them across projects.
 
-<Note>
-If you're on a legacy request-based plan, you must enable [Max Mode](https://cursor.com/docs/context/max-mode) to use subagents. Usage-based plans have subagents enabled by default.
-</Note>
+> **Note:** If you're on a legacy request-based plan, you must enable [Max Mode](https://cursor.com/docs/context/max-mode) to use subagents. Usage-based plans have subagents enabled by default.
 
 ## How Subagents Work
 
@@ -66,9 +64,7 @@ You don't need to configure these subagents. Agent uses them automatically when 
 | The task requires specialized expertise across many steps | The task completes in one shot |
 | You want an independent verification of work | You don't need a separate context window |
 
-<Tip>
-If you find yourself creating a subagent for a simple, single-purpose task like "generate a changelog" or "format imports," consider using a [skill](docs/cursor-skills.md) instead.
-</Tip>
+> **Tip:** If you find yourself creating a subagent for a simple, single-purpose task like "generate a changelog" or "format imports," consider using a [skill](docs/cursor-skills.md) instead.
 
 ## Creating Custom Subagents
 
@@ -181,9 +177,7 @@ Each subagent execution returns an agent ID. Pass this ID to resume the subagent
 > Resume agent abc123 and analyze the remaining test failures
 ```
 
-<Note>
-Background subagents write their state as they run. You can resume a subagent after it completes to continue the conversation with preserved context.
-</Note>
+> **Note:** Background subagents write their state as they run. You can resume a subagent after it completes to continue the conversation with preserved context.
 
 ## Common Patterns
 
@@ -336,9 +330,7 @@ Report findings by severity:
 
 ### Anti-patterns to Avoid
 
-<Warning>
-**Don't create dozens of generic subagents.** Having 50+ subagents with vague instructions like "helps with coding" is ineffective. Agent won't know when to use them, and you'll waste time maintaining them.
-</Warning>
+> **Warning:** **Don't create dozens of generic subagents.** Having 50+ subagents with vague instructions like "helps with coding" is ineffective. Agent won't know when to use them, and you'll waste time maintaining them.
 
 - **Vague descriptions**: "Use for general tasks" gives Agent no signal about when to delegate. Be specific: "Use when implementing authentication flows with OAuth providers."
 - **Overly long prompts**: A 2,000-word prompt doesn't make a subagent smarter. It makes it slower and harder to maintain.

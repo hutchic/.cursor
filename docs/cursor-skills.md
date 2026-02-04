@@ -167,9 +167,7 @@ Before deploying, run the validation script: `python scripts/validate.py`
 
 The agent reads these instructions and executes the referenced scripts when the skill is invoked. Scripts can be written in any language—Bash, Python, JavaScript, or any other executable format supported by the agent implementation.
 
-<Info>
-Scripts should be self-contained, include helpful error messages, and handle edge cases gracefully.
-</Info>
+> **Info:** Scripts should be self-contained, include helpful error messages, and handle edge cases gracefully.
 
 ### Progressive Loading
 

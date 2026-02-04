@@ -206,6 +206,7 @@ This repository includes meta processes for self-improvement:
 
 - `/process-chat` - Analyze AI chat conversations for patterns
 - `/create-artifact` - Interactively create artifacts from patterns
+- `/shipit` - Stage, commit (with pre-commit), push, open or update PR
 - `/update-cross-references` - Maintain cross-references
 - `/validate-organization` - Validate repository organization
 - `/generate-docs-index` - Generate documentation indexes

@@ -29,7 +29,7 @@ The Skills CLI (`npx skills`) is the package manager for the open agent skills e
 - `npx skills check` - Check for skill updates
 - `npx skills update` - Update all installed skills
 
-**Browse skills at:** https://skills.sh/
+**Browse skills at:** <https://skills.sh/>
 
 ## How to Help Users Find Skills
 

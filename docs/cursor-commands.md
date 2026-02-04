@@ -8,9 +8,7 @@ Cursor Commands are custom workflows that can be triggered with a simple `/` pre
 
 Commands are defined as plain Markdown files that describe what the command should do. When you type `/` in the chat input, Cursor automatically detects and displays available commands, making them instantly accessible.
 
-<Info>
-Commands are currently in beta. The feature and syntax may change as we continue to improve it.
-</Info>
+> **Info:** Commands are currently in beta. The feature and syntax may change as we continue to improve it.
 
 ## How Commands Work
 
@@ -125,9 +123,7 @@ The text "analyze this conversation for patterns" will be passed as context to t
 
 ## Team Commands
 
-<Info>
-Team commands are available on Team and Enterprise plans.
-</Info>
+> **Info:** Team commands are available on Team and Enterprise plans.
 
 Team admins can create server-enforced custom commands that are automatically available to all team members. This makes it easy to share standardized prompts and workflows across your entire organization.
 
@@ -276,6 +272,10 @@ Create a command when:
 - ❌ A script or tool would be more appropriate
 
 ## Command Examples
+
+### Multi-Step Workflows Composed from Skills
+
+The [shipit command](.cursor/commands/shipit.md) is an example of a multi-step workflow that orchestrates discrete skills: it uses the stage-related-files, terse-semantic-commits, and open-pr skills to stage changes, commit (with pre-commit), push, and open or update a PR. See the [Automation Decomposition Rule](.cursor/rules/meta/automation-decomposition.mdc) for the pattern of decomposing automations into skills then composing them in a command.
 
 ### Example 1: Pull Request Creation
 

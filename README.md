@@ -56,6 +56,7 @@ Commands for self-improvement workflows (use with `/command-name`):
 
 - `/process-chat` - Analyze AI chat conversations and extract patterns
 - `/create-artifact` - Interactively create rules, skills, commands, or subagents
+- `/shipit` - Stage, commit (with pre-commit), push, and open or update PR (workflow from git skills)
 - `/update-cross-references` - Maintain cross-references between artifacts
 - `/validate-organization` - Validate repository organization structure
 - `/generate-docs-index` - Generate documentation indexes
@@ -126,11 +127,12 @@ The system can analyze conversations, extract patterns, and create new artifacts
     - `hello-world.mdc` - Example rule demonstrating rule structure
     - `self-improvement.mdc` - Self-improvement guidance
   - `skills/` - Cursor skills (see [docs/cursor-skills.md](docs/cursor-skills.md))
-    - `meta/` - Meta skills (conversation-analysis, pattern-extraction, artifact-creation, cross-reference-maintenance)
+    - `meta/` - Meta skills (conversation-analysis, pattern-extraction, artifact-creation, cross-reference-maintenance; skill-creator and command-creator are symlinked from `.agents/skills/`)
     - `analysis/` - Analysis and pattern extraction skills
     - `hello-world/` - Example skill demonstrating skill structure
   - `commands/` - Cursor commands (see [docs/cursor-commands.md](docs/cursor-commands.md))
     - `meta/` - Meta commands (process-chat, create-artifact, update-cross-references, validate-organization, generate-docs-index)
+    - `shipit.md` - Stage, commit, push, open or update PR
     - `hello-world.md` - Example command demonstrating command structure
   - `agents/` - Cursor subagents (see [docs/cursor-subagents.md](docs/cursor-subagents.md))
     - `meta/` - Meta subagents (conversation-analyzer, artifact-creator, cross-reference-maintainer, documentation-updater)
