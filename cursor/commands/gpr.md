@@ -33,9 +33,47 @@ With options:
 ## Arguments
 
 - **PR_TITLE** (required): The semantic title for your pull request
+  - **MUST** follow [Conventional Commits](https://www.conventionalcommits.org/) format: `type(scope): description`
+  - **MUST** be terse (under 50 characters when possible)
+  - **MUST** use imperative mood ("add" not "added")
   - Example: `"feat(api): add search endpoint"`
   - Example: `"fix(auth): resolve token expiry"`
   - Example: `"docs: update installation guide"`
+  - See [CONTRIBUTING.md](../../CONTRIBUTING.md#pull-request-titles) for comprehensive guidelines
+
+**Valid types:**
+- `feat`: New feature
+- `fix`: Bug fix
+- `docs`: Documentation changes
+- `refactor`: Code refactoring
+- `perf`: Performance improvements
+- `test`: Adding/modifying tests
+- `chore`: Maintenance tasks
+- `ci`: CI/CD configuration
+- `build`: Build system changes
+- `style`: Code style/formatting
+
+**✅ Good PR title examples:**
+```bash
+/gpr "feat(search): implement full-text search"
+/gpr "fix(parser): resolve off-by-one error in cursor navigation"
+/gpr "docs(api): clarify authentication flow"
+/gpr "refactor(utils): simplify date formatting"
+/gpr "perf(query): optimize database indexes"
+/gpr "test(api): add search endpoint coverage"
+/gpr "chore(deps): update lodash to 4.17.21"
+/gpr "ci(workflow): add build caching"
+```
+
+**❌ Bad PR title examples (DO NOT USE):**
+```bash
+/gpr "Added new feature"                    # Not semantic, not imperative
+/gpr "Update files"                         # Too vague
+/gpr "WIP: Working on search"               # Not descriptive of final state
+/gpr "Fixed bug"                            # Not specific enough
+/gpr "Updated README with installation instructions and troubleshooting"  # Too verbose
+/gpr "Changes"                              # Meaningless
+```
 
 ## Options
 

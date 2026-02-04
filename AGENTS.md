@@ -143,6 +143,38 @@ For installation of Cursor automation scaffolding, see [INSTALL.md](INSTALL.md).
 >
 > When updating AI agent guidelines, ensure all locations are kept in sync.
 
+### Pull Request Title Requirements
+
+**CRITICAL**: All pull requests created by AI agents MUST have titles that are:
+
+- **Semantic**: Follow [Conventional Commits](https://www.conventionalcommits.org/) format: `type(scope): description`
+- **Terse**: Keep under 50 characters when possible - be minimal and direct
+- **Descriptive**: Clearly summarize the essence of the change
+- **Imperative mood**: Use "add" not "added" or "adds"
+
+**Format:**
+```
+<type>(<scope>): <description>
+```
+
+**Valid types:** `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `chore`, `ci`, `build`, `revert`
+
+**Examples of good PR titles:**
+- ✅ `feat(api): add user search endpoint`
+- ✅ `fix(auth): resolve token expiry bug`
+- ✅ `docs(readme): update installation steps`
+- ✅ `refactor(parser): simplify token handling`
+- ✅ `chore(deps): update dependencies`
+
+**Examples of bad PR titles:**
+- ❌ `Added new feature` (not semantic, not imperative)
+- ❌ `Update files` (too vague)
+- ❌ `Fixed a bug in the authentication module that was causing tokens to expire` (too verbose)
+- ❌ `WIP: Working on feature` (not descriptive of final state)
+- ❌ `Changes` (meaningless)
+
+For comprehensive guidelines, see [CONTRIBUTING.md](CONTRIBUTING.md#pull-request-titles).
+
 ### Pre-commit Hook Setup
 
 AI agents using automated commit tools (like `report_progress`) MUST:
