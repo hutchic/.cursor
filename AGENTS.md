@@ -15,6 +15,50 @@ Runs on every pull request to ensure code quality and consistency.
 - **Validate PR titles**: Ensures PR titles follow semantic versioning conventions using `amannn/action-semantic-pull-request`
 - **pre-commit**: Runs all configured pre-commit hooks to lint and format code
 
+#### Configured Pre-commit Hooks
+
+**Configuration:** `.pre-commit-config.yaml`
+
+The repository uses the following pre-commit hooks to ensure code quality:
+
+**File Quality:**
+
+- `end-of-file-fixer`: Ensures files end with a newline
+- `trailing-whitespace`: Removes trailing whitespace
+- `mixed-line-ending`: Ensures consistent line endings
+- `check-byte-order-marker`: Checks for UTF-8 BOM
+
+**Validation:**
+
+- `check-yaml`: Validates YAML syntax (with --unsafe flag for custom tags)
+- `check-json`: Validates JSON syntax
+- `check-merge-conflict`: Detects merge conflict markers
+- `check-ast`: Validates Python syntax
+- `check-builtin-literals`: Checks for builtin type constructor use
+
+**Security:**
+
+- `detect-private-key`: Detects private keys in code
+- `bandit`: Python security linter
+
+**Formatting:**
+
+- `black`: Python code formatter
+- `forbid-crlf` / `remove-crlf`: Enforces LF line endings
+- `forbid-tabs` / `remove-tabs`: Enforces spaces over tabs
+
+**Linting:**
+
+- `shellcheck`: Bash/shell script linter (error severity only)
+- `yamllint`: YAML linter (uses `.yamllint` config)
+- `markdownlint`: Markdown documentation linter (uses `.markdownlint.json` config)
+
+**Python-specific:**
+
+- `debug-statements`: Detects Python debug statements
+- `requirements-txt-fixer`: Sorts requirements.txt
+- `fix-encoding-pragma`: Fixes Python encoding pragmas (deprecated)
+
 ### Dependabot Auto-merge
 
 **Workflow:** `.github/workflows/automerge.yml`
