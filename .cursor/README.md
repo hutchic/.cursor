@@ -48,3 +48,49 @@ ln -s "$(pwd)/cursor/skills" ~/.cursor/skills
 ```
 
 See [INSTALL.md](../INSTALL.md) for more details.
+
+## Troubleshooting
+
+### Symlinks not working?
+
+**Verify symlinks exist:**
+```bash
+ls -la .cursor/
+```
+
+You should see:
+```
+commands -> ../cursor/commands
+skills -> ../cursor/skills
+```
+
+**Test the configuration:**
+```bash
+bash scripts/test_cursor_config.sh
+```
+
+### Windows Issues
+
+If symlinks aren't working on Windows:
+
+1. **Enable Developer Mode** (Windows 10/11):
+   - Settings → Update & Security → For Developers → Enable "Developer Mode"
+   - Re-clone the repository
+
+2. **Or use Administrator privileges**:
+   ```powershell
+   git clone -c core.symlinks=true https://github.com/hutchic/.cursor.git
+   ```
+
+3. **Fallback: Use global installation**:
+   ```bash
+   ln -s "$(pwd)/cursor/commands" ~/.cursor/commands
+   ```
+
+See [INSTALL.md](../INSTALL.md) for detailed Windows setup instructions.
+
+### Commands not showing in Cursor IDE?
+
+1. **Verify you're in the right directory**: The `.cursor/` configuration only works when this repository is the root directory opened in Cursor
+2. **Check Cursor IDE version**: Ensure you're using a recent version that supports project-local `.cursor/` directories
+3. **Try global installation**: If project-local doesn't work, use the global installation method in [INSTALL.md](../INSTALL.md)

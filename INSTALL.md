@@ -114,8 +114,51 @@ Cursor IDE loads configurations from these locations in order:
   - If symlinks are not preserved when cloning (Windows without developer mode)
   - If the repository is accessed as a subdirectory of another project
 
+### Cross-Platform Compatibility
+
+#### Linux and macOS
+✅ **Works out-of-the-box**
+- Symlinks are natively supported
+- Git preserves symlinks by default
+
+#### Windows
+⚠️ **Requires Developer Mode or Administrator privileges**
+
+**Option 1: Enable Developer Mode (Recommended)**
+1. Go to Settings → Update & Security → For Developers
+2. Enable "Developer Mode"
+3. Clone the repository (symlinks will work automatically)
+
+**Option 2: Use Administrator privileges**
+```powershell
+# Clone with admin privileges
+git clone -c core.symlinks=true https://github.com/hutchic/.cursor.git
+```
+
+**Option 3: Manual symlink creation (if cloning fails to preserve symlinks)**
+```powershell
+# From PowerShell with admin privileges
+cd .cursor
+cmd /c mklink /D commands ..\cursor\commands
+cmd /c mklink /D skills ..\cursor\skills
+```
+
+**Option 4: Use global installation instead**
+If symlinks don't work on your Windows setup, use the global installation method:
+```bash
+ln -s "$(pwd)/cursor/commands" ~/.cursor/commands
+ln -s "$(pwd)/cursor/skills" ~/.cursor/skills
+```
+
+**Verify Windows symlinks work:**
+```powershell
+# Run the test script
+bash scripts/test_cursor_config.sh
+```
+
 ### Recommended Approach
 
 1. **For this repository**: Use the built-in `.cursor/` self-configuration (automatic)
 2. **For using these commands elsewhere**: Use global installation to `~/.cursor/`
 3. **For templates derived from this repository**: Keep the `.cursor/` symlinks for self-configuration
+4. **For Windows users without symlink support**: Use global installation as fallback
