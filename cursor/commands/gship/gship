@@ -130,11 +130,15 @@ generate_semantic_message() {
 find_gadd() {
     local gadd_path=""
     local script_dir
+    local repo_root
 
     # Check in same directory as this script
     script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
     if [ -f "$script_dir/gadd" ] && [ -x "$script_dir/gadd" ]; then
         gadd_path="$script_dir/gadd"
+    # Check in project-local .cursor/commands (repository scope)
+    elif repo_root=$(git rev-parse --show-toplevel 2>/dev/null) && [ -f "$repo_root/.cursor/commands/gadd" ] && [ -x "$repo_root/.cursor/commands/gadd" ]; then
+        gadd_path="$repo_root/.cursor/commands/gadd"
     # Check in ~/.cursor/commands (handle both file and directory structure)
     elif [ -f "$HOME/.cursor/commands/gadd" ] && [ -x "$HOME/.cursor/commands/gadd" ]; then
         gadd_path="$HOME/.cursor/commands/gadd"
@@ -159,6 +163,9 @@ find_gpr() {
     repo_root="$(cd "$script_dir/../.." && pwd)"
     if [ -f "$repo_root/scripts/gpr" ] && [ -x "$repo_root/scripts/gpr" ]; then
         gpr_path="$repo_root/scripts/gpr"
+    # Check in project-local .cursor/commands (repository scope)
+    elif repo_root=$(git rev-parse --show-toplevel 2>/dev/null) && [ -f "$repo_root/.cursor/commands/gpr" ] && [ -x "$repo_root/.cursor/commands/gpr" ]; then
+        gpr_path="$repo_root/.cursor/commands/gpr"
     # Check in ~/.cursor/commands (handle both file and directory structure)
     elif [ -f "$HOME/.cursor/commands/gpr" ] && [ -x "$HOME/.cursor/commands/gpr" ]; then
         gpr_path="$HOME/.cursor/commands/gpr"

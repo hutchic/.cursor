@@ -387,34 +387,53 @@ install_commands() {
         return 1
     fi
 
-    # Remove existing directory or symlink if it exists
-    if [ -L "$COMMANDS_DIR" ]; then
-        log_info "Removing existing symlink: $COMMANDS_DIR"
-        rm -f "$COMMANDS_DIR"
-    elif [ -d "$COMMANDS_DIR" ]; then
-        log_info "Removing existing directory: $COMMANDS_DIR"
-        rm -rf "$COMMANDS_DIR"
-    fi
+    # Create commands directory if it doesn't exist
+    mkdir -p "$COMMANDS_DIR"
 
-    # Create parent directory if it doesn't exist
-    mkdir -p "$(dirname "$COMMANDS_DIR")"
-
-    # Symlink the entire commands directory for forward compatibility
-    ln -sfn "$source_dir" "$COMMANDS_DIR"
-    log_step "Symlinked commands directory: $COMMANDS_DIR -> $source_dir"
+    # Remove any existing symlinks or files that might conflict
+    # (but keep the directory structure)
+    log_info "Creating executable symlinks for commands..."
 
     # Count commands for reporting
     local count=0
+    
+    # Process directory-based commands (e.g., gship/gship)
     for item in "$source_dir"/*; do
         if [ -d "$item" ]; then
             local cmd_name=$(basename "$item")
             local cmd_file="${item}/${cmd_name}"
+            local cmd_readme="${item}/README.md"
+            
             if [ -f "$cmd_file" ] && [ -x "$cmd_file" ]; then
+                # Create symlink for executable
+                local target="${COMMANDS_DIR}/${cmd_name}"
+                if [ -L "$target" ] || [ -f "$target" ]; then
+                    rm -f "$target"
+                fi
+                ln -sfn "$cmd_file" "$target"
+                log_step "Linked executable: $cmd_name"
+                
+                # Create symlink for documentation (.md file)
+                local doc_target="${COMMANDS_DIR}/${cmd_name}.md"
+                if [ -f "$cmd_readme" ]; then
+                    if [ -L "$doc_target" ] || [ -f "$doc_target" ]; then
+                        rm -f "$doc_target"
+                    fi
+                    ln -sfn "$cmd_readme" "$doc_target"
+                fi
+                
                 count=$((count + 1))
             fi
         elif [ -f "$item" ] && [ -x "$item" ]; then
+            # Handle single-file commands (if any)
             local cmd_name=$(basename "$item")
             if [ "$cmd_name" != "README.md" ]; then
+                local target="${COMMANDS_DIR}/${cmd_name}"
+                if [ -L "$target" ] || [ -f "$target" ]; then
+                    rm -f "$target"
+                fi
+                ln -sfn "$item" "$target"
+                log_step "Linked executable: $cmd_name"
                 count=$((count + 1))
             fi
         fi
@@ -423,7 +442,7 @@ install_commands() {
     if [ $count -eq 0 ]; then
         log_warning "No commands found in $source_dir"
     else
-        log_success "Symlinked commands directory with $count command(s)"
+        log_success "Installed $count command(s) with executable and documentation symlinks"
     fi
 
     echo ""
