@@ -96,3 +96,4 @@ You can provide additional context when invoking this command:
 - Review suggestions before creating artifacts
 - Always use templates for consistency
 - Update documentation as you create artifacts
+- Optional export format for conversation transcripts: `chats/yyyy-mm-dd-description.md`

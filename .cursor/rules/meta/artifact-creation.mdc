@@ -132,6 +132,15 @@ Is the task simple and single-purpose?
 3. **Differentiate clearly**: If keeping separate, make differences clear
 4. **Update references**: Update all cross-references
 
+## Using Creator Skills When Implementing Plans
+
+When drafting or implementing a plan that creates new skills or commands:
+
+- **For each new skill**: Use the [Skill-creator skill](.cursor/skills/meta/skill-creator/SKILL.md) (frontmatter, concise body, progressive disclosure, Cursor paths).
+- **For each new command**: Use the [Command-creator skill](.cursor/skills/meta/command-creator/SKILL.md) with **Cursor paths** (`.cursor/commands/`, not `.claude/commands/`) and Cursor command shape (e.g. [process-chat](.cursor/commands/meta/process-chat.md), [create-artifact](.cursor/commands/meta/create-artifact.md)).
+
+Plans that add skills or commands should explicitly require these creator skills so implementers follow the same workflow. See [Shipit Automation Plan](docs/plans/shipit-automation.md) for an example.
+
 ## Artifact Creation Process
 
 1. **Identify pattern**: Extract pattern from conversation/analysis
@@ -161,4 +170,6 @@ Is the task simple and single-purpose?
 - [Artifact Creation Skill](.cursor/skills/meta/artifact-creation/SKILL.md)
 - [Create Artifact Command](.cursor/commands/meta/create-artifact.md)
 - [Artifact Creator Subagent](.cursor/agents/meta/artifact-creator.md)
+- [Skill-creator Skill](.cursor/skills/meta/skill-creator/SKILL.md) – Use when creating new skills
+- [Command-creator Skill](.cursor/skills/meta/command-creator/SKILL.md) – Use when creating new commands (Cursor paths: `.cursor/commands/`)
 - [Cursor Best Practices](docs/research/cursor-best-practices.md)
