@@ -4,7 +4,30 @@ This repository contains Cursor IDE automation commands and utilities.
 
 ## Quick Start
 
-### Option 1: Self-Configuring (Recommended)
+### Option 1: Automated Global Installation (Recommended)
+
+Install commands and skills globally to use them in **all projects**:
+
+```bash
+# Clone the repository
+git clone https://github.com/hutchic/.cursor.git
+cd .cursor
+
+# Run the interactive setup script
+bash scripts/setup.sh
+
+# Or use make
+make install
+```
+
+The setup script will:
+- ✅ Check dependencies (Git, GitHub CLI, etc.)
+- ✅ Create `~/.cursor/` directories
+- ✅ Symlink commands and skills
+- ✅ Verify installation
+- ✅ Guide you through any issues
+
+### Option 2: Self-Configuring (Project-Local Only)
 
 This repository is **self-configuring** when opened in Cursor IDE:
 
@@ -12,18 +35,26 @@ This repository is **self-configuring** when opened in Cursor IDE:
 2. The `.cursor/` directory in the project root provides immediate access to commands
 3. Use commands by typing `/` followed by the command name
 
-**No manual installation required!**
+**No manual installation required!** Commands only work in this repository.
 
-### Option 2: Global Installation
+### Option 3: Manual Global Installation
 
-To use these commands across all projects:
+If you prefer manual setup:
 
 ```bash
-ln -s "$(pwd)/cursor/commands" ~/.cursor/commands
-ln -s "$(pwd)/cursor/skills" ~/.cursor/skills
+git clone https://github.com/hutchic/.cursor.git
+cd .cursor
+
+# Create directories and symlink commands
+mkdir -p ~/.cursor/commands ~/.cursor/skills
+ln -sf "$(pwd)"/cursor/commands/* ~/.cursor/commands/
+ln -sf "$(pwd)"/cursor/skills/* ~/.cursor/skills/
+
+# Verify installation
+bash scripts/test_cursor_config.sh
 ```
 
-See [INSTALL.md](INSTALL.md) for detailed installation instructions.
+See [INSTALL.md](INSTALL.md) for comprehensive installation instructions and troubleshooting.
 
 ## Available Commands
 
