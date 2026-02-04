@@ -131,6 +131,29 @@ pre-commit run --all-files
 pre-commit run
 ```
 
+### For AI Agents (CRITICAL)
+
+**AI agents and automated tools MUST install and run pre-commit hooks** to prevent CI failures:
+
+```bash
+# 1. Install hooks at session start
+pre-commit install
+
+# 2. Run pre-commit before committing
+pre-commit run --all-files
+
+# 3. Then use automated commit tools (e.g., report_progress)
+```
+
+**Why this matters:**
+- Automated commit tools bypass local git hooks
+- Without pre-commit, commits fail CI/CD checks
+- Causes PR failures requiring fix-up commits
+
+**See also:**
+- [AGENTS.md - AI Agent Guidelines](../AGENTS.md#ai-agent-guidelines) - Comprehensive AI agent workflow
+- [.github/PRE_COMMIT_SETUP.md](.github/PRE_COMMIT_SETUP.md) - Detailed pre-commit setup guide
+
 ## Automation Patterns
 
 ### Dependabot
@@ -236,8 +259,18 @@ Place skill files in `cursor/skills/` directory following the Cursor skill forma
 
 ## References
 
+### External Documentation
+
 - [Pre-commit Documentation](https://pre-commit.com/)
 - [GitHub Actions Documentation](https://docs.github.com/en/actions)
 - [Conventional Commits](https://www.conventionalcommits.org/)
 - [Black Code Formatter](https://black.readthedocs.io/)
 - [Dependabot Documentation](https://docs.github.com/en/code-security/dependabot)
+
+### Internal Documentation (AI Agents)
+
+> **For Maintainers**: When updating AI agent instructions, remember to update all related files:
+
+- [AGENTS.md](../AGENTS.md) - Comprehensive automation agents and workflows documentation, including AI agent guidelines
+- [.github/PRE_COMMIT_SETUP.md](PRE_COMMIT_SETUP.md) - Detailed pre-commit setup and troubleshooting for AI agents
+- This file (.github/copilot-instructions.md) - Copilot-specific project instructions

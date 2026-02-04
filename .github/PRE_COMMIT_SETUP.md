@@ -53,6 +53,12 @@ The repository has a GitHub Actions workflow (`.github/workflows/pre-commit.yml`
 
 **Critical**: AI agents using the `report_progress` tool or similar automated commit mechanisms MUST:
 
+> **Note for Maintainers**: This guidance is also documented in:
+> - [AGENTS.md - AI Agent Guidelines](../AGENTS.md#ai-agent-guidelines) - Main AI agent workflow documentation
+> - [.github/copilot-instructions.md](copilot-instructions.md#for-ai-agents-critical) - Copilot-specific instructions
+>
+> When updating AI agent pre-commit requirements, ensure all locations are kept in sync.
+
 1. **Install pre-commit hooks** at the start of each session:
    ```bash
    pre-commit install

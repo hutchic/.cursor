@@ -137,6 +137,12 @@ For installation of Cursor automation scaffolding, see [INSTALL.md](INSTALL.md).
 
 **CRITICAL**: AI agents making commits to this repository MUST follow these steps:
 
+> **Note for Maintainers**: This section is duplicated/referenced in multiple locations:
+> - [.github/copilot-instructions.md](.github/copilot-instructions.md#for-ai-agents-critical) - Copilot-specific instructions
+> - [.github/PRE_COMMIT_SETUP.md](.github/PRE_COMMIT_SETUP.md#for-ai-agents) - Detailed pre-commit setup
+>
+> When updating AI agent guidelines, ensure all locations are kept in sync.
+
 ### Pre-commit Hook Setup
 
 AI agents using automated commit tools (like `report_progress`) MUST:
