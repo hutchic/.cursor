@@ -16,6 +16,7 @@ Rules that guide the self-improvement process:
 - **[Cross-Referencing Rule](.cursor/rules/meta/cross-referencing.mdc)**: Reference standards and maintenance
 - **[Documentation Rule](.cursor/rules/meta/documentation.mdc)**: Documentation standards
 - **[Artifact Creation Rule](.cursor/rules/meta/artifact-creation.mdc)**: Decision framework for creating artifacts
+- **[Automation Decomposition Rule](.cursor/rules/meta/automation-decomposition.mdc)**: Decompose automations into discrete skills, then package into commands
 
 ### Meta Skills
 

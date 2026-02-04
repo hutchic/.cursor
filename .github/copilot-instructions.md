@@ -29,7 +29,7 @@ This repository provides automation scaffolding for Cursor IDE, including comman
 │   ├── settings.yml        # Repository settings (via Probot)
 │   ├── labeler.yml         # PR auto-labeling rules
 │   └── pull_request_template.md
-├── cursor/
+├── .cursor/
 │   ├── commands/           # Cursor IDE commands
 │   └── skills/             # Cursor IDE skills
 ├── scripts/                # Utility scripts
@@ -261,11 +261,11 @@ jobs:
 
 ### Creating Cursor Commands
 
-Place command files in `cursor/commands/` directory following the Cursor command format.
+Place command files in `.cursor/commands/` directory following the Cursor command format.
 
 ### Creating Cursor Skills
 
-Place skill files in `cursor/skills/` directory following the Cursor skill format.
+Place skill files in `.cursor/skills/` directory following the Cursor skill format.
 
 ## Security Considerations
 

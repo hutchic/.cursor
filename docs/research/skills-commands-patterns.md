@@ -57,7 +57,7 @@ This document compiles best practices for organizing and structuring skills and 
 
 - **Format**: `kebab-case/` folder with `SKILL.md`
 - **Pattern**: `action-object` or `domain-action`
-- **Examples**: 
+- **Examples**:
   - `analyze-conversations/`
   - `deploy-application/`
   - `extract-patterns/`
@@ -109,7 +109,7 @@ See [Documentation](docs/cursor-skills.md)
 **File References (in Rules):**
 ```markdown
 @example-file.ts
-@cursor/rules/organization.mdc
+@.cursor/rules/organization.mdc
 ```
 
 ### Reference Sections

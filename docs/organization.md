@@ -7,7 +7,7 @@ This guide explains how artifacts are organized in this repository and how to ma
 ### Current Structure
 
 ```
-cursor/
+.cursor/
 ├── rules/
 │   ├── meta/              # Meta rules for system management
 │   ├── organization/      # Organization-specific rules

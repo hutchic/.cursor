@@ -19,12 +19,12 @@ help: ## Show this help message
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  $(YELLOW)%-15s$(NC) %s\n", $$1, $$2}'
 	@echo ""
 
-verify: ## Verify project structure (.cursor/ and cursor/ artifacts)
+verify: ## Verify project structure (.cursor/ artifacts)
 	@echo "$(BLUE)Verifying project structure...$(NC)"
 	@test -d "$(REPO_ROOT)/.cursor" || (echo "$(YELLOW)✗$(NC) .cursor/ not found"; exit 1)
-	@test -d "$(REPO_ROOT)/cursor/commands" || (echo "$(YELLOW)✗$(NC) cursor/commands/ not found"; exit 1)
-	@test -d "$(REPO_ROOT)/cursor/skills" || (echo "$(YELLOW)✗$(NC) cursor/skills/ not found"; exit 1)
-	@test -d "$(REPO_ROOT)/cursor/agents" || (echo "$(YELLOW)✗$(NC) cursor/agents/ not found"; exit 1)
+	@test -d "$(REPO_ROOT)/.cursor/commands" || (echo "$(YELLOW)✗$(NC) .cursor/commands/ not found"; exit 1)
+	@test -d "$(REPO_ROOT)/.cursor/skills" || (echo "$(YELLOW)✗$(NC) .cursor/skills/ not found"; exit 1)
+	@test -d "$(REPO_ROOT)/.cursor/agents" || (echo "$(YELLOW)✗$(NC) .cursor/agents/ not found"; exit 1)
 	@echo "$(GREEN)✓$(NC) Project structure OK"
 
 test: verify ## Alias for verify

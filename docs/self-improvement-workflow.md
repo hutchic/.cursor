@@ -125,7 +125,7 @@ This checks:
 1. **Analyze**:
    ```
    /process-chat
-   
+
    [Paste conversation about TypeScript strict mode]
    ```
 
@@ -148,7 +148,7 @@ This checks:
 
 For structured analysis, use the self-improvement prompt template:
 
-1. Copy template from `cursor/templates/self-improvement-prompt.md`
+1. Copy template from `.cursor/templates/self-improvement-prompt.md`
 2. Paste your conversation
 3. Submit to Cursor Agent
 4. Follow the analysis and recommendations
@@ -176,6 +176,6 @@ The system improves itself:
 
 - [Meta Processes Guide](docs/meta-processes.md)
 - [Organization Guide](docs/organization.md)
-- [Self-Improvement Prompt Template](cursor/templates/self-improvement-prompt.md)
+- [Self-Improvement Prompt Template](.cursor/templates/self-improvement-prompt.md)
 - [Process Chat Command](.cursor/commands/meta/process-chat.md)
 - [Create Artifact Command](.cursor/commands/meta/create-artifact.md)

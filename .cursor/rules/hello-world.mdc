@@ -41,7 +41,7 @@ When working with hello world artifacts, follow these standards established by t
 - [Hello World Skill](.cursor/skills/hello-world/SKILL.md) - Implements the instructions that follow this rule's standards
 - [Hello World Command](.cursor/commands/hello-world.md) - Creates a workflow using both this rule and the skill
 - [Hello World Subagent](.cursor/agents/hello-world.md) - Demonstrates subagent structure
-- [Rule Template](cursor/templates/rule-template.md)
+- [Rule Template](.cursor/templates/rule-template.md)
 - [Cursor Rules Documentation](docs/cursor-rules.md)
 
 ## How This Demonstrates Rule → Skill → Command Relationship

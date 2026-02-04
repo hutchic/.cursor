@@ -17,10 +17,10 @@ This workflow demonstrates the rule → skill → command relationship:
 
 1. **Reference the rule**: Review the [hello-world rule](.cursor/rules/hello-world.mdc) to understand the standards
    - The rule establishes: "Hello world should be simple, consistent, and cross-referenced"
-   
+
 2. **Use the skill**: Apply the [hello-world skill](.cursor/skills/hello-world/SKILL.md) instructions
    - The skill provides: Step-by-step instructions for following the rule's standards
-   
+
 3. **Execute the workflow**: Follow this command's steps to complete the process
    - The command creates: A structured workflow using both rule and skill
 
@@ -59,7 +59,7 @@ This workflow demonstrates the rule → skill → command relationship:
 - [Hello World Rule](.cursor/rules/hello-world.mdc) - Provides the standards this command workflow follows
 - [Hello World Skill](.cursor/skills/hello-world/SKILL.md) - Provides the instructions this command workflow uses
 - [Hello World Subagent](.cursor/agents/hello-world.md) - Demonstrates subagent structure
-- [Command Template](cursor/templates/command-template.md)
+- [Command Template](.cursor/templates/command-template.md)
 - [Cursor Commands Documentation](docs/cursor-commands.md)
 
 ## How This Demonstrates Command's Role

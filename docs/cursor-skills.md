@@ -218,7 +218,7 @@ Skills installed from GitHub are automatically synced with their source reposito
 
 ## Skills.sh Integration
 
-This repository integrates with [skills.sh](https://skills.sh/), the open agent skills directory and CLI. Skills from the skills.sh ecosystem are included under `cursor/skills/skills-sh/` so they work with this repo's structure and are available alongside project skills.
+This repository integrates with [skills.sh](https://skills.sh/), the open agent skills directory and CLI. Skills from the skills.sh ecosystem are included under `.cursor/skills/skills-sh/` so they work with this repo's structure and are available alongside project skills.
 
 ### Skills CLI
 
@@ -232,14 +232,14 @@ Browse all skills at [https://skills.sh/](https://skills.sh/).
 
 ### find-skills (included)
 
-The **find-skills** skill from [Vercel Labs](https://skills.sh/vercel-labs/skills/find-skills) is included at `cursor/skills/skills-sh/find-skills/`. It teaches the agent to:
+The **find-skills** skill from [Vercel Labs](https://skills.sh/vercel-labs/skills/find-skills) is included at `.cursor/skills/skills-sh/find-skills/`. It teaches the agent to:
 
 - Recognize when the user is looking for installable skills ("find a skill for X", "how do I do X")
 - Search via `npx skills find [query]`
 - Present options with install commands and links to skills.sh
 - Install skills for the user with `npx skills add ...` when they want to proceed
 
-Use it when users ask for capabilities that might exist as skills (testing, deployment, docs, design, etc.). Additional skills from skills.sh can be added under `cursor/skills/skills-sh/` or installed globally with `npx skills add <package> -g`.
+Use it when users ask for capabilities that might exist as skills (testing, deployment, docs, design, etc.). Additional skills from skills.sh can be added under `.cursor/skills/skills-sh/` or installed globally with `npx skills add <package> -g`.
 
 ## Migrating Rules and Commands to Skills
 

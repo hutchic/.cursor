@@ -26,7 +26,7 @@ The `.github/workflows/copilot-setup-steps.yml` workflow automatically fetches t
 
 ## Fallback Strategy
 
-1. **Primary**: Use internal repository documentation in `cursor/COMMAND_DEVELOPMENT_GUIDE.md`
+1. **Primary**: Use internal repository documentation in `.cursor/COMMAND_DEVELOPMENT_GUIDE.md`
 2. **Secondary**: Check `/tmp/cursor-docs/` for cached external documentation
 3. **Tertiary**: Reference external URLs directly (may be blocked)
 
@@ -34,9 +34,9 @@ The `.github/workflows/copilot-setup-steps.yml` workflow automatically fetches t
 
 This repository maintains comprehensive internal documentation that covers Cursor IDE command development:
 
-- `cursor/COMMAND_DEVELOPMENT_GUIDE.md` - Complete guide for command development
-- `cursor/skills/command-development.md` - AI context for command development
-- `cursor/commands/README.md` - Overview of available commands
+- `.cursor/COMMAND_DEVELOPMENT_GUIDE.md` - Complete guide for command development
+- `.cursor/skills/command-development.md` - AI context for command development
+- `.cursor/commands/README.md` - Overview of available commands
 - `AGENTS.md` - Automation agents and workflows
 
 These internal docs are preferred over external resources as they are always available and specific to this repository's conventions.

@@ -21,13 +21,13 @@ Interactively create an artifact (rule, skill, command, or subagent) from a patt
    - **Command**: Manual workflows, checklists
    - **Subagent**: Complex tasks, context isolation
 
-3. **If the artifact type is Skill**: Apply the [skill-creator](.cursor/skills/skill-creator/SKILL.md) skill. Follow its guidance for SKILL.md structure, frontmatter, and when to add scripts/references/assets. Then use `cursor/templates/skill-template.md` for repo structure. For other artifact types, continue to step 4.
+3. **If the artifact type is Skill**: Apply the [skill-creator](.cursor/skills/skill-creator/SKILL.md) skill. Follow its guidance for SKILL.md structure, frontmatter, and when to add scripts/references/assets. Then use `.cursor/templates/skill-template.md` for repo structure. For other artifact types, continue to step 4.
 
 4. **Choose template**: Select appropriate template:
-   - `cursor/templates/rule-template.md`
-   - `cursor/templates/skill-template.md`
-   - `cursor/templates/command-template.md`
-   - `cursor/templates/subagent-template.md`
+   - `.cursor/templates/rule-template.md`
+   - `.cursor/templates/skill-template.md`
+   - `.cursor/templates/command-template.md`
+   - `.cursor/templates/subagent-template.md`
 
 5. **Create structure**: Use template to create artifact with:
    - Proper frontmatter/metadata
@@ -80,7 +80,7 @@ Interactively create an artifact (rule, skill, command, or subagent) from a patt
 1. Type: Rule
 2. Template: rule-template.md
 3. Name: `async-await-preference`
-4. Location: `cursor/rules/organization/async-await-preference.mdc`
+4. Location: `.cursor/rules/organization/async-await-preference.mdc`
 5. Content: Guidelines for async/await usage
 6. Cross-refs: JavaScript/TypeScript rules
 
@@ -92,7 +92,7 @@ Interactively create an artifact (rule, skill, command, or subagent) from a patt
 1. Type: Command
 2. Template: command-template.md
 3. Name: `code-review-checklist`
-4. Location: `cursor/commands/meta/code-review-checklist.md`
+4. Location: `.cursor/commands/meta/code-review-checklist.md`
 5. Content: Step-by-step review checklist
 6. Cross-refs: Review-related artifacts
 
@@ -112,7 +112,7 @@ You can specify artifact type when invoking:
 - [Artifact Creation Rule](.cursor/rules/meta/artifact-creation.mdc)
 - [Artifact Creation Skill](.cursor/skills/meta/artifact-creation/SKILL.md)
 - [Artifact Creator Subagent](.cursor/agents/meta/artifact-creator.md)
-- [Templates](cursor/templates/)
+- [Templates](.cursor/templates/)
 - [Organization Guide](docs/organization.md)
 
 ## Notes

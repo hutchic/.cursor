@@ -18,7 +18,7 @@ This repository serves as a **Cursor configuration meta-repository** where you c
 This repository is **self-configuring** when opened in Cursor IDE:
 
 1. Clone or open this repository in Cursor
-2. The `.cursor/` directory (symlink to `cursor/`) provides immediate access to all artifacts
+2. The `.cursor/` directory contains all artifacts and is used directly by Cursor IDE
 3. Use commands by typing `/` followed by the command name
 4. Rules, skills, and subagents are automatically detected
 
@@ -71,7 +71,7 @@ Skills that help analyze and create (automatically detected or use `/skill-name`
 
 ### Skills.sh Integration
 
-- **find-skills** (`cursor/skills/skills-sh/find-skills/`) - Discover and install agent skills from [skills.sh](https://skills.sh/). Use when the user asks "find a skill for X", "how do I do X", or wants to extend capabilities. Uses `npx skills find` and `npx skills add`.
+- **find-skills** (`.cursor/skills/skills-sh/find-skills/`) - Discover and install agent skills from [skills.sh](https://skills.sh/). Use when the user asks "find a skill for X", "how do I do X", or wants to extend capabilities. Uses `npx skills find` and `npx skills add`.
 
 ### Meta Rules
 
@@ -81,6 +81,7 @@ Rules that guide the self-improvement process (always applied):
 - `cross-referencing` - Reference standards and maintenance
 - `documentation` - Documentation standards
 - `artifact-creation` - Decision framework for creating artifacts
+- `automation-decomposition` - Decompose automations into discrete skills, then package into commands
 
 ### Meta Subagents
 
@@ -118,12 +119,9 @@ The system can analyze conversations, extract patterns, and create new artifacts
 
 ## Directory Structure
 
-- `.cursor/` - Symlink to `cursor/` directory (automatically used by Cursor IDE)
-  - All artifacts are accessible through this symlink
-  - Cursor IDE automatically detects rules, skills, commands, and subagents here
-- `cursor/` - Source directory for all Cursor artifacts
+- `.cursor/` - All Cursor artifacts (used directly by Cursor IDE)
   - `rules/` - Cursor rules (see [docs/cursor-rules.md](docs/cursor-rules.md))
-    - `meta/` - Meta rules for self-improvement (organization, cross-referencing, documentation, artifact-creation)
+    - `meta/` - Meta rules for self-improvement (organization, cross-referencing, documentation, artifact-creation, automation-decomposition)
     - `organization/` - Organization-specific rules
     - `hello-world.mdc` - Example rule demonstrating rule structure
     - `self-improvement.mdc` - Self-improvement guidance
@@ -174,7 +172,7 @@ See [Self-Improvement Workflow](docs/self-improvement-workflow.md) for the compl
 
 ### Creating Your Own Artifacts
 
-1. **Use templates**: Start with templates in `cursor/templates/`
+1. **Use templates**: Start with templates in `.cursor/templates/`
 2. **Follow standards**: Use the meta rules as guidance (organization, naming, structure)
 3. **Add cross-references**: Link to related artifacts
 4. **Update documentation**: Keep docs in sync
@@ -190,7 +188,7 @@ See [Organization Guide](docs/organization.md) for structure details.
 **A:** Check the following:
 
 1. **Verify repository location**: Is this repository opened as the root folder in Cursor IDE?
-2. **Check symlink**: Run `ls -la .cursor` to verify `.cursor` is a symlink to `cursor/`
+2. **Check structure**: Run `ls -la .cursor` to verify `.cursor/` exists and contains `rules/`, `skills/`, `commands/`, `agents/`
 3. **Cursor IDE version**: Ensure you're using a recent version of Cursor IDE that supports `.cursor/` directories
 4. **Restart Cursor**: Sometimes Cursor needs a restart to detect new artifacts
 
@@ -199,14 +197,14 @@ See [Organization Guide](docs/organization.md) for structure details.
 **A:** Check the structure:
 
 ```bash
-# Verify .cursor symlink
+# Verify .cursor directory
 ls -la .cursor
 
 # Check artifacts exist
-ls -la cursor/rules/
-ls -la cursor/skills/
-ls -la cursor/commands/
-ls -la cursor/agents/
+ls -la .cursor/rules/
+ls -la .cursor/skills/
+ls -la .cursor/commands/
+ls -la .cursor/agents/
 
 # Try a hello world example
 # Type /hello-world in Cursor chat
@@ -224,28 +222,9 @@ See [INSTALL.md](INSTALL.md) for more details.
 
 ### Platform-Specific Issues
 
-#### Q: Symlink not working on Windows?
+#### Q: .cursor not detected on Windows?
 
-**A:** Windows requires special handling for symlinks:
-
-**Option 1: Enable Developer Mode (Recommended)**
-1. Open Settings → Update & Security → For Developers
-2. Enable "Developer Mode"
-3. Re-clone the repository
-
-**Option 2: Use Administrator Privileges**
-```powershell
-git clone -c core.symlinks=true https://github.com/hutchic/.cursor.git
-```
-
-**Option 3: Manual Symlink Creation**
-```powershell
-# From PowerShell with admin privileges
-cd repository-root
-cmd /c mklink /D .cursor cursor
-```
-
-See [INSTALL.md](INSTALL.md#windows) for detailed Windows instructions.
+**A:** Ensure the repository is cloned with the `.cursor` directory present (it is a normal directory in this repo). If you use symlinks for global sharing, see [INSTALL.md](INSTALL.md) for optional setup.
 
 ### Dependency Issues
 
@@ -287,7 +266,6 @@ gh auth login
 winget install GitHub.cli
 gh auth login
 ```
-
 
 #### Q: How do I set up pre-commit hooks?
 
@@ -351,12 +329,12 @@ Or use the cross-reference-maintainer subagent for comprehensive maintenance.
 
 #### Q: Can I customize existing artifacts?
 
-**A:** Yes! All artifacts are in the `cursor/` directory:
+**A:** Yes! All artifacts are in the `.cursor/` directory:
 
-1. **Rules**: Edit `.mdc` files in `cursor/rules/`
-2. **Skills**: Edit `SKILL.md` files in `cursor/skills/`
-3. **Commands**: Edit `.md` files in `cursor/commands/`
-4. **Subagents**: Edit `.md` files in `cursor/agents/`
+1. **Rules**: Edit `.mdc` files in `.cursor/rules/`
+2. **Skills**: Edit `SKILL.md` files in `.cursor/skills/`
+3. **Commands**: Edit `.md` files in `.cursor/commands/`
+4. **Subagents**: Edit `.md` files in `.cursor/agents/`
 
 Remember to update cross-references and documentation when modifying artifacts.
 
@@ -364,9 +342,8 @@ Remember to update cross-references and documentation when modifying artifacts.
 
 **A:** Artifact locations:
 
-- **Source files**: `cursor/` directory (rules, skills, commands, agents)
-- **Cursor access**: `.cursor/` symlink (points to `cursor/`)
-- **Templates**: `cursor/templates/` for creating new artifacts
+- **Artifacts**: `.cursor/` directory (rules, skills, commands, agents)
+- **Templates**: `.cursor/templates/` for creating new artifacts
 - **Documentation**: `docs/` for guides and references
 
 ### Getting Help
@@ -387,7 +364,7 @@ Remember to update cross-references and documentation when modifying artifacts.
 - **[docs/organization.md](docs/organization.md)** - Organization structure guide
 - **[docs/self-improvement-workflow.md](docs/self-improvement-workflow.md)** - Step-by-step self-improvement workflow
 - **[docs/automation-agents.md](docs/automation-agents.md)** - GitHub Actions and automation workflows
-- **[cursor/commands/](cursor/commands/)** - Individual command documentation
+- **[.cursor/commands/](.cursor/commands/)** - Individual command documentation
 - **[.github/copilot-instructions.md](.github/copilot-instructions.md)** - Project standards and guidelines
 
 #### Q: I found a bug or have a feature request?
@@ -420,16 +397,16 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 1. Click "Use this template" on GitHub
 2. Clone your new repository
 3. The `.cursor/` directory will automatically work
-4. Customize commands in `cursor/commands/` to your needs
+4. Customize commands in `.cursor/commands/` to your needs
 
 #### Q: How do I add new commands?
 
 **A:**
 
-1. Create a new executable file in `cursor/commands/`:
+1. Create a new executable file in `.cursor/commands/`:
    ```bash
-   touch cursor/commands/mycommand
-   chmod +x cursor/commands/mycommand
+   touch .cursor/commands/mycommand
+   chmod +x .cursor/commands/mycommand
    ```
 
 2. Add a shebang and implementation:
@@ -440,11 +417,11 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 
 3. Document it with a `.md` file:
    ```bash
-   # cursor/commands/mycommand.md
+   # .cursor/commands/mycommand.md
    # Your command documentation
    ```
 
-4. Test the command works through the symlink:
+4. Test the command:
    ```bash
    bash .cursor/commands/mycommand
    ```

@@ -30,28 +30,28 @@ Guide the creation of artifacts from patterns, ensuring proper structure, cross-
 
 #### For Rules
 
-- Use `cursor/templates/rule-template.md`
+- Use `.cursor/templates/rule-template.md`
 - Include proper frontmatter (description, alwaysApply, globs)
 - Follow rule structure and formatting
 - Add cross-references section
 
 #### For Skills
 
-When creating a **skill**, you MUST use the [skill-creator](.cursor/skills/skill-creator/SKILL.md) skill first. Follow its guidance for SKILL.md anatomy, frontmatter (name, description), progressive disclosure, and when to add scripts/references/assets. Then use `cursor/templates/skill-template.md` for this repo’s structure and cross-references.
+When creating a **skill**, you MUST use the [skill-creator](.cursor/skills/skill-creator/SKILL.md) skill first. Follow its guidance for SKILL.md anatomy, frontmatter (name, description), progressive disclosure, and when to add scripts/references/assets. Then use `.cursor/templates/skill-template.md` for this repo’s structure and cross-references.
 
 - Create folder structure: `skill-name/SKILL.md`
 - Apply skill-creator before filling content
 
 #### For Commands
 
-- Use `cursor/templates/command-template.md`
+- Use `.cursor/templates/command-template.md`
 - Create markdown file with command structure
 - Include Overview, Steps, Checklist sections
 - Add cross-references section
 
 #### For Subagents
 
-- Use `cursor/templates/subagent-template.md`
+- Use `.cursor/templates/subagent-template.md`
 - Create markdown file with frontmatter
 - Include proper configuration (model, readonly, is_background)
 - Write clear, focused prompt
@@ -89,7 +89,7 @@ When creating artifacts:
 
 **Creation**:
 1. Use rule template
-2. Create `cursor/rules/organization/typescript-strict-mode.mdc`
+2. Create `.cursor/rules/organization/typescript-strict-mode.mdc`
 3. Add frontmatter with description
 4. Add guidelines for TypeScript strict mode
 5. Add cross-references to TypeScript-related artifacts
@@ -101,7 +101,7 @@ When creating artifacts:
 
 **Creation**:
 1. Use command template
-2. Create `cursor/commands/meta/code-review-checklist.md`
+2. Create `.cursor/commands/meta/code-review-checklist.md`
 3. Add overview and steps
 4. Add checklist items
 5. Add cross-references to review-related artifacts
@@ -124,4 +124,4 @@ When creating artifacts:
 - [Cross-Referencing Rule](.cursor/rules/meta/cross-referencing.mdc)
 - [Create Artifact Command](.cursor/commands/meta/create-artifact.md)
 - [Artifact Creator Subagent](.cursor/agents/meta/artifact-creator.md)
-- [Templates](cursor/templates/)
+- [Templates](.cursor/templates/)

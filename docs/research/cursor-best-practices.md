@@ -136,7 +136,7 @@ Brief description of what this command does.
 
 Commands can accept parameters - anything typed after the command name is included in the prompt:
 ```
-/commit and /pr these changes to address DX-523
+/process-chat analyze this conversation for patterns
 ```
 
 ## Subagents Best Practices

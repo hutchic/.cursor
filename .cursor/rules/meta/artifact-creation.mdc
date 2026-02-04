@@ -154,6 +154,7 @@ Is the task simple and single-purpose?
 
 ## Related Artifacts
 
+- [Automation Decomposition Rule](.cursor/rules/meta/automation-decomposition.mdc) – Decompose automations into discrete skills, then package into commands
 - [Organization Rule](.cursor/rules/meta/organization.mdc)
 - [Cross-Referencing Rule](.cursor/rules/meta/cross-referencing.mdc)
 - [Documentation Rule](.cursor/rules/meta/documentation.mdc)

@@ -118,10 +118,10 @@ You can provide additional context to a command in the Agent chat input. Anythin
 
 **Example:**
 ```
-/commit and /pr these changes to address DX-523
+/process-chat analyze this conversation for patterns
 ```
 
-The text "these changes to address DX-523" will be passed as context to the command, allowing the AI to understand the specific task you want to accomplish.
+The text "analyze this conversation for patterns" will be passed as context to the command, allowing the AI to understand the specific task you want to accomplish.
 
 ## Team Commands
 

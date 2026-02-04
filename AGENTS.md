@@ -77,7 +77,7 @@ Verify project structure:
 make verify
 ```
 
-This checks that `.cursor/`, `cursor/commands/`, `cursor/skills/`, and `cursor/agents/` exist.
+This checks that `.cursor/`, `.cursor/commands/`, `.cursor/skills/`, and `.cursor/agents/` exist.
 
 ### CI/CD Checks
 
@@ -121,7 +121,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md#pull-request-titles) for complete guidelin
 1. **Run pre-commit**: `pre-commit run --all-files`
 2. **Verify structure**: `make verify`
 3. **Check dependencies**: `make check-deps`
-4. **Ensure PR title is semantic**: Follow format above
+4. **Ensure PR title is semantic**: Follow format above (see [CONTRIBUTING.md](CONTRIBUTING.md))
 5. **Update documentation**: If adding features, update relevant docs
 
 ## Security Considerations
@@ -147,13 +147,12 @@ Required secrets are configured in repository settings (not in code):
 
 ## Project Structure
 
-**This repo is a standalone project. Rules, skills, and commands live in `cursor/`. Two symlinks only: (1) `.cursor` → `cursor/` so editors can self-edit; (2) global use = symlink skills/commands (e.g. `~/.cursor/skills` → repo `cursor/skills`). No install scripts or extra complexity.** See [Standalone Repository rule](.cursor/rules/standalone-repository.mdc).
+**This repo is a standalone project. Rules, skills, and commands live in `.cursor/`. Optional: symlink skills/commands globally (e.g. `~/.cursor/skills` → repo `.cursor/skills`). No install scripts.** See [Standalone Repository rule](.cursor/rules/standalone-repository.mdc).
 
 ### Key Directories
 
-- `cursor/` - **Source of truth** for rules, skills, commands, agents. Edit here.
-- `.cursor/` - Symlink to `cursor/` so Cursor IDE (and AI editors) see and can self-edit the same files.
-- `cursor/commands/`, `cursor/skills/`, `cursor/agents/`, `cursor/rules/` - All artifacts live under `cursor/`.
+- `.cursor/` - Rules, skills, commands, agents. Edit here; Cursor IDE reads from here.
+- `.cursor/commands/`, `.cursor/skills/`, `.cursor/agents/`, `.cursor/rules/` - All artifacts live under `.cursor/`.
 - `docs/` - Documentation
 - `scripts/` - Utility scripts (no global-install or symlink-creation scripts)
 
@@ -210,11 +209,9 @@ This repository includes meta processes for self-improvement:
 - `/update-cross-references` - Maintain cross-references
 - `/validate-organization` - Validate repository organization
 - `/generate-docs-index` - Generate documentation indexes
-- `/commit` - Run terse semantic commit workflow (stage → message → pre-commit → commit)
 
 ### Meta Skills
 
-- `terse-semantic-commits` - Use when committing or suggesting a commit message; Conventional Commits format, terse, imperative (see [CONTRIBUTING.md](CONTRIBUTING.md) and the skill)
 - `conversation-analysis` - Analyze AI chat conversations
 - `pattern-extraction` - Extract reusable patterns
 - `artifact-creation` - Guide artifact creation

@@ -5,8 +5,7 @@ This repository provides rules, skills, commands, and subagents for use **in thi
 ## Quick Start
 
 1. **Clone and open in Cursor** — that's it.
-2. The `.cursor/` directory in this repo is configured so Cursor loads commands, skills, and agents from `cursor/`.
-3. Rules live in `.cursor/rules/`. Commands, skills, and subagents are available when this repository is open.
+2. Rules, commands, skills, and subagents live in `.cursor/` and are available when this repository is open.
 
 **No installation required.** Everything works when you open this repository in Cursor.
 
@@ -14,7 +13,7 @@ This repository provides rules, skills, commands, and subagents for use **in thi
 
 To use the same artifacts elsewhere:
 
-- **Copy** the rules, skills, commands, or subagents you need into that project's `.cursor/` (or `cursor/`) structure.
+- **Copy** the rules, skills, commands, or subagents you need into that project's `.cursor/` structure.
 - **Reference** this repo in that project's docs or AGENTS.md.
 - **Use as template** — fork or copy this repo and trim to your needs.
 
@@ -36,7 +35,7 @@ Check that the project structure is present:
 make verify
 ```
 
-This confirms `.cursor/`, `cursor/commands/`, `cursor/skills/`, and `cursor/agents/` exist.
+This confirms `.cursor/`, `.cursor/commands/`, `.cursor/skills/`, and `.cursor/agents/` exist.
 
 ## Optional: GitHub CLI
 
