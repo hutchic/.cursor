@@ -188,3 +188,92 @@ The `main` branch has the following protections:
 Refer to [README.md](README.md) for repository-specific setup steps.
 
 For installation of Cursor automation scaffolding, see [INSTALL.md](INSTALL.md).
+
+## AI Agent Guidelines
+
+**CRITICAL**: AI agents making commits to this repository MUST follow these steps:
+
+> **Note for Maintainers**: This section is duplicated/referenced in multiple locations:
+> - [.github/copilot-instructions.md](.github/copilot-instructions.md#for-ai-agents-critical) - Copilot-specific instructions
+> - [.github/PRE_COMMIT_SETUP.md](.github/PRE_COMMIT_SETUP.md#for-ai-agents) - Detailed pre-commit setup
+>
+> When updating AI agent guidelines, ensure all locations are kept in sync.
+
+### Pull Request Title Requirements
+
+**CRITICAL**: All pull requests created by AI agents MUST have titles that are:
+
+- **Semantic**: Follow [Conventional Commits](https://www.conventionalcommits.org/) format: `type(scope): description`
+- **Terse**: Keep under 50 characters when possible - be minimal and direct
+- **Descriptive**: Clearly summarize the essence of the change
+- **Imperative mood**: Use "add" not "added" or "adds"
+
+**Format:**
+```
+<type>(<scope>): <description>
+```
+
+**Valid types:** `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `chore`, `ci`, `build`, `revert`
+
+**Examples of good PR titles:**
+- ✅ `feat(api): add user search endpoint`
+- ✅ `fix(auth): resolve token expiry bug`
+- ✅ `docs(readme): update installation steps`
+- ✅ `refactor(parser): simplify token handling`
+- ✅ `chore(deps): update dependencies`
+
+**Examples of bad PR titles:**
+- ❌ `Added new feature` (not semantic, not imperative)
+- ❌ `Update files` (too vague)
+- ❌ `Fixed a bug in the authentication module that was causing tokens to expire` (too verbose)
+- ❌ `WIP: Working on feature` (not descriptive of final state)
+- ❌ `Changes` (meaningless)
+
+For comprehensive guidelines, see [CONTRIBUTING.md](CONTRIBUTING.md#pull-request-titles).
+
+### Pre-commit Hook Setup
+
+AI agents using automated commit tools (like `report_progress`) MUST:
+
+1. **Install pre-commit hooks at session start**:
+   ```bash
+   pre-commit install
+   ```
+
+2. **Run pre-commit before every commit**:
+   ```bash
+   pre-commit run --all-files
+   ```
+
+3. **Commit any fixes** made by pre-commit before using `report_progress` or similar tools
+
+### Why This Is Required
+
+- Automated commit tools bypass local git hooks
+- Without pre-commit checks, commits will **fail CI/CD checks**
+- This causes PR failures and requires additional fix-up commits
+- Pre-commit catches issues like:
+  - Trailing whitespace
+  - Missing end-of-file newlines
+  - Mixed line endings
+  - CRLF issues
+  - Python formatting (black)
+  - Security issues (bandit)
+
+### Workflow Template
+
+```bash
+# 1. Install hooks (once per session)
+pre-commit install
+
+# 2. Make code changes
+# ... edit files ...
+
+# 3. Run pre-commit to fix issues
+pre-commit run --all-files
+
+# 4. Now use report_progress or other commit tools
+# The files are clean and will pass CI
+```
+
+For detailed setup instructions, see [.github/PRE_COMMIT_SETUP.md](.github/PRE_COMMIT_SETUP.md).

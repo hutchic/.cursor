@@ -1,3 +1,11 @@
+<!--
+IMPORTANT: PR Title Requirements
+Your PR title MUST be semantic and terse:
+- Format: type(scope): description
+- Examples: feat(api): add search endpoint | fix(auth): resolve token expiry | docs: update readme
+- See CONTRIBUTING.md for full guidelines
+-->
+
 ## Description
 
 <!-- Provide a brief description of the changes in this PR -->
