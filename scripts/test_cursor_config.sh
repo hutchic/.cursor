@@ -84,7 +84,7 @@ fi
 
 # Test 6: gadd command is accessible through symlink
 echo "Test 6: gadd command is accessible through symlink"
-if [ -f "${REPO_ROOT}/.cursor/commands/gadd" ]; then
+if [ -f "${REPO_ROOT}/.cursor/commands/gadd/gadd" ]; then
     test_pass "gadd command is accessible"
 else
     test_fail "gadd command is not accessible"
@@ -92,7 +92,7 @@ fi
 
 # Test 7: gship command is accessible through symlink
 echo "Test 7: gship command is accessible through symlink"
-if [ -f "${REPO_ROOT}/.cursor/commands/gship" ]; then
+if [ -f "${REPO_ROOT}/.cursor/commands/gship/gship" ]; then
     test_pass "gship command is accessible"
 else
     test_fail "gship command is not accessible"

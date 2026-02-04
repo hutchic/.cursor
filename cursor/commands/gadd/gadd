@@ -178,15 +178,48 @@ classify_file() {
     echo "misc"
 }
 
-# Build bucket map
-declare -A bucket_files
-bucket_files[deps]=""
-bucket_files[src]=""
-bucket_files[tests]=""
-bucket_files[docs]=""
-bucket_files[ci]=""
-bucket_files[config]=""
-bucket_files[misc]=""
+# Bash 3.2 compatible bucket storage (using functions instead of associative arrays)
+# Initialize bucket storage
+_bucket_deps=""
+_bucket_src=""
+_bucket_tests=""
+_bucket_docs=""
+_bucket_ci=""
+_bucket_config=""
+_bucket_misc=""
+
+# Helper functions to get/set bucket values (bash 3.2 compatible)
+get_bucket_files() {
+    local bucket="$1"
+    eval echo "\$_bucket_${bucket}"
+}
+
+set_bucket_files() {
+    local bucket="$1"
+    local value="$2"
+    eval "_bucket_${bucket}=\"\$value\""
+}
+
+append_bucket_file() {
+    local bucket="$1"
+    local file="$2"
+    local current=$(get_bucket_files "$bucket")
+    if [ -n "$current" ]; then
+        set_bucket_files "$bucket" "${current}|${file}"
+    else
+        set_bucket_files "$bucket" "$file"
+    fi
+}
+
+get_bucket_count() {
+    local bucket="$1"
+    local files=$(get_bucket_files "$bucket")
+    if [ -z "$files" ]; then
+        echo "0"
+    else
+        echo "$files" | tr '|' '\n' | wc -l | tr -d ' '
+    fi
+}
 
 # Parse git status and classify files
 while IFS= read -r line; do
@@ -204,27 +237,13 @@ while IFS= read -r line; do
 
     # Classify and add to bucket
     bucket=$(classify_file "$file")
-    if [ -n "${bucket_files[$bucket]}" ]; then
-        bucket_files[$bucket]="${bucket_files[$bucket]}|${file}"
-    else
-        bucket_files[$bucket]="$file"
-    fi
+    append_bucket_file "$bucket" "$file"
 done <<< "$STATUS_OUTPUT"
-
-# Count files in each bucket
-declare -A bucket_counts
-for bucket in deps src config tests ci docs misc; do
-    if [ -z "${bucket_files[$bucket]}" ]; then
-        bucket_counts[$bucket]=0
-    else
-        bucket_counts[$bucket]=$(echo "${bucket_files[$bucket]}" | tr '|' '\n' | wc -l)
-    fi
-done
 
 # Function to stage a bucket
 stage_bucket() {
     local bucket="$1"
-    local files="${bucket_files[$bucket]}"
+    local files=$(get_bucket_files "$bucket")
 
     if [ -z "$files" ]; then
         return
@@ -238,7 +257,8 @@ stage_bucket() {
         git add -- "$file"
     done
 
-    echo -e "${GREEN}✓ Staged ${bucket_counts[$bucket]} file(s) from bucket: $bucket${NC}"
+    local count=$(get_bucket_count "$bucket")
+    echo -e "${GREEN}✓ Staged ${count} file(s) from bucket: $bucket${NC}"
 }
 
 # Execute based on mode
@@ -250,12 +270,15 @@ if [ "$MODE" = "all" ]; then
 
 elif [ "$MODE" = "specific" ]; then
     # Stage specific bucket
-    if [ -z "${bucket_files[$TARGET_BUCKET]:-}" ] || [ "${bucket_counts[$TARGET_BUCKET]}" -eq 0 ]; then
+    local bucket_files=$(get_bucket_files "$TARGET_BUCKET")
+    local bucket_count=$(get_bucket_count "$TARGET_BUCKET")
+    
+    if [ -z "$bucket_files" ] || [ "$bucket_count" -eq 0 ]; then
         echo -e "${YELLOW}No files in bucket: $TARGET_BUCKET${NC}"
         exit 0
     fi
 
-    echo -e "${BLUE}Staging bucket: $TARGET_BUCKET (${bucket_counts[$TARGET_BUCKET]} file(s))${NC}"
+    echo -e "${BLUE}Staging bucket: $TARGET_BUCKET (${bucket_count} file(s))${NC}"
     stage_bucket "$TARGET_BUCKET"
 
 else
@@ -265,7 +288,7 @@ else
 
     # Present buckets in deterministic order
     for bucket in deps src config tests ci docs misc; do
-        count=${bucket_counts[$bucket]}
+        local count=$(get_bucket_count "$bucket")
 
         if [ "$count" -eq 0 ]; then
             continue
@@ -274,11 +297,13 @@ else
         echo -e "${YELLOW}Bucket: $bucket ($count file(s))${NC}"
 
         # Show files in bucket (first 5)
-        files="${bucket_files[$bucket]}"
+        local files=$(get_bucket_files "$bucket")
         IFS='|' read -ra file_array <<< "$files"
-        show_count=$((count < 5 ? count : 5))
-        for i in $(seq 0 $((show_count - 1))); do
+        local show_count=$((count < 5 ? count : 5))
+        local i=0
+        while [ $i -lt $show_count ]; do
             echo "  - ${file_array[$i]}"
+            i=$((i + 1))
         done
         if [ "$count" -gt 5 ]; then
             echo "  ... and $((count - 5)) more"

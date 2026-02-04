@@ -133,11 +133,13 @@ find_gadd() {
 
     # Check in same directory as this script
     script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-    if [ -x "$script_dir/gadd" ]; then
+    if [ -f "$script_dir/gadd" ] && [ -x "$script_dir/gadd" ]; then
         gadd_path="$script_dir/gadd"
-    # Check in ~/.cursor/commands
-    elif [ -x "$HOME/.cursor/commands/gadd" ]; then
+    # Check in ~/.cursor/commands (handle both file and directory structure)
+    elif [ -f "$HOME/.cursor/commands/gadd" ] && [ -x "$HOME/.cursor/commands/gadd" ]; then
         gadd_path="$HOME/.cursor/commands/gadd"
+    elif [ -d "$HOME/.cursor/commands/gadd" ] && [ -f "$HOME/.cursor/commands/gadd/gadd" ] && [ -x "$HOME/.cursor/commands/gadd/gadd" ]; then
+        gadd_path="$HOME/.cursor/commands/gadd/gadd"
     # Check in PATH
     elif command -v gadd &> /dev/null; then
         gadd_path="gadd"
@@ -155,11 +157,13 @@ find_gpr() {
     # Check in repository scripts directory
     script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
     repo_root="$(cd "$script_dir/../.." && pwd)"
-    if [ -x "$repo_root/scripts/gpr" ]; then
+    if [ -f "$repo_root/scripts/gpr" ] && [ -x "$repo_root/scripts/gpr" ]; then
         gpr_path="$repo_root/scripts/gpr"
-    # Check in ~/.cursor/commands
-    elif [ -x "$HOME/.cursor/commands/gpr" ]; then
+    # Check in ~/.cursor/commands (handle both file and directory structure)
+    elif [ -f "$HOME/.cursor/commands/gpr" ] && [ -x "$HOME/.cursor/commands/gpr" ]; then
         gpr_path="$HOME/.cursor/commands/gpr"
+    elif [ -d "$HOME/.cursor/commands/gpr" ] && [ -f "$HOME/.cursor/commands/gpr/gpr" ] && [ -x "$HOME/.cursor/commands/gpr/gpr" ]; then
+        gpr_path="$HOME/.cursor/commands/gpr/gpr"
     # Check in PATH
     elif command -v gpr &> /dev/null; then
         gpr_path="gpr"

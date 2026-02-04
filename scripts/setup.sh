@@ -387,23 +387,43 @@ install_commands() {
         return 1
     fi
 
-    local count=0
-    for cmd in "$source_dir"/*; do
-        if [ -f "$cmd" ]; then
-            local cmd_name=$(basename "$cmd")
-            local target="${COMMANDS_DIR}/${cmd_name}"
+    # Remove existing directory or symlink if it exists
+    if [ -L "$COMMANDS_DIR" ]; then
+        log_info "Removing existing symlink: $COMMANDS_DIR"
+        rm -f "$COMMANDS_DIR"
+    elif [ -d "$COMMANDS_DIR" ]; then
+        log_info "Removing existing directory: $COMMANDS_DIR"
+        rm -rf "$COMMANDS_DIR"
+    fi
 
-            # Create or update symlink
-            ln -sf "$cmd" "$target"
-            log_step "Linked: $cmd_name"
-            count=$((count + 1))
+    # Create parent directory if it doesn't exist
+    mkdir -p "$(dirname "$COMMANDS_DIR")"
+
+    # Symlink the entire commands directory for forward compatibility
+    ln -sfn "$source_dir" "$COMMANDS_DIR"
+    log_step "Symlinked commands directory: $COMMANDS_DIR -> $source_dir"
+
+    # Count commands for reporting
+    local count=0
+    for item in "$source_dir"/*; do
+        if [ -d "$item" ]; then
+            local cmd_name=$(basename "$item")
+            local cmd_file="${item}/${cmd_name}"
+            if [ -f "$cmd_file" ] && [ -x "$cmd_file" ]; then
+                count=$((count + 1))
+            fi
+        elif [ -f "$item" ] && [ -x "$item" ]; then
+            local cmd_name=$(basename "$item")
+            if [ "$cmd_name" != "README.md" ]; then
+                count=$((count + 1))
+            fi
         fi
     done
 
     if [ $count -eq 0 ]; then
         log_warning "No commands found in $source_dir"
     else
-        log_success "Installed $count command(s)"
+        log_success "Symlinked commands directory with $count command(s)"
     fi
 
     echo ""
@@ -420,29 +440,38 @@ install_skills() {
         return 1
     fi
 
+    # Remove existing directory or symlink if it exists
+    if [ -L "$SKILLS_DIR" ]; then
+        log_info "Removing existing symlink: $SKILLS_DIR"
+        rm -f "$SKILLS_DIR"
+    elif [ -d "$SKILLS_DIR" ]; then
+        log_info "Removing existing directory: $SKILLS_DIR"
+        rm -rf "$SKILLS_DIR"
+    fi
+
+    # Create parent directory if it doesn't exist
+    mkdir -p "$(dirname "$SKILLS_DIR")"
+
+    # Symlink the entire skills directory for forward compatibility
+    ln -sfn "$source_dir" "$SKILLS_DIR"
+    log_step "Symlinked skills directory: $SKILLS_DIR -> $source_dir"
+
+    # Count skills for reporting
     local count=0
     for skill in "$source_dir"/*; do
         if [ -f "$skill" ] || [ -d "$skill" ]; then
             local skill_name=$(basename "$skill")
-
             # Skip README files in root
-            if [[ "$skill_name" == "README.md" ]]; then
-                continue
+            if [[ "$skill_name" != "README.md" ]]; then
+                count=$((count + 1))
             fi
-
-            local target="${SKILLS_DIR}/${skill_name}"
-
-            # Create or update symlink
-            ln -sf "$skill" "$target"
-            log_step "Linked: $skill_name"
-            count=$((count + 1))
         fi
     done
 
     if [ $count -eq 0 ]; then
         log_info "No skills found (this is normal if none are defined yet)"
     else
-        log_success "Installed $count skill(s)"
+        log_success "Symlinked skills directory with $count skill(s)"
     fi
 
     echo ""
@@ -475,19 +504,46 @@ verify_installation() {
         verification_passed=false
     fi
 
-    # Check symlinks are valid
+    # Check that commands and skills directories are symlinks pointing to correct locations
     local broken_links=0
-    for link in "$COMMANDS_DIR"/* "$SKILLS_DIR"/*; do
-        if [ -L "$link" ] && [ ! -e "$link" ]; then
-            log_warning "Broken symlink: $link"
+    if [ -L "$COMMANDS_DIR" ]; then
+        if [ ! -e "$COMMANDS_DIR" ]; then
+            log_warning "Broken symlink: $COMMANDS_DIR"
             broken_links=$((broken_links + 1))
+        else
+            local expected_target="${REPO_ROOT}/cursor/commands"
+            local actual_target=$(readlink -f "$COMMANDS_DIR")
+            if [ "$actual_target" != "$expected_target" ]; then
+                log_warning "Commands symlink points to wrong location: $actual_target (expected: $expected_target)"
+                broken_links=$((broken_links + 1))
+            fi
         fi
-    done
+    else
+        log_warning "Commands directory is not a symlink: $COMMANDS_DIR"
+        broken_links=$((broken_links + 1))
+    fi
+
+    if [ -L "$SKILLS_DIR" ]; then
+        if [ ! -e "$SKILLS_DIR" ]; then
+            log_warning "Broken symlink: $SKILLS_DIR"
+            broken_links=$((broken_links + 1))
+        else
+            local expected_target="${REPO_ROOT}/cursor/skills"
+            local actual_target=$(readlink -f "$SKILLS_DIR")
+            if [ "$actual_target" != "$expected_target" ]; then
+                log_warning "Skills symlink points to wrong location: $actual_target (expected: $expected_target)"
+                broken_links=$((broken_links + 1))
+            fi
+        fi
+    else
+        log_warning "Skills directory is not a symlink: $SKILLS_DIR"
+        broken_links=$((broken_links + 1))
+    fi
 
     if [ $broken_links -eq 0 ]; then
         log_success "All symlinks valid"
     else
-        log_warning "$broken_links broken symlink(s) found"
+        log_warning "$broken_links issue(s) found with symlinks"
         verification_passed=false
     fi
 
