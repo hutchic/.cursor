@@ -4,13 +4,26 @@ This repository contains Cursor IDE automation commands and utilities.
 
 ## Quick Start
 
-1. Install the commands:
+### Option 1: Self-Configuring (Recommended)
 
-   ```bash
-   ln -s "$(pwd)/cursor/commands" ~/.cursor/commands
-   ```
+This repository is **self-configuring** when opened in Cursor IDE:
 
-2. Use commands in Cursor IDE by typing `/` followed by the command name.
+1. Clone or open this repository in Cursor
+2. The `.cursor/` directory in the project root provides immediate access to commands
+3. Use commands by typing `/` followed by the command name
+
+**No manual installation required!**
+
+### Option 2: Global Installation
+
+To use these commands across all projects:
+
+```bash
+ln -s "$(pwd)/cursor/commands" ~/.cursor/commands
+ln -s "$(pwd)/cursor/skills" ~/.cursor/skills
+```
+
+See [INSTALL.md](INSTALL.md) for detailed installation instructions.
 
 ## Available Commands
 
@@ -51,8 +64,11 @@ Creates or updates a GitHub pull request for the current branch.
 
 ## Directory Structure
 
-- `cursor/commands/` - Cursor IDE commands
-- `cursor/skills/` - Cursor IDE skills
+- `.cursor/` - Self-configuring symlinks (automatically used by Cursor IDE)
+  - `commands/` → `../cursor/commands/`
+  - `skills/` → `../cursor/skills/`
+- `cursor/commands/` - Cursor IDE commands (source files)
+- `cursor/skills/` - Cursor IDE skills (source files)
 - `scripts/` - Utility scripts
 - `templates/` - Template files
 
