@@ -77,6 +77,17 @@ else
     test_fail "Should error on paste mode without content"
 fi
 
+# Test 6: --ready flag parsing
+echo "Test 6: --ready flag"
+set +e
+output=$("${GPR_SCRIPT}" "feat: test" --ready 2>&1)
+set -e
+if echo "$output" | grep -q "Unknown option.*--ready"; then
+    test_fail "--ready flag should be accepted"
+else
+    test_pass "--ready flag is accepted"
+fi
+
 echo ""
 echo "================================"
 echo "Test Results: ${passed} passed, ${failed} failed"

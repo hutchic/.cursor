@@ -2,25 +2,41 @@
 # -*- coding: utf-8 -*-
 # vim: set ft=bash:
 #
-# /gship - Branch + Semantic Commit Command
+# /gship - Branch + Semantic Commit + PR Command
 #
-# Creates feature branches from protected branches and commits staged changes
-# with semantic commit messages. Never bypasses hooks or signing.
+# Creates feature branches from protected branches and commits changes
+# with semantic commit messages. Internally uses gadd for staging and gpr for
+# PR creation. Never bypasses hooks or signing.
+#
+# This command is a wrapper that delegates to:
+#   - gadd: for intelligent file staging
+#   - gpr: for pushing and creating/updating pull requests
 #
 # Usage:
-#   gship <semantic-message> [--mode=single|multi]
+#   gship [<semantic-message>] [--mode=single|multi] [--no-pr]
+#
+# Sensible Defaults:
+#   - If no semantic message is provided, one is auto-generated from the changes
+#   - Creates semantic branch from protected branches automatically
+#   - Stages all files via gadd if none are staged
+#   - Commits with semantic message
+#   - Pushes to remote and creates draft PR by default
+#   - Uses GitHub MCP if available, falls back to gh CLI
+#   - Uses PR template from .github/pull_request_template.md if available
 #
 # Examples:
-#   gship "feat(api): add search endpoint"
-#   gship "fix: resolve null pointer in handler"
-#   gship "docs: update installation guide"
-#   gship "feat(auth): add OAuth support" --mode=multi
+#   gship                                    # Auto-generate everything
+#   gship "feat(api): add search endpoint"   # Explicit message
+#   gship "fix: resolve null pointer"        # With auto-staging
+#   gship "docs: update guide" --no-pr       # Skip PR creation
+#   gship "feat(auth): add OAuth" --mode=multi
 
 set -euo pipefail
 
 # Global variables
 WORKING_BRANCH=""
 COMMIT_HASH=""
+CREATE_PR=true  # Whether to create a PR after commit
 
 # Colors for output
 RED='\033[0;31m'
@@ -49,6 +65,160 @@ print_warning() {
     echo -e "${YELLOW}$1${NC}"
 }
 
+# Function to generate semantic commit message from git diff
+generate_semantic_message() {
+    local changed_files
+    changed_files=$(git diff --cached --name-only 2>/dev/null || echo "")
+
+    if [ -z "$changed_files" ]; then
+        echo "chore: update files"
+        return
+    fi
+
+    # Classify the primary change type based on files
+    local has_src=false
+    local has_test=false
+    local has_docs=false
+    local has_config=false
+    local has_ci=false
+
+    while IFS= read -r file; do
+        [ -z "$file" ] && continue
+
+        if [[ "$file" =~ \.(md|txt)$ ]] || [[ "$file" =~ ^(README|CHANGELOG|LICENSE|CONTRIBUTING) ]]; then
+            has_docs=true
+        elif [[ "$file" =~ (test_|_test\.|\.test\.|\.spec\.|/__tests__/|/tests?/|/spec/) ]]; then
+            has_test=true
+        elif [[ "$file" =~ ^\.github/|^\.gitlab-ci\.yml|^\.circleci/|Jenkinsfile ]]; then
+            has_ci=true
+        elif [[ "$file" =~ \.(yaml|yml|json|toml|ini|conf|cfg|config)$ ]] || [[ "$file" =~ Dockerfile|docker-compose|\.(gitignore|dockerignore|editorconfig)$ ]]; then
+            has_config=true
+        elif [[ "$file" =~ \.(py|js|ts|jsx|tsx|java|go|rs|rb|php|c|cpp|h|hpp|cs|swift|kt|scala)$ ]]; then
+            has_src=true
+        fi
+    done <<< "$changed_files"
+
+    # Generate message based on primary change type
+    local type="chore"
+    local scope=""
+
+    if [ "$has_docs" = true ]; then
+        type="docs"
+    elif [ "$has_test" = true ]; then
+        type="test"
+    elif [ "$has_ci" = true ]; then
+        type="ci"
+    elif [ "$has_config" = true ]; then
+        type="chore"
+        scope="config"
+    elif [ "$has_src" = true ]; then
+        type="feat"
+    fi
+
+    # Generate a brief summary
+    local file_count
+    file_count=$(echo "$changed_files" | wc -l | tr -d ' ')
+
+    if [ -n "$scope" ]; then
+        echo "${type}(${scope}): update ${file_count} file(s)"
+    else
+        echo "${type}: update ${file_count} file(s)"
+    fi
+}
+
+# Function to find gadd command
+find_gadd() {
+    local gadd_path=""
+    local script_dir
+
+    # Check in same directory as this script
+    script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    if [ -x "$script_dir/gadd" ]; then
+        gadd_path="$script_dir/gadd"
+    # Check in ~/.cursor/commands
+    elif [ -x "$HOME/.cursor/commands/gadd" ]; then
+        gadd_path="$HOME/.cursor/commands/gadd"
+    # Check in PATH
+    elif command -v gadd &> /dev/null; then
+        gadd_path="gadd"
+    fi
+
+    echo "$gadd_path"
+}
+
+# Function to find gpr command
+find_gpr() {
+    local gpr_path=""
+    local script_dir
+    local repo_root
+
+    # Check in repository scripts directory
+    script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    repo_root="$(cd "$script_dir/../.." && pwd)"
+    if [ -x "$repo_root/scripts/gpr" ]; then
+        gpr_path="$repo_root/scripts/gpr"
+    # Check in ~/.cursor/commands
+    elif [ -x "$HOME/.cursor/commands/gpr" ]; then
+        gpr_path="$HOME/.cursor/commands/gpr"
+    # Check in PATH
+    elif command -v gpr &> /dev/null; then
+        gpr_path="gpr"
+    fi
+
+    echo "$gpr_path"
+}
+
+# Function to call gadd to stage files
+call_gadd() {
+    local gadd_cmd
+    gadd_cmd=$(find_gadd)
+
+    if [ -z "$gadd_cmd" ]; then
+        print_warning "gadd command not found, skipping automatic staging"
+        print_info "Files must already be staged"
+        return 0
+    fi
+
+    print_info "Calling gadd to stage files..."
+
+    # Call gadd with 'all' mode to stage all changes
+    if "$gadd_cmd" all; then
+        print_success "Files staged successfully via gadd"
+        return 0
+    else
+        print_error "gadd failed to stage files"
+        return 1
+    fi
+}
+
+# Function to call gpr to create/update pull request
+call_gpr() {
+    local pr_title="$1"
+    local gpr_cmd
+    gpr_cmd=$(find_gpr)
+
+    if [ -z "$gpr_cmd" ]; then
+        print_warning "gpr command not found, skipping PR creation"
+        print_info "You can manually push and create a PR with:"
+        print_info "  git push -u origin $WORKING_BRANCH"
+        print_info "  gh pr create --title \"$pr_title\""
+        return 0
+    fi
+
+    print_info "Calling gpr to create/update pull request..."
+
+    # Call gpr with the semantic message as PR title
+    if "$gpr_cmd" "$pr_title"; then
+        print_success "Pull request created/updated successfully via gpr"
+        return 0
+    else
+        print_error "gpr failed to create/update pull request"
+        print_warning "Your changes are committed locally but not pushed"
+        print_info "You can manually push with: git push -u origin $WORKING_BRANCH"
+        return 1
+    fi
+}
+
 # Function to check if we're in a git repository
 check_git_repo() {
     if ! git rev-parse --git-dir > /dev/null 2>&1; then
@@ -57,15 +227,27 @@ check_git_repo() {
     fi
 }
 
-# Function to check for staged changes
+# Function to check for staged changes (and optionally stage via gadd)
 check_staged_changes() {
     local staged_files
     staged_files=$(git diff --cached --name-only)
 
     if [ -z "$staged_files" ]; then
-        print_error "No staged changes found"
-        print_info "Please stage your changes first with 'git add' or '/gadd'"
-        exit 1
+        print_info "No staged changes found, attempting to stage via gadd..."
+
+        # Try to call gadd to stage files
+        if ! call_gadd; then
+            print_error "Failed to stage files"
+            print_info "Please stage your changes first with 'git add' or 'gadd'"
+            exit 1
+        fi
+
+        # Check again after gadd
+        staged_files=$(git diff --cached --name-only)
+        if [ -z "$staged_files" ]; then
+            print_error "No changes to commit after staging"
+            exit 1
+        fi
     fi
 
     echo "$staged_files"
@@ -131,7 +313,8 @@ normalize_branch_name() {
     # Replace non-alphanumeric with hyphens
     branch_name=$(echo "$branch_name" | sed 's/[^a-z0-9/-]/-/g')
 
-    # Collapse duplicate hyphens
+    # Collapse duplicate hyphens (use sed for efficiency, suppress shellcheck SC2001)
+    # shellcheck disable=SC2001
     branch_name=$(echo "$branch_name" | sed 's/-\+/-/g')
 
     # Remove leading/trailing hyphens
@@ -253,17 +436,18 @@ main() {
     for arg in "$@"; do
         if [[ "$arg" =~ ^--mode= ]]; then
             mode="${arg#--mode=}"
+        elif [[ "$arg" == "--no-pr" ]]; then
+            CREATE_PR=false
         else
             semantic_message="$arg"
         fi
     done
 
-    # Validate arguments
+    # Auto-generate semantic message if not provided
     if [ -z "$semantic_message" ]; then
-        print_error "Missing semantic commit message"
-        print_info "Usage: gship <semantic-message> [--mode=single|multi]"
-        print_info "Example: gship \"feat(api): add search endpoint\""
-        exit 1
+        print_info "No semantic message provided, auto-generating..."
+        semantic_message=$(generate_semantic_message)
+        print_info "Generated message: $semantic_message"
     fi
 
     # Validate mode
@@ -303,6 +487,22 @@ main() {
     # Print summary
     print_summary "$WORKING_BRANCH" "$COMMIT_HASH" "$semantic_message"
 
+    # Create/update pull request via gpr (unless --no-pr flag is set)
+    if [ "$CREATE_PR" = true ]; then
+        echo ""
+        print_info "Creating/updating pull request..."
+        if ! call_gpr "$semantic_message"; then
+            print_warning "PR creation failed, but commit was successful"
+            # Don't exit with error - commit was successful
+        fi
+    else
+        print_info "Skipping PR creation (--no-pr flag set)"
+        print_info "To push and create PR manually:"
+        print_info "  git push -u origin $WORKING_BRANCH"
+        print_info "  gh pr create --title \"$semantic_message\""
+    fi
+
+    echo ""
     print_success "Done!"
 }
 
