@@ -63,6 +63,12 @@ if [ $# -gt 0 ]; then
     elif [[ "$1" =~ ^group= ]]; then
         MODE="specific"
         TARGET_BUCKET="${1#group=}"
+        # Validate bucket name
+        if [[ ! "$TARGET_BUCKET" =~ ^(deps|src|tests|docs|ci|config|misc)$ ]]; then
+            echo -e "${RED}Error: Invalid bucket name '$TARGET_BUCKET'${NC}"
+            echo "Valid buckets: deps, src, tests, docs, ci, config, misc"
+            exit 1
+        fi
     else
         echo -e "${RED}Error: Invalid argument '$1'${NC}"
         echo "Usage: gadd [all|group=<bucket>]"
@@ -112,7 +118,7 @@ classify_file() {
        [[ "$file" =~ ^\.travis\.yml$ ]] || \
        [[ "$file" =~ ^azure-pipelines\.yml$ ]] || \
        [[ "$file" =~ ^\.buildkite/ ]] || \
-       [[ "$file" =~ ^jenkinsfile$ ]]; then
+       [[ "$file" =~ ^[Jj]enkinsfile$ ]]; then
         echo "ci"
         return
     fi
@@ -244,12 +250,7 @@ if [ "$MODE" = "all" ]; then
     
 elif [ "$MODE" = "specific" ]; then
     # Stage specific bucket
-    if [ -z "${bucket_files[$TARGET_BUCKET]:-}" ]; then
-        echo -e "${YELLOW}No files in bucket: $TARGET_BUCKET${NC}"
-        exit 0
-    fi
-    
-    if [ "${bucket_counts[$TARGET_BUCKET]}" -eq 0 ]; then
+    if [ -z "${bucket_files[$TARGET_BUCKET]:-}" ] || [ "${bucket_counts[$TARGET_BUCKET]}" -eq 0 ]; then
         echo -e "${YELLOW}No files in bucket: $TARGET_BUCKET${NC}"
         exit 0
     fi
