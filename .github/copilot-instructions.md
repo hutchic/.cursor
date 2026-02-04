@@ -52,7 +52,6 @@ This repository provides automation scaffolding for Cursor IDE, including comman
 - Follow PEP 8 style guide
 - Use `black` for code formatting (enforced by pre-commit)
 - Use `bandit` for security linting
-- Add encoding pragma to Python files
 - Avoid debug statements in committed code
 - Use descriptive variable and function names
 - Add docstrings to functions and classes
@@ -157,7 +156,7 @@ pre-commit run
 4. Push to remote and create PR
 5. Automated labeling based on changed files
 6. Required status checks must pass
-7. PR title must follow semantic versioning (e.g., `feat:`, `fix:`, `docs:`)
+7. PR title must follow Conventional Commits format (e.g., `feat:`, `fix:`, `docs:`)
 8. Squash merge to `main`
 9. Branch automatically deleted
 
