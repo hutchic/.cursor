@@ -145,10 +145,12 @@ fi
 
 # Test 10: Command path finding (gpr)
 echo "Test 10: Command path finding (gpr)"
-if [ -x "${SCRIPT_DIR}/gpr" ]; then
+# gpr is located at repo_root/scripts/gpr, where repo_root is two levels up from cursor/commands
+REPO_ROOT="${SCRIPT_DIR}/.."
+if [ -x "${REPO_ROOT}/scripts/gpr" ]; then
     test_pass "gpr command is found and executable"
 else
-    test_fail "gpr command should be found and executable"
+    test_fail "gpr command should be found and executable at ${REPO_ROOT}/scripts/gpr"
 fi
 
 echo ""

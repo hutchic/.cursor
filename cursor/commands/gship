@@ -243,10 +243,9 @@ normalize_branch_name() {
     # Replace non-alphanumeric with hyphens
     branch_name=$(echo "$branch_name" | sed 's/[^a-z0-9/-]/-/g')
 
-    # Collapse duplicate hyphens using bash parameter expansion
-    while [[ "$branch_name" =~ -- ]]; do
-        branch_name="${branch_name//--/-}"
-    done
+    # Collapse duplicate hyphens (use sed for efficiency, suppress shellcheck SC2001)
+    # shellcheck disable=SC2001
+    branch_name=$(echo "$branch_name" | sed 's/-\+/-/g')
 
     # Remove leading/trailing hyphens
     branch_name=$(echo "$branch_name" | sed 's/^-//;s/-$//')
