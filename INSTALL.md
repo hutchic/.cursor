@@ -1,6 +1,53 @@
 # Cursor Automation Installation
 
-This document provides installation instructions for using the Cursor automation commands.
+This document provides comprehensive installation instructions for using the Cursor automation commands and skills.
+
+## Prerequisites
+
+Before installing, ensure you have the following:
+
+### Required
+
+- **Git** (2.0+): Version control system
+  - Check: `git --version`
+  - Install: See [git-scm.com](https://git-scm.com/downloads)
+
+- **Bash** (4.0+): Shell environment
+  - Check: `bash --version`
+  - Included by default on Linux/macOS
+  - Windows: Use Git Bash, WSL, or MinGW
+
+- **Cursor IDE**: The IDE this automation is designed for
+  - Download: [cursor.sh](https://cursor.sh/)
+
+### Recommended
+
+- **GitHub CLI (gh)**: Required for `/gpr` command
+  - Check: `gh --version`
+  - Install: See [CLI installation guide](#installing-github-cli)
+  - Alternative: Configure GitHub MCP
+
+- **Python 3.7+**: Required for pre-commit hooks
+  - Check: `python3 --version`
+  - Install: See [python.org](https://www.python.org/downloads/)
+
+- **pre-commit**: Code quality automation
+  - Check: `pre-commit --version`
+  - Install: `pip install pre-commit`
+
+### Optional
+
+- **Docker**: For containerized workflows
+  - Check: `docker --version`
+  - Install: [docker.com](https://www.docker.com/get-started)
+
+- **Node.js**: If using npm-based tools
+  - Check: `node --version`
+  - Install: [nodejs.org](https://nodejs.org/)
+
+## Installation Methods
+
+Choose the installation method that best fits your use case.
 
 ## Self-Configuring Repository (Recommended)
 
