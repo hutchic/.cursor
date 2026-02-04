@@ -334,8 +334,33 @@ update_readme() {
 
     print_info "Adding command to README.md..."
 
-    # Add entry before the last heading or at the end
-    local entry="
+    # Create temp file with new entry
+    local temp_file=$(mktemp)
+
+    # Add entry before "## Meta Commands" section or append
+    if grep -q "## Meta Commands" "$readme"; then
+        awk -v name="$name" -v desc="$description" '
+        /^## Meta Commands/ {
+            print ""
+            print "### `/" name "` - " desc
+            print ""
+            print "Brief description of the command."
+            print ""
+            print "**Usage:**"
+            print ""
+            print "```bash"
+            print name " [options] [arguments]"
+            print "```"
+            print ""
+            print "[Full Documentation](" name "/README.md)"
+            print ""
+        }
+        { print }
+        ' "$readme" > "$temp_file"
+        mv "$temp_file" "$readme"
+    else
+        cat >> "$readme" << EOF
+
 ### \`/$name\` - $description
 
 Brief description of the command.
@@ -346,14 +371,8 @@ Brief description of the command.
 $name [options] [arguments]
 \`\`\`
 
-[Full Documentation]($name.md)
-"
-
-    # Insert before "## Structure" section or append
-    if grep -q "## Structure" "$readme"; then
-        sed -i "/## Structure/i\\$entry" "$readme"
-    else
-        echo "$entry" >> "$readme"
+[Full Documentation]($name/README.md)
+EOF
     fi
 
     print_success "✓ Updated README.md"
