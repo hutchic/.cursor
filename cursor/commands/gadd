@@ -103,14 +103,14 @@ classify_file() {
     local file="$1"
     local basename=$(basename "$file")
     local dirname=$(dirname "$file")
-    
+
     # deps: lockfiles, dependency manifests
     if [[ "$basename" =~ ^(package-lock\.json|yarn\.lock|pnpm-lock\.yaml|Gemfile\.lock|Pipfile\.lock|poetry\.lock|Cargo\.lock|composer\.lock|go\.sum|mix\.lock|pubspec\.lock)$ ]] || \
        [[ "$basename" =~ ^(package\.json|Gemfile|Pipfile|pyproject\.toml|Cargo\.toml|composer\.json|go\.mod|mix\.exs|pubspec\.yaml|requirements\.txt|requirements-dev\.txt)$ ]]; then
         echo "deps"
         return
     fi
-    
+
     # ci: GitHub/GitLab configs, pipelines
     if [[ "$file" =~ ^\.github/ ]] || \
        [[ "$file" =~ ^\.gitlab-ci\.yml$ ]] || \
@@ -122,7 +122,7 @@ classify_file() {
         echo "ci"
         return
     fi
-    
+
     # docs: README, docs, markdown
     if [[ "$basename" =~ ^README ]] || \
        [[ "$file" =~ ^docs/ ]] || \
@@ -133,7 +133,7 @@ classify_file() {
         echo "docs"
         return
     fi
-    
+
     # tests: test files and fixtures
     if [[ "$basename" =~ ^test_ ]] || \
        [[ "$basename" =~ _test\. ]] || \
@@ -149,7 +149,7 @@ classify_file() {
         echo "tests"
         return
     fi
-    
+
     # config: yaml/json/toml/ini, docker, k8s, helm
     if [[ "$basename" =~ \.(yaml|yml|json|toml|ini|conf|cfg|config)$ ]] || \
        [[ "$basename" =~ ^Dockerfile ]] || \
@@ -167,13 +167,13 @@ classify_file() {
         echo "config"
         return
     fi
-    
+
     # src: application/runtime code
     if [[ "$file" =~ \.(py|js|ts|jsx|tsx|java|go|rs|rb|php|c|cpp|h|hpp|cs|swift|kt|scala|clj|ex|exs|erl|hs|ml|fs|r|jl|lua|pl|sh|bash|zsh)$ ]]; then
         echo "src"
         return
     fi
-    
+
     # misc: fallback
     echo "misc"
 }
@@ -193,15 +193,15 @@ while IFS= read -r line; do
     # Extract file path (handle renames, copies, etc.)
     status="${line:0:2}"
     file="${line:3}"
-    
+
     # Handle renamed files (R  old -> new)
     if [[ "$status" =~ ^R ]]; then
         file=$(echo "$file" | sed 's/^.* -> //')
     fi
-    
+
     # Skip empty lines
     [ -z "$file" ] && continue
-    
+
     # Classify and add to bucket
     bucket=$(classify_file "$file")
     if [ -n "${bucket_files[$bucket]}" ]; then
@@ -225,19 +225,19 @@ done
 stage_bucket() {
     local bucket="$1"
     local files="${bucket_files[$bucket]}"
-    
+
     if [ -z "$files" ]; then
         return
     fi
-    
+
     # Convert pipe-separated list to array
     IFS='|' read -ra file_array <<< "$files"
-    
+
     # Stage files
     for file in "${file_array[@]}"; do
         git add -- "$file"
     done
-    
+
     echo -e "${GREEN}✓ Staged ${bucket_counts[$bucket]} file(s) from bucket: $bucket${NC}"
 }
 
@@ -247,32 +247,32 @@ if [ "$MODE" = "all" ]; then
     echo -e "${BLUE}Staging all changes...${NC}"
     git add -A
     echo -e "${GREEN}✓ All changes staged${NC}"
-    
+
 elif [ "$MODE" = "specific" ]; then
     # Stage specific bucket
     if [ -z "${bucket_files[$TARGET_BUCKET]:-}" ] || [ "${bucket_counts[$TARGET_BUCKET]}" -eq 0 ]; then
         echo -e "${YELLOW}No files in bucket: $TARGET_BUCKET${NC}"
         exit 0
     fi
-    
+
     echo -e "${BLUE}Staging bucket: $TARGET_BUCKET (${bucket_counts[$TARGET_BUCKET]} file(s))${NC}"
     stage_bucket "$TARGET_BUCKET"
-    
+
 else
     # Guided mode
     echo -e "${BLUE}Guided staging mode${NC}"
     echo ""
-    
+
     # Present buckets in deterministic order
     for bucket in deps src config tests ci docs misc; do
         count=${bucket_counts[$bucket]}
-        
+
         if [ "$count" -eq 0 ]; then
             continue
         fi
-        
+
         echo -e "${YELLOW}Bucket: $bucket ($count file(s))${NC}"
-        
+
         # Show files in bucket (first 5)
         files="${bucket_files[$bucket]}"
         IFS='|' read -ra file_array <<< "$files"
@@ -283,17 +283,17 @@ else
         if [ "$count" -gt 5 ]; then
             echo "  ... and $((count - 5)) more"
         fi
-        
+
         # Prompt user
         read -p "Stage this bucket? (y/n): " -n 1 -r
         echo ""
-        
+
         if [[ $REPLY =~ ^[Yy]$ ]]; then
             stage_bucket "$bucket"
         else
             echo -e "${YELLOW}✗ Skipped bucket: $bucket${NC}"
         fi
-        
+
         echo ""
     done
 fi
