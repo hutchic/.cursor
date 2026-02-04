@@ -2,26 +2,37 @@
 
 ## Overview
 
-`/gship` is a command that safely creates semantic commits from staged changes. It automatically creates feature branches when you're on a protected branch and enforces semantic commit message standards.
+`/gship` is a command that safely creates semantic commits and pull requests in one step. It's a composite command that internally uses `gadd` for staging and `gpr` for PR creation. It automatically creates feature branches when you're on a protected branch and enforces semantic commit message standards.
+
+### Internal Architecture
+
+`gship` delegates to two other commands:
+- **`gadd`**: For intelligent file staging (automatically stages all files if none are staged)
+- **`gpr`**: For pushing branches and creating/updating GitHub pull requests
+
+This ensures that any updates to `gadd` or `gpr` logic automatically benefit `gship` without code duplication.
 
 ## Features
 
+- ✅ **Automatic Staging**: Uses `gadd` to stage files if none are staged
 - ✅ **Protected Branch Detection**: Automatically creates a feature branch when on `main`, `master`, `trunk`, `develop`, or branches starting with `release/`
 - ✅ **Semantic Commit Enforcement**: Validates commit messages follow semantic conventions
 - ✅ **Hook & Signing Safety**: Never bypasses pre-commit hooks or GPG signing
 - ✅ **Clean Branch Naming**: Generates normalized branch names from semantic messages
+- ✅ **Automatic PR Creation**: Uses `gpr` to push and create/update pull requests
 - ✅ **Clear Error Messages**: Provides helpful feedback when something goes wrong
 
 ## Usage
 
 ```bash
-gship "<semantic-message>" [--mode=single|multi]
+gship "<semantic-message>" [--mode=single|multi] [--no-pr]
 ```
 
 ### Arguments
 
 - `<semantic-message>`: A semantic commit message in the format `type(scope): summary` or `type: summary`
 - `--mode`: Optional. Either `single` (default) or `multi` (experimental)
+- `--no-pr`: Optional. Skip PR creation (commit only)
 
 ### Valid Semantic Types
 
@@ -72,24 +83,54 @@ gship "chore: update dependencies"
 gship "test: add integration tests"
 ```
 
+### Skip PR Creation
+
+```bash
+# Commit without creating a PR
+gship "fix: resolve bug" --no-pr
+```
+
 ## Workflow
+
+### New Workflow (After Refactoring)
+
+1. Run: `gship "feat(api): add endpoint"`
+2. What happens internally:
+   - **Step 1**: If no files are staged, calls `gadd all` to stage all changes
+   - **Step 2**: Creates new branch if on protected branch: `feat/api-add-endpoint`
+   - **Step 3**: Creates commit with message: `feat(api): add endpoint`
+   - **Step 4**: Calls `gpr` to push branch and create/update pull request
 
 ### From Protected Branch (main/master/trunk/develop/release/...)
 
-1. Stage your changes: `git add <files>`
+1. Make your changes (no need to stage manually)
 2. Run: `gship "feat(api): add endpoint"`
 3. Result:
+   - Files are staged via `gadd all`
    - Creates new branch: `feat/api-add-endpoint`
    - Switches to new branch
    - Creates commit with message: `feat(api): add endpoint`
+   - Pushes branch and creates PR via `gpr`
 
 ### From Feature Branch
 
-1. Stage your changes: `git add <files>`
+1. Make your changes (no need to stage manually)
 2. Run: `gship "fix: resolve bug"`
 3. Result:
+   - Files are staged via `gadd all`
    - Stays on current branch
    - Creates commit with message: `fix: resolve bug`
+   - Pushes branch and updates PR via `gpr`
+
+### With Pre-Staged Files
+
+If you prefer to stage files manually or selectively:
+
+1. Stage your changes: `git add <files>` or `gadd group=src`
+2. Run: `gship "feat(api): add endpoint"`
+3. Result:
+   - Skips automatic staging (uses already-staged files)
+   - Creates branch/commit/PR as usual
 
 ## Acceptance Criteria Coverage
 
@@ -97,7 +138,7 @@ gship "test: add integration tests"
 Given staged files exist, when user runs `/gship feat(api): add search`, then a commit is created with subject `feat(api): add search`.
 
 ### ✅ AC-2: No Staged Files
-Given no staged files exist, when user runs `/gship ...`, then command exits and suggests staging files first.
+Given no staged files exist, when user runs `/gship ...`, then `gadd all` is called automatically to stage files.
 
 ### ✅ AC-3: Protected Branch Detection
 Given user is on main, when user runs `/gship ...`, then a new branch is created before committing.
@@ -116,10 +157,19 @@ Given mode=multi, when staged changes represent multiple logical groups, then im
 
 ## Error Handling
 
-### No Staged Files
+### No Changes to Commit
 ```
+No staged changes found, attempting to stage via gadd...
+Staging all changes...
+✓ All changes staged
+```
+
+Or if gadd is not available:
+```
+gadd command not found, skipping automatic staging
+Files must already be staged
 Error: No staged changes found
-Please stage your changes first with 'git add' or '/gadd'
+Please stage your changes first with 'git add' or 'gadd'
 ```
 
 ### Invalid Semantic Message
@@ -151,6 +201,7 @@ Please use a different semantic message or switch to the existing branch
 2. **Never bypasses signing**: No `--no-gpg-sign` flag is used
 3. **Fails fast**: Stops immediately on any error
 4. **Protected branch safety**: Prevents direct commits to protected branches
+5. **Graceful degradation**: If `gadd` or `gpr` are not available, provides helpful fallback messages
 
 ## Branch Naming Convention
 
@@ -171,13 +222,13 @@ Examples:
 ## Limitations
 
 - Multi-commit mode is not fully implemented (falls back to single-commit)
-- No automatic file staging (use `git add` or `/gadd` first)
-- No PR creation (handled separately)
-- No automatic pushing (use `git push` separately)
+- Requires `gh` CLI or GitHub MCP for PR creation (via `gpr` command)
 
 ## Integration
 
 This command integrates with:
+- **`gadd`**: For intelligent file staging
+- **`gpr`**: For pushing branches and creating/updating PRs
 - Git pre-commit hooks (always runs them)
 - GPG signing configuration (always respects it)
 - Protected branch policies (enforces branch creation)

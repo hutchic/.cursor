@@ -4,16 +4,19 @@ This directory contains Cursor automation commands.
 
 ## Available Commands
 
-### gship - Semantic Commit Command
+### gship - Semantic Commit + PR Command
 
-Creates semantic commits from staged changes with automatic branch creation for protected branches.
+Creates semantic commits and pull requests in one step. Internally uses `gadd` for staging and `gpr` for PR creation. Automatically creates feature branches when on protected branches.
 
 [Full Documentation](README_GSHIP.md)
 
 **Quick Start:**
 ```bash
+# Complete workflow: stage → branch → commit → PR
 gship "feat(api): add search endpoint"
-gship "fix: resolve bug"
+
+# Commit only (skip PR creation)
+gship "fix: resolve bug" --no-pr
 ```
 
 ## Structure

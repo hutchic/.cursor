@@ -2,25 +2,32 @@
 # -*- coding: utf-8 -*-
 # vim: set ft=bash:
 #
-# /gship - Branch + Semantic Commit Command
+# /gship - Branch + Semantic Commit + PR Command
 #
 # Creates feature branches from protected branches and commits staged changes
-# with semantic commit messages. Never bypasses hooks or signing.
+# with semantic commit messages. Internally uses gadd for staging and gpr for
+# PR creation. Never bypasses hooks or signing.
+#
+# This command is a wrapper that delegates to:
+#   - gadd: for intelligent file staging
+#   - gpr: for pushing and creating/updating pull requests
 #
 # Usage:
-#   gship <semantic-message> [--mode=single|multi]
+#   gship <semantic-message> [--mode=single|multi] [--no-pr]
 #
 # Examples:
 #   gship "feat(api): add search endpoint"
 #   gship "fix: resolve null pointer in handler"
 #   gship "docs: update installation guide"
 #   gship "feat(auth): add OAuth support" --mode=multi
+#   gship "fix: resolve bug" --no-pr  # skip PR creation
 
 set -euo pipefail
 
 # Global variables
 WORKING_BRANCH=""
 COMMIT_HASH=""
+CREATE_PR=true  # Whether to create a PR after commit
 
 # Colors for output
 RED='\033[0;31m'
@@ -49,6 +56,96 @@ print_warning() {
     echo -e "${YELLOW}$1${NC}"
 }
 
+# Function to find gadd command
+find_gadd() {
+    local gadd_path=""
+    
+    # Check in same directory as this script
+    local script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    if [ -x "$script_dir/gadd" ]; then
+        gadd_path="$script_dir/gadd"
+    # Check in ~/.cursor/commands
+    elif [ -x "$HOME/.cursor/commands/gadd" ]; then
+        gadd_path="$HOME/.cursor/commands/gadd"
+    # Check in PATH
+    elif command -v gadd &> /dev/null; then
+        gadd_path="gadd"
+    fi
+    
+    echo "$gadd_path"
+}
+
+# Function to find gpr command
+find_gpr() {
+    local gpr_path=""
+    
+    # Check in repository scripts directory
+    local script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    local repo_root="$(cd "$script_dir/../.." && pwd)"
+    if [ -x "$repo_root/scripts/gpr" ]; then
+        gpr_path="$repo_root/scripts/gpr"
+    # Check in ~/.cursor/commands
+    elif [ -x "$HOME/.cursor/commands/gpr" ]; then
+        gpr_path="$HOME/.cursor/commands/gpr"
+    # Check in PATH
+    elif command -v gpr &> /dev/null; then
+        gpr_path="gpr"
+    fi
+    
+    echo "$gpr_path"
+}
+
+# Function to call gadd to stage files
+call_gadd() {
+    local gadd_cmd
+    gadd_cmd=$(find_gadd)
+    
+    if [ -z "$gadd_cmd" ]; then
+        print_warning "gadd command not found, skipping automatic staging"
+        print_info "Files must already be staged"
+        return 0
+    fi
+    
+    print_info "Calling gadd to stage files..."
+    
+    # Call gadd with 'all' mode to stage all changes
+    if "$gadd_cmd" all; then
+        print_success "Files staged successfully via gadd"
+        return 0
+    else
+        print_error "gadd failed to stage files"
+        return 1
+    fi
+}
+
+# Function to call gpr to create/update pull request
+call_gpr() {
+    local pr_title="$1"
+    local gpr_cmd
+    gpr_cmd=$(find_gpr)
+    
+    if [ -z "$gpr_cmd" ]; then
+        print_warning "gpr command not found, skipping PR creation"
+        print_info "You can manually push and create a PR with:"
+        print_info "  git push -u origin $WORKING_BRANCH"
+        print_info "  gh pr create --title \"$pr_title\""
+        return 0
+    fi
+    
+    print_info "Calling gpr to create/update pull request..."
+    
+    # Call gpr with the semantic message as PR title
+    if "$gpr_cmd" "$pr_title"; then
+        print_success "Pull request created/updated successfully via gpr"
+        return 0
+    else
+        print_error "gpr failed to create/update pull request"
+        print_warning "Your changes are committed locally but not pushed"
+        print_info "You can manually push with: git push -u origin $WORKING_BRANCH"
+        return 1
+    fi
+}
+
 # Function to check if we're in a git repository
 check_git_repo() {
     if ! git rev-parse --git-dir > /dev/null 2>&1; then
@@ -57,15 +154,27 @@ check_git_repo() {
     fi
 }
 
-# Function to check for staged changes
+# Function to check for staged changes (and optionally stage via gadd)
 check_staged_changes() {
     local staged_files
     staged_files=$(git diff --cached --name-only)
 
     if [ -z "$staged_files" ]; then
-        print_error "No staged changes found"
-        print_info "Please stage your changes first with 'git add' or '/gadd'"
-        exit 1
+        print_info "No staged changes found, attempting to stage via gadd..."
+        
+        # Try to call gadd to stage files
+        if ! call_gadd; then
+            print_error "Failed to stage files"
+            print_info "Please stage your changes first with 'git add' or 'gadd'"
+            exit 1
+        fi
+        
+        # Check again after gadd
+        staged_files=$(git diff --cached --name-only)
+        if [ -z "$staged_files" ]; then
+            print_error "No changes to commit after staging"
+            exit 1
+        fi
     fi
 
     echo "$staged_files"
@@ -253,6 +362,8 @@ main() {
     for arg in "$@"; do
         if [[ "$arg" =~ ^--mode= ]]; then
             mode="${arg#--mode=}"
+        elif [[ "$arg" == "--no-pr" ]]; then
+            CREATE_PR=false
         else
             semantic_message="$arg"
         fi
@@ -303,6 +414,22 @@ main() {
     # Print summary
     print_summary "$WORKING_BRANCH" "$COMMIT_HASH" "$semantic_message"
 
+    # Create/update pull request via gpr (unless --no-pr flag is set)
+    if [ "$CREATE_PR" = true ]; then
+        echo ""
+        print_info "Creating/updating pull request..."
+        if ! call_gpr "$semantic_message"; then
+            print_warning "PR creation failed, but commit was successful"
+            # Don't exit with error - commit was successful
+        fi
+    else
+        print_info "Skipping PR creation (--no-pr flag set)"
+        print_info "To push and create PR manually:"
+        print_info "  git push -u origin $WORKING_BRANCH"
+        print_info "  gh pr create --title \"$semantic_message\""
+    fi
+
+    echo ""
     print_success "Done!"
 }
 
