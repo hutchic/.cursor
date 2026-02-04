@@ -69,22 +69,22 @@ print_warning() {
 generate_semantic_message() {
     local changed_files
     changed_files=$(git diff --cached --name-only 2>/dev/null || echo "")
-    
+
     if [ -z "$changed_files" ]; then
         echo "chore: update files"
         return
     fi
-    
+
     # Classify the primary change type based on files
     local has_src=false
     local has_test=false
     local has_docs=false
     local has_config=false
     local has_ci=false
-    
+
     while IFS= read -r file; do
         [ -z "$file" ] && continue
-        
+
         if [[ "$file" =~ \.(md|txt)$ ]] || [[ "$file" =~ ^(README|CHANGELOG|LICENSE|CONTRIBUTING) ]]; then
             has_docs=true
         elif [[ "$file" =~ (test_|_test\.|\.test\.|\.spec\.|/__tests__/|/tests?/|/spec/) ]]; then
@@ -97,11 +97,11 @@ generate_semantic_message() {
             has_src=true
         fi
     done <<< "$changed_files"
-    
+
     # Generate message based on primary change type
     local type="chore"
     local scope=""
-    
+
     if [ "$has_docs" = true ]; then
         type="docs"
     elif [ "$has_test" = true ]; then
@@ -114,11 +114,11 @@ generate_semantic_message() {
     elif [ "$has_src" = true ]; then
         type="feat"
     fi
-    
+
     # Generate a brief summary
     local file_count
     file_count=$(echo "$changed_files" | wc -l | tr -d ' ')
-    
+
     if [ -n "$scope" ]; then
         echo "${type}(${scope}): update ${file_count} file(s)"
     else
@@ -130,7 +130,7 @@ generate_semantic_message() {
 find_gadd() {
     local gadd_path=""
     local script_dir
-    
+
     # Check in same directory as this script
     script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
     if [ -x "$script_dir/gadd" ]; then
@@ -142,7 +142,7 @@ find_gadd() {
     elif command -v gadd &> /dev/null; then
         gadd_path="gadd"
     fi
-    
+
     echo "$gadd_path"
 }
 
@@ -151,7 +151,7 @@ find_gpr() {
     local gpr_path=""
     local script_dir
     local repo_root
-    
+
     # Check in repository scripts directory
     script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
     repo_root="$(cd "$script_dir/../.." && pwd)"
@@ -164,7 +164,7 @@ find_gpr() {
     elif command -v gpr &> /dev/null; then
         gpr_path="gpr"
     fi
-    
+
     echo "$gpr_path"
 }
 
@@ -172,15 +172,15 @@ find_gpr() {
 call_gadd() {
     local gadd_cmd
     gadd_cmd=$(find_gadd)
-    
+
     if [ -z "$gadd_cmd" ]; then
         print_warning "gadd command not found, skipping automatic staging"
         print_info "Files must already be staged"
         return 0
     fi
-    
+
     print_info "Calling gadd to stage files..."
-    
+
     # Call gadd with 'all' mode to stage all changes
     if "$gadd_cmd" all; then
         print_success "Files staged successfully via gadd"
@@ -196,7 +196,7 @@ call_gpr() {
     local pr_title="$1"
     local gpr_cmd
     gpr_cmd=$(find_gpr)
-    
+
     if [ -z "$gpr_cmd" ]; then
         print_warning "gpr command not found, skipping PR creation"
         print_info "You can manually push and create a PR with:"
@@ -204,9 +204,9 @@ call_gpr() {
         print_info "  gh pr create --title \"$pr_title\""
         return 0
     fi
-    
+
     print_info "Calling gpr to create/update pull request..."
-    
+
     # Call gpr with the semantic message as PR title
     if "$gpr_cmd" "$pr_title"; then
         print_success "Pull request created/updated successfully via gpr"
@@ -234,14 +234,14 @@ check_staged_changes() {
 
     if [ -z "$staged_files" ]; then
         print_info "No staged changes found, attempting to stage via gadd..."
-        
+
         # Try to call gadd to stage files
         if ! call_gadd; then
             print_error "Failed to stage files"
             print_info "Please stage your changes first with 'git add' or 'gadd'"
             exit 1
         fi
-        
+
         # Check again after gadd
         staged_files=$(git diff --cached --name-only)
         if [ -z "$staged_files" ]; then

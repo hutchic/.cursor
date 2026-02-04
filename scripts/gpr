@@ -323,7 +323,7 @@ generate_snippet() {
 generate_pr_body() {
     local base_branch="${1:-main}"
     local pr_template=""
-    
+
     # Look for PR template in common locations
     for template_path in ".github/pull_request_template.md" ".github/PULL_REQUEST_TEMPLATE.md" "docs/pull_request_template.md" "PULL_REQUEST_TEMPLATE.md"; do
         if [ -f "$template_path" ]; then
@@ -331,13 +331,13 @@ generate_pr_body() {
             break
         fi
     done
-    
+
     # If template exists, use it with some smart filling
     if [ -n "$pr_template" ]; then
         # Replace common placeholders
         pr_template="${pr_template//<!-- Provide a brief description of the changes in this PR -->/$PR_TITLE}"
         pr_template="${pr_template//<!-- List the specific changes made in this PR -->/$(get_commit_log "$base_branch")}"
-        
+
         # Add commit log and diff snippet to the template
         cat <<EOF
 $pr_template
@@ -416,10 +416,10 @@ create_pr_with_gh() {
     local repo="${repo_info##*:}"
 
     log_info "Creating PR with gh CLI"
-    
+
     # Build gh pr create command with draft flag if needed
     local gh_cmd="gh pr create --title \"$title\" --body \"$body\" --base \"$base_branch\" --repo \"$owner/$repo\""
-    
+
     if [ "$DRAFT_PR" = true ]; then
         gh_cmd="$gh_cmd --draft"
         log_info "Creating as draft PR"
