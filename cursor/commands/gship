@@ -59,9 +59,10 @@ print_warning() {
 # Function to find gadd command
 find_gadd() {
     local gadd_path=""
+    local script_dir
     
     # Check in same directory as this script
-    local script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
     if [ -x "$script_dir/gadd" ]; then
         gadd_path="$script_dir/gadd"
     # Check in ~/.cursor/commands
@@ -78,10 +79,12 @@ find_gadd() {
 # Function to find gpr command
 find_gpr() {
     local gpr_path=""
+    local script_dir
+    local repo_root
     
     # Check in repository scripts directory
-    local script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-    local repo_root="$(cd "$script_dir/../.." && pwd)"
+    script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    repo_root="$(cd "$script_dir/../.." && pwd)"
     if [ -x "$repo_root/scripts/gpr" ]; then
         gpr_path="$repo_root/scripts/gpr"
     # Check in ~/.cursor/commands
@@ -240,8 +243,10 @@ normalize_branch_name() {
     # Replace non-alphanumeric with hyphens
     branch_name=$(echo "$branch_name" | sed 's/[^a-z0-9/-]/-/g')
 
-    # Collapse duplicate hyphens
-    branch_name=$(echo "$branch_name" | sed 's/-\+/-/g')
+    # Collapse duplicate hyphens using bash parameter expansion
+    while [[ "$branch_name" =~ -- ]]; do
+        branch_name="${branch_name//--/-}"
+    done
 
     # Remove leading/trailing hyphens
     branch_name=$(echo "$branch_name" | sed 's/^-//;s/-$//')
