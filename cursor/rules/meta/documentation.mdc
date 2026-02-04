@@ -1,0 +1,146 @@
+---
+description: "Rules for documentation standards and keeping documentation in sync with artifacts. Use when creating or updating documentation."
+alwaysApply: true
+---
+
+# Documentation Rules
+
+Rules for documentation standards and keeping documentation in sync with artifacts.
+
+## Documentation Structure
+
+### Artifact Documentation
+
+Each artifact should be self-documenting with:
+- **Overview**: What it does
+- **When to Use**: When it applies
+- **How to Use**: Usage instructions
+- **Related**: Links to related artifacts
+- **Examples**: Usage examples
+
+### Category Documentation
+
+Each category should have documentation:
+- **Purpose**: What the category is for
+- **Contents**: List of artifacts in category
+- **Usage**: How to use artifacts in category
+- **Related Categories**: Links to related categories
+
+### Master Documentation
+
+Maintain master documentation:
+- **Index**: Complete list of all artifacts
+- **Organization Guide**: How artifacts are organized
+- **Cross-Reference Map**: Map of relationships
+- **Usage Guide**: How to use the system
+
+## When to Update Documentation
+
+### Immediate Updates
+
+Update documentation immediately when:
+- Creating new artifacts
+- Moving or renaming artifacts
+- Adding new categories
+- Changing organization structure
+
+### Periodic Updates
+
+Update documentation periodically:
+- Review and refresh examples
+- Update cross-reference maps
+- Validate all links
+- Ensure completeness
+
+### Triggered Updates
+
+Update documentation when:
+- Artifacts are modified significantly
+- New patterns emerge
+- Organization changes
+- User feedback indicates gaps
+
+## Documentation Cross-Referencing
+
+### Artifact References in Docs
+
+- Link to all relevant artifacts
+- Provide examples from artifacts
+- Reference artifact categories
+- Link to templates
+
+### Doc References in Artifacts
+
+- Link to relevant documentation
+- Reference usage guides
+- Link to best practices
+- Reference organization guides
+
+### Documentation Structure
+
+- Clear headings and hierarchy
+- Examples for each artifact type
+- Best practices sections
+- Troubleshooting guides
+
+## Keeping Docs in Sync
+
+### When Creating Artifacts
+
+1. **Document immediately**: Add to relevant docs
+2. **Update indexes**: Add to master index
+3. **Add cross-references**: Link from related docs
+4. **Update examples**: Add to example sections
+
+### When Modifying Artifacts
+
+1. **Update artifact docs**: Update artifact's own documentation
+2. **Update category docs**: Update category documentation if needed
+3. **Update master docs**: Update master documentation if relevant
+4. **Validate references**: Ensure all references still work
+
+### When Removing Artifacts
+
+1. **Remove from indexes**: Remove from master index
+2. **Update category docs**: Remove from category lists
+3. **Remove references**: Remove from related documentation
+4. **Update examples**: Remove from example sections
+
+## Documentation Standards
+
+### Formatting
+
+- Use clear headings and hierarchy
+- Keep line length reasonable
+- Use consistent formatting
+- Include code examples where helpful
+
+### Content
+
+- Be clear and concise
+- Provide concrete examples
+- Include usage instructions
+- Document best practices
+
+### Organization
+
+- Logical structure
+- Easy navigation
+- Clear cross-references
+- Complete coverage
+
+## Best Practices
+
+1. **Document as you go**: Don't defer documentation
+2. **Keep it current**: Update docs when artifacts change
+3. **Be comprehensive**: Cover all aspects
+4. **Use examples**: Show, don't just tell
+5. **Maintain links**: Keep cross-references current
+
+## Related Artifacts
+
+- [Organization Rule](.cursor/rules/meta/organization.mdc)
+- [Cross-Referencing Rule](.cursor/rules/meta/cross-referencing.mdc)
+- [Documentation Updater Subagent](.cursor/agents/meta/documentation-updater.md)
+- [Generate Docs Index Command](.cursor/commands/meta/generate-docs-index.md)
+- [Cursor Best Practices](docs/research/cursor-best-practices.md)

@@ -1,253 +1,192 @@
-# Automation Agents
+# AGENTS.md
 
-This document describes the automated agents and workflows configured in this repository.
+Instructions for AI coding agents working on this repository.
 
-## GitHub Actions Workflows
+## Setup Commands
+
+### Initial Setup
+
+- Verify project structure: `make verify`
+- Check dependencies: `make check-deps`
+
+### Pre-commit Setup
+
+**CRITICAL**: AI agents making commits MUST set up pre-commit hooks:
+
+```bash
+# Install pre-commit hooks (required before first commit)
+pre-commit install
+
+# Run pre-commit on all files before committing
+pre-commit run --all-files
+```
+
+This ensures all commits pass CI/CD checks. See [.github/PRE_COMMIT_SETUP.md](.github/PRE_COMMIT_SETUP.md) for details.
+
+## Code Style
+
+### General Guidelines
+
+- Follow existing code patterns in the repository
+- Use consistent indentation (spaces, not tabs)
+- Ensure files end with a newline
+- Remove trailing whitespace
+- Use LF line endings (not CRLF)
+
+### Shell Scripts
+
+- Use `#!/usr/bin/env bash` shebang
+- Make scripts executable: `chmod +x script.sh`
+- Follow shellcheck guidelines (error severity only)
+- Use consistent quoting and error handling
+
+### Markdown
+
+- Follow markdownlint rules (see `.markdownlint.json`)
+- Use proper heading hierarchy
+- Keep line length reasonable
+
+### Python (if any)
+
+- Use Black formatter (configured in pre-commit)
+- Follow PEP 8 style guidelines
+- Run bandit security checks
+
+## Testing Instructions
 
 ### Pre-commit Checks
 
-**Workflow:** `.github/workflows/pre-commit.yml`
+Before committing, run:
 
-Runs on every pull request to ensure code quality and consistency.
+```bash
+pre-commit run --all-files
+```
 
-#### Jobs
+This runs all configured hooks:
+- File quality checks (end-of-file, whitespace, line endings)
+- YAML/JSON validation
+- Python syntax and formatting
+- Security checks (bandit, detect-private-key)
+- Linting (shellcheck, yamllint, markdownlint)
 
-- **Validate PR titles**: Ensures PR titles follow semantic versioning conventions using `amannn/action-semantic-pull-request`
-- **pre-commit**: Runs all configured pre-commit hooks to lint and format code
+### Verification
 
-#### Configured Pre-commit Hooks
+Verify project structure:
 
-**Configuration:** `.pre-commit-config.yaml`
+```bash
+make verify
+```
 
-The repository uses the following pre-commit hooks to ensure code quality:
+This checks that `.cursor/`, `cursor/commands/`, `cursor/skills/`, and `cursor/agents/` exist.
 
-**File Quality:**
+### CI/CD Checks
 
-- `end-of-file-fixer`: Ensures files end with a newline
-- `trailing-whitespace`: Removes trailing whitespace
-- `mixed-line-ending`: Ensures consistent line endings
-- `check-byte-order-marker`: Checks for UTF-8 BOM
+All PRs must pass:
+- `pre-commit` - All pre-commit hooks
+- `lint-pr-title` - PR title validation (semantic format)
+- `sync` - Repository sync checks
 
-**Validation:**
+## PR Instructions
 
-- `check-yaml`: Validates YAML syntax (with --unsafe flag for custom tags)
-- `check-json`: Validates JSON syntax
-- `check-merge-conflict`: Detects merge conflict markers
-- `check-ast`: Validates Python syntax
-- `check-builtin-literals`: Checks for builtin type constructor use
+### Pull Request Title Format
 
-**Security:**
+**CRITICAL**: All PR titles MUST follow [Conventional Commits](https://www.conventionalcommits.org/) format:
 
-- `detect-private-key`: Detects private keys in code
-- `bandit`: Python security linter
-
-**Formatting:**
-
-- `black`: Python code formatter
-- `forbid-crlf` / `remove-crlf`: Enforces LF line endings
-- `forbid-tabs` / `remove-tabs`: Enforces spaces over tabs
-
-**Linting:**
-
-- `shellcheck`: Bash/shell script linter (error severity only)
-- `yamllint`: YAML linter (uses `.yamllint` config)
-- `markdownlint`: Markdown documentation linter (uses `.markdownlint.json` config)
-
-**Python-specific:**
-
-- `debug-statements`: Detects Python debug statements
-- `requirements-txt-fixer`: Sorts requirements.txt
-- `fix-encoding-pragma`: Fixes Python encoding pragmas (deprecated)
-
-### Dependabot Auto-merge
-
-**Workflow:** `.github/workflows/automerge.yml`
-
-Automatically approves and merges Dependabot PRs.
-
-#### Trigger
-
-- Runs on `pull_request_target` events
-- Only executes when the actor is `dependabot[bot]`
-
-#### Actions
-
-1. Fetches Dependabot metadata
-2. Automatically approves the PR
-3. Enables auto-merge with squash strategy
-
-### Pull Request Labeler
-
-**Workflow:** `.github/workflows/labeller.yml`
-
-Automatically adds labels to pull requests based on modified files and PR metadata.
-
-#### Jobs
-
-- Uses `actions/labeler` to add labels based on file patterns (configured in `.github/labeler.yml`)
-- Uses `TimonVS/pr-labeler-action` to add labels based on PR branch names (configured in `.github/pr-labeler.yml`)
-
-### Auto-update PRs
-
-**Workflow:** `.github/workflows/autoupdate.yml`
-
-Automatically updates pull request branches when the main branch is updated.
-
-#### Trigger
-
-- Runs when code is pushed to `main` branch
-
-#### Actions
-
-- Updates all open PRs to be in sync with the latest main branch
-- Only updates PRs that have passed required checks
-- Sorts by creation date (newest first)
-
-### Pre-commit Hook Updates
-
-**Workflow:** `.github/workflows/pre-commit-update.yml`
-
-Keeps pre-commit hooks up to date.
-
-#### Trigger
-
-- Manual trigger via `workflow_dispatch`
-- Weekly schedule (Mondays at 7:00 AM)
-
-#### Actions
-
-1. Runs `pre-commit autoupdate`
-2. Creates a PR with updated hook versions
-3. Labels the PR as `dependencies`
-
-## Dependabot
-
-**Configuration:** `.github/dependabot.yml`
-
-Automated dependency updates for multiple package ecosystems.
-
-### Monitored Ecosystems
-
-- **Python** (pip): Daily updates for Python dependencies
-- **Docker**: Daily updates for Docker images
-- **GitHub Actions**: Daily updates for action versions
-- **npm** (frontend): Daily updates for Node.js dependencies (major versions ignored)
-- **Git Submodules**: Daily updates for submodules
-
-### Update Strategy
-
-- Groups patch updates together for cleaner PRs
-- Runs daily for all ecosystems
-- Frontend npm dependencies ignore major version updates
-
-## Bot Integrations
-
-### Pull[bot]
-
-**Configuration:** `.github/pull.yml`
-
-Keeps repository in sync with upstream template repository.
-
-### Settings Bot
-
-**Configuration:** `.github/settings.yml`
-
-Syncs repository settings via [Probot Settings](https://probot.github.io/apps/settings/).
-
-#### Key Settings
-
-- Auto-delete branches on merge
-- Squash merge enabled (merge commits disabled)
-- Branch protection on `main`:
-  - Requires PRs to be up-to-date with main
-  - Requires `pre-commit` and `sync` checks to pass
-  - Enforces linear history
-
-## Required Secrets
-
-The following secrets must be configured in GitHub repository settings:
-
-- `AUTO_MERGE_TOKEN`: Personal access token for auto-merge functionality
-- `GH_TOKEN`: GitHub token for general GitHub API access
-- `GITHUB_TOKEN`: Automatically provided by GitHub Actions
-
-## Branch Protection
-
-The `main` branch has the following protections:
-
-- Pull requests required before merging
-- Status checks required:
-  - `pre-commit`
-  - `sync`
-- Branches must be up-to-date before merging
-- Linear history enforced (no merge commits)
-- Auto-delete branches after merge
-
-## Setup Instructions
-
-Refer to [README.md](README.md) for repository-specific setup steps.
-
-For installation of Cursor automation scaffolding, see [INSTALL.md](INSTALL.md).
-
-## AI Agent Guidelines
-
-**CRITICAL**: AI agents making commits to this repository MUST follow these steps:
-
-> **Note for Maintainers**: This section is duplicated/referenced in multiple locations:
-> - [.github/copilot-instructions.md](.github/copilot-instructions.md#for-ai-agents-critical) - Copilot-specific instructions
-> - [.github/PRE_COMMIT_SETUP.md](.github/PRE_COMMIT_SETUP.md#for-ai-agents) - Detailed pre-commit setup
->
-> When updating AI agent guidelines, ensure all locations are kept in sync.
-
-### Pull Request Title Requirements
-
-**CRITICAL**: All pull requests created by AI agents MUST have titles that are:
-
-- **Semantic**: Follow [Conventional Commits](https://www.conventionalcommits.org/) format: `type(scope): description`
-- **Terse**: Keep under 50 characters when possible - be minimal and direct
-- **Descriptive**: Clearly summarize the essence of the change
-- **Imperative mood**: Use "add" not "added" or "adds"
-
-**Format:**
 ```
 <type>(<scope>): <description>
 ```
 
+**Requirements:**
+- **Semantic**: Use proper type (feat, fix, docs, etc.)
+- **Terse**: Keep under 50 characters when possible
+- **Descriptive**: Clearly summarize the change
+- **Imperative mood**: Use "add" not "added" or "adds"
+
 **Valid types:** `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `chore`, `ci`, `build`, `revert`
 
-**Examples of good PR titles:**
+**Examples:**
 - ✅ `feat(api): add user search endpoint`
 - ✅ `fix(auth): resolve token expiry bug`
 - ✅ `docs(readme): update installation steps`
 - ✅ `refactor(parser): simplify token handling`
 - ✅ `chore(deps): update dependencies`
-
-**Examples of bad PR titles:**
-- ❌ `Added new feature` (not semantic, not imperative)
+- ❌ `Added new feature` (not semantic)
 - ❌ `Update files` (too vague)
 - ❌ `Fixed a bug in the authentication module that was causing tokens to expire` (too verbose)
-- ❌ `WIP: Working on feature` (not descriptive of final state)
-- ❌ `Changes` (meaningless)
 
-For comprehensive guidelines, see [CONTRIBUTING.md](CONTRIBUTING.md#pull-request-titles).
+See [CONTRIBUTING.md](CONTRIBUTING.md#pull-request-titles) for complete guidelines.
 
-### Pre-commit Hook Setup
+### Before Submitting PR
 
-AI agents using automated commit tools (like `report_progress`) MUST:
+1. **Run pre-commit**: `pre-commit run --all-files`
+2. **Verify structure**: `make verify`
+3. **Check dependencies**: `make check-deps`
+4. **Ensure PR title is semantic**: Follow format above
+5. **Update documentation**: If adding features, update relevant docs
 
-1. **Install pre-commit hooks at session start**:
+## Security Considerations
+
+### Pre-commit Security Checks
+
+- `detect-private-key`: Detects private keys in code
+- `bandit`: Python security linter
+
+### Never Commit
+
+- API keys or secrets
+- Private keys or certificates
+- Passwords or tokens
+- Personal information
+
+### GitHub Secrets
+
+Required secrets are configured in repository settings (not in code):
+- `AUTO_MERGE_TOKEN`
+- `GH_TOKEN`
+- `GITHUB_TOKEN` (auto-provided)
+
+## Project Structure
+
+**This repo is a standalone project. Rules, skills, and commands live in `cursor/`. Two symlinks only: (1) `.cursor` → `cursor/` so editors can self-edit; (2) global use = symlink skills/commands (e.g. `~/.cursor/skills` → repo `cursor/skills`). No install scripts or extra complexity.** See [Standalone Repository rule](.cursor/rules/standalone-repository.mdc).
+
+### Key Directories
+
+- `cursor/` - **Source of truth** for rules, skills, commands, agents. Edit here.
+- `.cursor/` - Symlink to `cursor/` so Cursor IDE (and AI editors) see and can self-edit the same files.
+- `cursor/commands/`, `cursor/skills/`, `cursor/agents/`, `cursor/rules/` - All artifacts live under `cursor/`.
+- `docs/` - Documentation
+- `scripts/` - Utility scripts (no global-install or symlink-creation scripts)
+
+### Important Files
+
+- `AGENTS.md` - This file (instructions for agents)
+- `README.md` - Project overview and quick start
+- `CONTRIBUTING.md` - Contribution guidelines
+- `INSTALL.md` - Installation instructions
+- `.pre-commit-config.yaml` - Pre-commit hook configuration
+- `Makefile` - Common commands
+
+## Workflow for AI Agents
+
+### Standard Workflow
+
+1. **Install pre-commit hooks** (once per session):
    ```bash
    pre-commit install
    ```
 
-2. **Run pre-commit before every commit**:
+2. **Make code changes**
+
+3. **Run pre-commit** before committing:
    ```bash
    pre-commit run --all-files
    ```
 
-3. **Commit any fixes** made by pre-commit before using `report_progress` or similar tools
+4. **Commit fixes** made by pre-commit
 
-### Why This Is Required
+5. **Create PR** with semantic title
+
+### Why Pre-commit is Required
 
 - Automated commit tools bypass local git hooks
 - Without pre-commit checks, commits will **fail CI/CD checks**
@@ -260,20 +199,50 @@ AI agents using automated commit tools (like `report_progress`) MUST:
   - Python formatting (black)
   - Security issues (bandit)
 
-### Workflow Template
+## Meta Processes
 
-```bash
-# 1. Install hooks (once per session)
-pre-commit install
+This repository includes meta processes for self-improvement:
 
-# 2. Make code changes
-# ... edit files ...
+### Meta Commands
 
-# 3. Run pre-commit to fix issues
-pre-commit run --all-files
+- `/process-chat` - Analyze AI chat conversations for patterns
+- `/create-artifact` - Interactively create artifacts from patterns
+- `/update-cross-references` - Maintain cross-references
+- `/validate-organization` - Validate repository organization
+- `/generate-docs-index` - Generate documentation indexes
 
-# 4. Now use report_progress or other commit tools
-# The files are clean and will pass CI
-```
+### Meta Skills
 
-For detailed setup instructions, see [.github/PRE_COMMIT_SETUP.md](.github/PRE_COMMIT_SETUP.md).
+- `conversation-analysis` - Analyze AI chat conversations
+- `pattern-extraction` - Extract reusable patterns
+- `artifact-creation` - Guide artifact creation
+- `cross-reference-maintenance` - Maintain cross-references
+- `find-skills` - Discover and install skills from [skills.sh](https://skills.sh/) when users ask "find a skill for X" or want to extend capabilities; uses `npx skills find` and `npx skills add`
+
+### Meta Subagents
+
+- `conversation-analyzer` - Analyze conversations in isolation
+- `artifact-creator` - Create artifacts from patterns
+- `cross-reference-maintainer` - Maintain cross-references
+- `documentation-updater` - Update documentation
+
+See [Meta Processes Guide](docs/meta-processes.md) for details on using these meta artifacts.
+
+## Additional Resources
+
+- [Cursor Rules Documentation](docs/cursor-rules.md) - Guide to Cursor Rules
+- [Cursor Commands Documentation](docs/cursor-commands.md) - Guide to creating reusable workflows
+- [Cursor Skills Documentation](docs/cursor-skills.md) - Guide to extending AI agents with specialized capabilities
+- [Cursor Subagents Documentation](docs/cursor-subagents.md) - Guide to specialized AI assistants for complex tasks
+- [Meta Processes Guide](docs/meta-processes.md) - Guide to meta processes for self-improvement
+- [Self-Improvement Workflow](docs/self-improvement-workflow.md) - Step-by-step self-improvement process
+- [Organization Guide](docs/organization.md) - Organization structure guide
+- [Automation Agents](docs/automation-agents.md) - GitHub Actions and automation workflows
+- [Contributing Guidelines](CONTRIBUTING.md) - Detailed contribution standards
+- [Installation Guide](INSTALL.md) - Comprehensive setup instructions
+
+## Notes
+
+- Commands, skills, and subagents are loaded from this project's `.cursor/` when the repo is open in Cursor (project-local only; no global `~/.cursor` install).
+- Rules are in `.cursor/rules/` (see [docs/cursor-rules.md](docs/cursor-rules.md)).
+- All changes must pass pre-commit hooks before committing.

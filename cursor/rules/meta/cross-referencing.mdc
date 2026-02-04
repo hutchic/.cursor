@@ -1,0 +1,140 @@
+---
+description: "Rules for maintaining cross-references between artifacts and documentation. Use when creating artifacts, updating documentation, or maintaining reference integrity."
+alwaysApply: true
+---
+
+# Cross-Referencing Rules
+
+Rules for maintaining cross-references between artifacts and documentation.
+
+## When to Add Cross-References
+
+### Artifact-to-Artifact References
+
+Add references when:
+- Artifacts are related or work together
+- One artifact uses or depends on another
+- Artifacts address similar concerns
+- Artifacts are part of the same workflow
+
+### Artifact-to-Documentation References
+
+Add references when:
+- Artifact relates to documentation topic
+- Documentation explains artifact usage
+- Artifact is an example of documentation concept
+- Documentation provides context for artifact
+
+### Documentation-to-Artifact References
+
+Add references when:
+- Documentation describes artifact
+- Artifact is example of documentation concept
+- Documentation guides artifact usage
+- Artifact implements documentation pattern
+
+## How to Format References
+
+### Markdown Links
+
+Use relative paths for references:
+
+```markdown
+[Link Text](.cursor/rules/meta/organization.mdc)
+[Link Text](.cursor/skills/meta/pattern-extraction/SKILL.md)
+[Link Text](docs/cursor-rules.md)
+```
+
+### File References (in Rules)
+
+Use `@filename` syntax in rules:
+
+```markdown
+@example-file.ts
+@cursor/rules/meta/organization.mdc
+```
+
+### Reference Sections
+
+Include a "Related Artifacts" section in all artifacts:
+
+```markdown
+## Related Artifacts
+
+- [Related Rule](.cursor/rules/category/related-rule.mdc)
+- [Related Skill](.cursor/skills/category/related-skill/SKILL.md)
+- [Related Command](.cursor/commands/category/related-command.md)
+- [Related Subagent](.cursor/agents/category/related-subagent.md)
+- [Documentation](docs/relevant-doc.md)
+```
+
+## Maintaining Reference Integrity
+
+### When Creating Artifacts
+
+1. **Identify related artifacts**: Find artifacts that relate to new one
+2. **Add forward references**: Add references in new artifact
+3. **Add backward references**: Add references in related artifacts
+4. **Update documentation**: Add references in relevant docs
+
+### When Moving Artifacts
+
+1. **Update all references**: Find and update all references to moved file
+2. **Check documentation**: Update docs that reference the artifact
+3. **Validate paths**: Ensure all paths are correct
+4. **Test references**: Verify links work after move
+
+### When Deleting Artifacts
+
+1. **Find all references**: Search for references to deleted artifact
+2. **Remove references**: Remove references from other artifacts
+3. **Update documentation**: Remove references from docs
+4. **Verify cleanup**: Ensure no broken references remain
+
+## Reference Validation
+
+### Regular Validation
+
+- Check for broken links periodically
+- Validate reference paths are correct
+- Ensure referenced files exist
+- Verify reference context makes sense
+
+### Validation Checklist
+
+- [ ] All referenced files exist
+- [ ] All paths are correct
+- [ ] References make contextual sense
+- [ ] Bidirectional references are maintained where appropriate
+- [ ] Documentation references are current
+
+## Cross-Reference Patterns
+
+### Bidirectional References
+
+When artifact A references artifact B:
+- Add forward reference in A
+- Add backward reference in B (when relevant)
+- Both link to relevant documentation
+
+### Reference Chains
+
+- **Rule → Skill → Command**: Rule uses skill, skill uses command
+- **Documentation → Artifacts**: Docs link to all related artifacts
+- **Index → All**: Master index links to everything
+
+## Best Practices
+
+1. **Add references when creating**: Include related artifacts from the start
+2. **Maintain bidirectionally**: Add backward references when relevant
+3. **Update on changes**: Update references when files move or change
+4. **Validate regularly**: Check for broken references periodically
+5. **Document relationships**: Explain why artifacts are related
+
+## Related Artifacts
+
+- [Organization Rule](.cursor/rules/meta/organization.mdc)
+- [Documentation Rule](.cursor/rules/meta/documentation.mdc)
+- [Cross-Reference Maintenance Skill](.cursor/skills/meta/cross-reference-maintenance/SKILL.md)
+- [Update Cross-References Command](.cursor/commands/meta/update-cross-references.md)
+- [Skills/Commands Patterns](docs/research/skills-commands-patterns.md)

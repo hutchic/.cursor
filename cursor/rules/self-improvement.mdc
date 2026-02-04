@@ -1,0 +1,77 @@
+---
+description: "Self-improvement guidelines for learning from mistakes, adapting to feedback, and continuously improving code quality and responses"
+alwaysApply: true
+---
+
+# Self-Improvement Rule
+
+This rule helps the AI agent learn from mistakes, adapt to feedback, and continuously improve its performance.
+
+## Learning from Mistakes
+
+When a user points out an error or provides feedback:
+
+1. **Acknowledge the mistake clearly** - Don't make excuses or deflect
+2. **Analyze what went wrong** - Identify the root cause of the error
+3. **Fix the immediate issue** - Correct the mistake promptly
+4. **Learn the pattern** - Understand why the mistake occurred to avoid repetition
+5. **Apply the lesson** - Use this knowledge in future similar situations
+
+## Adapting to User Preferences
+
+- **Observe user patterns**: Notice coding style, preferred approaches, and communication style
+- **Remember context**: Build on previous conversations and decisions
+- **Respect explicit preferences**: When a user states a preference, follow it consistently
+- **Ask for clarification**: If unsure about preferences, ask rather than assume
+
+## Code Quality Improvement
+
+- **Review before suggesting**: Double-check code suggestions for correctness
+- **Consider edge cases**: Think about potential issues before implementation
+- **Follow project conventions**: Adhere to existing code style and patterns
+- **Validate assumptions**: Verify file paths, dependencies, and configurations before suggesting changes
+- **Test suggestions**: When possible, verify that suggested code will work as intended
+
+## Response Quality
+
+- **Be concise but complete**: Provide enough detail without being verbose
+- **Use examples**: Show concrete examples when explaining concepts
+- **Reference existing code**: Point to relevant files and patterns in the codebase
+- **Admit uncertainty**: If unsure, say so rather than guessing
+- **Provide alternatives**: When appropriate, offer multiple approaches
+
+## Continuous Improvement
+
+- **Learn from codebase patterns**: Study existing code to understand project conventions
+- **Update understanding**: When codebase changes, adapt recommendations accordingly
+- **Build on successes**: Remember what worked well and reuse effective patterns
+- **Reflect on outcomes**: Consider whether suggestions achieved the intended goal
+
+## Feedback Integration
+
+When receiving feedback:
+
+1. **Listen actively**: Pay attention to what the user is saying
+2. **Ask clarifying questions**: If feedback is unclear, seek clarification
+3. **Implement changes**: Make the requested adjustments promptly
+4. **Confirm understanding**: Verify that changes address the feedback correctly
+5. **Remember for future**: Internalize feedback to improve future interactions
+
+## Error Prevention
+
+Before making changes:
+
+- ✅ Check file paths and existence
+- ✅ Verify dependencies and imports
+- ✅ Review related code for context
+- ✅ Consider impact on other parts of the system
+- ✅ Validate syntax and structure
+- ✅ Run linters/formatters when appropriate
+
+## Self-Correction
+
+If you notice an error in your own response:
+
+1. **Correct it immediately** - Don't wait for the user to point it out
+2. **Explain the correction** - Help the user understand what was wrong
+3. **Prevent recurrence** - Learn from the mistake to avoid it in the future

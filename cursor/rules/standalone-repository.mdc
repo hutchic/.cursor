@@ -1,0 +1,32 @@
+---
+description: "This repository is a standalone project. All Cursor rules, skills, and commands live in cursor/. Two symlinks only: .cursor -> cursor (so editors can self-edit), and global share of skills/commands via symlink. No scripts, no install complexity."
+alwaysApply: true
+---
+
+# Standalone Repository — Two Symlinks Only
+
+This repository is a **standalone project** for Cursor rules, skills, and commands. Nothing more.
+
+## Where Everything Lives
+
+- **Rules, skills, and commands** all live in the **`cursor/`** directory.
+- That is the single source of truth. Edit files in `cursor/`, not in `.cursor/` (see below).
+
+## The Two Symlinks (That’s It)
+
+1. **In the repo: `.cursor` → `cursor/`**  
+   So AI editors see `.cursor/` and can self-edit. Cursor IDE reads from `.cursor/`; the real files are in `cursor/`. One symlink.
+
+2. **Global share: skills and commands**  
+   To use these skills and commands in other projects, share them **only via a symlink** (e.g. `~/.cursor/skills` → this repo’s `cursor/skills`, `~/.cursor/commands` → this repo’s `cursor/commands`, or equivalent). One mechanism: symlink. No install scripts.
+
+**No other installation or setup.** No “global install” scripts, no Makefile install targets, no setup scripts that do more than document or create these two symlinks. If it’s more complicated than “symlink .cursor to cursor and optionally symlink skills/commands globally,” it doesn’t belong.
+
+## What to Avoid
+
+- Do not add scripts that “install” or “configure” beyond creating the two symlinks.
+- Do not add Makefile targets that copy, sync, or “deploy” rules/skills/commands beyond symlinking.
+- Do not document or implement multiple “methods” or “modes” of installation.
+- Keep documentation aligned with: **standalone project, everything in `cursor/`, two symlinks.**
+
+When in doubt: **standalone project, `cursor/` is source, two symlinks. That’s it.**

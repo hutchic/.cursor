@@ -1,0 +1,163 @@
+---
+description: "Decision framework for creating artifacts. Use when analyzing patterns to determine whether to create a rule, skill, command, or subagent, and how to organize it."
+alwaysApply: true
+---
+
+# Artifact Creation Rules
+
+Decision framework for creating rules, skills, commands, and subagents.
+
+## When to Create an Artifact
+
+### Create an Artifact When
+
+- Pattern appears multiple times in conversations
+- Instruction is repeated or corrected
+- Workflow is used frequently
+- Domain knowledge should persist
+- Process should be standardized
+- Team needs shared guidance
+
+### Don't Create an Artifact When
+
+- One-time instruction or task
+- Knowledge already clear from code
+- Pattern is too vague or abstract
+- Linter/formatter would be more appropriate
+- Common tool documentation (AI already knows)
+
+## Decision Framework: Rule vs Skill vs Command vs Subagent
+
+### Create a Rule When
+
+- **Persistent guidance** needed across sessions
+- **Domain-specific knowledge** that should always be available
+- **Style and architecture standards** for the project
+- **Context-aware patterns** based on file types
+- **Team collaboration** needs shared conventions
+
+**Characteristics:**
+- Included in context automatically (based on configuration)
+- Provides persistent guidance
+- Can be file-specific via globs
+- No executable scripts
+
+### Create a Skill When
+
+- **Domain knowledge** with executable scripts
+- **Workflows** that include automation
+- **Complex procedures** needing structured guidance
+- **Knowledge** that should be available across projects
+- **Tasks** that benefit from automatic detection
+
+**Characteristics:**
+- Can include executable scripts
+- Automatically detected by agent
+- Progressive loading (references/assets)
+- Portable across projects
+
+### Create a Command When
+
+- **Manual workflows** and checklists
+- **Step-by-step processes** that need structured guidance
+- **Tasks** that should be triggered manually
+- **Team standardization** of workflows
+- **Quick, repeatable actions**
+
+**Characteristics:**
+- Invoked manually with `/command-name`
+- No automatic context inclusion
+- Simple markdown structure
+- No executable scripts
+
+### Create a Subagent When
+
+- **Complex tasks** needing context isolation
+- **Long-running research** or exploration
+- **Parallel workstreams** for different tasks
+- **Independent verification** of work
+- **Specialized expertise** across many steps
+
+**Characteristics:**
+- Own context window (isolated)
+- Can run in parallel
+- Specialized prompts and configuration
+- Can use different models
+
+## Artifact Selection Decision Tree
+
+```
+Is the task simple and single-purpose?
+├─ Yes → Is it a checklist/workflow?
+│   ├─ Yes → Command
+│   └─ No → Does it need scripts?
+│       ├─ Yes → Skill
+│       └─ No → Rule
+└─ No → Does it need context isolation?
+    ├─ Yes → Subagent
+    └─ No → Does it need scripts?
+        ├─ Yes → Skill
+        └─ No → Rule
+```
+
+## Naming and Organization Standards
+
+### Naming
+
+- Use kebab-case consistently
+- Be descriptive but concise
+- Follow naming patterns for each type
+- Avoid abbreviations
+
+### Organization
+
+- Place in appropriate category
+- Use meta/ for system management artifacts
+- Group related artifacts together
+- Follow directory structure standards
+
+## Avoiding Duplication
+
+### Before Creating
+
+1. **Search existing artifacts**: Check if similar artifact exists
+2. **Review related artifacts**: Check related categories
+3. **Consider consolidation**: Can existing artifact be extended?
+4. **Check documentation**: Review docs for similar patterns
+
+### When Duplicates Exist
+
+1. **Compare artifacts**: Identify differences
+2. **Consolidate if possible**: Merge into single artifact
+3. **Differentiate clearly**: If keeping separate, make differences clear
+4. **Update references**: Update all cross-references
+
+## Artifact Creation Process
+
+1. **Identify pattern**: Extract pattern from conversation/analysis
+2. **Select type**: Choose rule/skill/command/subagent
+3. **Choose template**: Use appropriate template
+4. **Create artifact**: Write content following standards
+5. **Organize**: Place in appropriate category
+6. **Cross-reference**: Add references to related artifacts
+7. **Document**: Update documentation
+8. **Validate**: Verify artifact works correctly
+
+## Best Practices
+
+1. **Start simple**: Create minimal artifact first, refine later
+2. **Use templates**: Always use templates for consistency
+3. **Follow standards**: Adhere to naming and organization standards
+4. **Add references**: Include cross-references from the start
+5. **Update docs**: Keep documentation in sync
+6. **Test artifacts**: Verify artifacts work as expected
+
+## Related Artifacts
+
+- [Organization Rule](.cursor/rules/meta/organization.mdc)
+- [Cross-Referencing Rule](.cursor/rules/meta/cross-referencing.mdc)
+- [Documentation Rule](.cursor/rules/meta/documentation.mdc)
+- [Artifact Creation Skill](.cursor/skills/meta/artifact-creation/SKILL.md)
+- [Create Artifact Command](.cursor/commands/meta/create-artifact.md)
+- [Artifact Creator Subagent](.cursor/agents/meta/artifact-creator.md)
+- [Cursor Best Practices](docs/research/cursor-best-practices.md)

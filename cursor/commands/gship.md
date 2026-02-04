@@ -1,1 +1,0 @@
-gship/README.md

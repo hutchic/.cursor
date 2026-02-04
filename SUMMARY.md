@@ -94,12 +94,6 @@ gadd group=src
 gadd group=tests
 ```
 
-## Installation
-
-```bash
-ln -s "$(pwd)/cursor/commands" ~/.cursor/commands
-```
-
 ## Non-Goals (Intentionally Not Implemented)
 
 - ❌ Semantic analysis of code intent
