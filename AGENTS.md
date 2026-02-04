@@ -10,7 +10,8 @@ This document describes the automated agents and workflows configured in this re
 
 Runs on every pull request to ensure code quality and consistency.
 
-#### Jobs:
+#### Jobs
+
 - **Validate PR titles**: Ensures PR titles follow semantic versioning conventions using `amannn/action-semantic-pull-request`
 - **pre-commit**: Runs all configured pre-commit hooks to lint and format code
 
@@ -20,11 +21,13 @@ Runs on every pull request to ensure code quality and consistency.
 
 Automatically approves and merges Dependabot PRs.
 
-#### Trigger:
+#### Trigger
+
 - Runs on `pull_request_target` events
 - Only executes when the actor is `dependabot[bot]`
 
-#### Actions:
+#### Actions
+
 1. Fetches Dependabot metadata
 2. Automatically approves the PR
 3. Enables auto-merge with squash strategy
@@ -35,7 +38,8 @@ Automatically approves and merges Dependabot PRs.
 
 Automatically adds labels to pull requests based on modified files and PR metadata.
 
-#### Jobs:
+#### Jobs
+
 - Uses `actions/labeler` to add labels based on file patterns (configured in `.github/labeler.yml`)
 - Uses `TimonVS/pr-labeler-action` to add labels based on PR branch names (configured in `.github/pr-labeler.yml`)
 
@@ -45,10 +49,12 @@ Automatically adds labels to pull requests based on modified files and PR metada
 
 Automatically updates pull request branches when the main branch is updated.
 
-#### Trigger:
+#### Trigger
+
 - Runs when code is pushed to `main` branch
 
-#### Actions:
+#### Actions
+
 - Updates all open PRs to be in sync with the latest main branch
 - Only updates PRs that have passed required checks
 - Sorts by creation date (newest first)
@@ -59,11 +65,13 @@ Automatically updates pull request branches when the main branch is updated.
 
 Keeps pre-commit hooks up to date.
 
-#### Trigger:
+#### Trigger
+
 - Manual trigger via `workflow_dispatch`
 - Weekly schedule (Mondays at 7:00 AM)
 
-#### Actions:
+#### Actions
+
 1. Runs `pre-commit autoupdate`
 2. Creates a PR with updated hook versions
 3. Labels the PR as `dependencies`
@@ -74,14 +82,16 @@ Keeps pre-commit hooks up to date.
 
 Automated dependency updates for multiple package ecosystems.
 
-### Monitored Ecosystems:
+### Monitored Ecosystems
+
 - **Python** (pip): Daily updates for Python dependencies
 - **Docker**: Daily updates for Docker images
 - **GitHub Actions**: Daily updates for action versions
 - **npm** (frontend): Daily updates for Node.js dependencies (major versions ignored)
 - **Git Submodules**: Daily updates for submodules
 
-### Update Strategy:
+### Update Strategy
+
 - Groups patch updates together for cleaner PRs
 - Runs daily for all ecosystems
 - Frontend npm dependencies ignore major version updates
@@ -100,7 +110,8 @@ Keeps repository in sync with upstream template repository.
 
 Syncs repository settings via [Probot Settings](https://probot.github.io/apps/settings/).
 
-#### Key Settings:
+#### Key Settings
+
 - Auto-delete branches on merge
 - Squash merge enabled (merge commits disabled)
 - Branch protection on `main`:
@@ -119,6 +130,7 @@ The following secrets must be configured in GitHub repository settings:
 ## Branch Protection
 
 The `main` branch has the following protections:
+
 - Pull requests required before merging
 - Status checks required:
   - `pre-commit`

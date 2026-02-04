@@ -11,6 +11,7 @@ Creates semantic commits from staged changes with automatic branch creation for 
 [Full Documentation](README_GSHIP.md)
 
 **Quick Start:**
+
 ```bash
 gship "feat(api): add search endpoint"
 gship "fix: resolve bug"
@@ -49,11 +50,11 @@ gadd group=misc    # Stage only miscellaneous files
 
 - **Logical Grouping**: Automatically classifies files into buckets
   - `deps`: Lockfiles and dependency manifests (package-lock.json, Gemfile.lock, etc.)
-  - `src`: Application/runtime code (*.py, *.js, *.java, *.go, etc.)
-  - `tests`: Test files and fixtures (test_*.py, *.test.js, __tests__/, etc.)
+  - `src`: Application/runtime code (*.py,*.js, *.java,*.go, etc.)
+  - `tests`: Test files and fixtures (test_*.py,*.test.js, **tests**/, etc.)
   - `docs`: Documentation files (README, *.md, docs/, etc.)
   - `ci`: CI/CD configs (.github/, .gitlab-ci.yml, Jenkinsfile, etc.)
-  - `config`: Configuration files (*.yaml, *.json, Dockerfile, etc.)
+  - `config`: Configuration files (*.yaml,*.json, Dockerfile, etc.)
   - `misc`: Anything not matched by above buckets
 
 - **Safety Checks**:
@@ -68,6 +69,7 @@ gadd group=misc    # Stage only miscellaneous files
 #### Examples
 
 **Scenario 1: Quick staging of everything**
+
 ```bash
 $ gadd all
 Staging all changes...
@@ -75,6 +77,7 @@ Staging all changes...
 ```
 
 **Scenario 2: Guided staging with prompts**
+
 ```bash
 $ gadd
 Guided staging mode
@@ -94,6 +97,7 @@ Stage this bucket? (y/n): n
 ```
 
 **Scenario 3: Stage only documentation**
+
 ```bash
 $ gadd group=docs
 Staging bucket: docs (2 file(s))

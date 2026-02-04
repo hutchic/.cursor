@@ -94,35 +94,44 @@ gship "test: add integration tests"
 ## Acceptance Criteria Coverage
 
 ### ✅ AC-1: Semantic Commit Creation
+
 Given staged files exist, when user runs `/gship feat(api): add search`, then a commit is created with subject `feat(api): add search`.
 
 ### ✅ AC-2: No Staged Files
+
 Given no staged files exist, when user runs `/gship ...`, then command exits and suggests staging files first.
 
 ### ✅ AC-3: Protected Branch Detection
+
 Given user is on main, when user runs `/gship ...`, then a new branch is created before committing.
 
 ### ✅ AC-4: Feature Branch Workflow
+
 Given user is on feat/foo, when user runs `/gship ...`, then no new branch is created.
 
 ### ✅ AC-5: Hook Failure Handling
+
 Given commit hooks fail, when user runs `/gship ...`, then no commit is created and error is surfaced.
 
 ### ✅ AC-6: GPG Signing Respect
+
 Given GPG signing is configured and fails, when user runs `/gship ...`, then no commit is created and error is surfaced.
 
 ### ⚠️ AC-7: Multi-Commit Mode
+
 Given mode=multi, when staged changes represent multiple logical groups, then implementation falls back to single-commit mode with a warning.
 
 ## Error Handling
 
 ### No Staged Files
+
 ```
 Error: No staged changes found
 Please stage your changes first with 'git add' or '/gadd'
 ```
 
 ### Invalid Semantic Message
+
 ```
 Error: Invalid semantic commit format
 Valid types: feat, fix, docs, style, refactor, perf, test, chore, build, ci, revert
@@ -131,6 +140,7 @@ Example: 'feat(api): add search' or 'fix: resolve bug'
 ```
 
 ### Pre-commit Hook Failure
+
 ```
 Error: Commit failed
 This could be due to:
@@ -140,6 +150,7 @@ This could be due to:
 ```
 
 ### Branch Already Exists
+
 ```
 Error: Branch 'feat/api-add-search' already exists
 Please use a different semantic message or switch to the existing branch
@@ -157,6 +168,7 @@ Please use a different semantic message or switch to the existing branch
 Branches are created following the pattern: `<type>/<scope>-<summary>`
 
 Examples:
+
 - `feat(api): add search` → `feat/api-add-search`
 - `fix: resolve bug` → `fix/resolve-bug`
 - `chore(deps): update packages` → `chore/deps-update-packages`
@@ -178,6 +190,7 @@ Examples:
 ## Integration
 
 This command integrates with:
+
 - Git pre-commit hooks (always runs them)
 - GPG signing configuration (always respects it)
 - Protected branch policies (enforces branch creation)

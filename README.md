@@ -46,8 +46,8 @@ Creates or updates a GitHub pull request for the current branch.
     - valid pr titles
     - sync
 - set github secrets for actions and dependabot
-    - AUTO_MERGE_TOKEN
-    - GH_TOKEN
+  - AUTO_MERGE_TOKEN
+  - GH_TOKEN
 
 ## Directory Structure
 

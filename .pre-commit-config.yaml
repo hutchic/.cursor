@@ -7,15 +7,17 @@ repos:
   - id: end-of-file-fixer
   - id: trailing-whitespace
   - id: mixed-line-ending
-  #- id: check-yaml
+  - id: check-yaml
+    args: ['--unsafe']  # Allow custom YAML tags
+  - id: check-json
   - id: check-byte-order-marker
   - id: check-merge-conflict
-  - id: end-of-file-fixer
   - id: check-ast
   - id: check-builtin-literals
   - id: debug-statements
   - id: requirements-txt-fixer
   - id: fix-encoding-pragma
+  - id: detect-private-key
 - repo: https://github.com/psf/black
   rev: 25.1.0
   hooks:
@@ -31,3 +33,17 @@ repos:
   - id: remove-crlf
   - id: forbid-tabs
   - id: remove-tabs
+- repo: https://github.com/shellcheck-py/shellcheck-py
+  rev: v0.10.0.1
+  hooks:
+  - id: shellcheck
+    args: ['-x', '--severity=error']  # Allow following external sources, only fail on errors
+- repo: https://github.com/adrienverge/yamllint
+  rev: v1.35.1
+  hooks:
+  - id: yamllint
+- repo: https://github.com/igorshubovych/markdownlint-cli
+  rev: v0.43.0
+  hooks:
+  - id: markdownlint
+    args: ['--fix']
