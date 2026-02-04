@@ -372,17 +372,19 @@ echo "All tests passed!"
 
 ## Examples from This Repository
 
-### Meta Command: `create-command`
+### All Commands Use Directory Structure
 
-Example of a well-structured command directory:
-- `create-command/create-command` - Main executable
-- `create-command/README.md` - Full documentation
-- Self-contained and follows all conventions
-- Generates other commands following the same structure
+All commands in this repository now follow the self-contained directory structure:
 
-### Legacy Commands
+- **`gadd/`** - Git staging with intelligent file grouping
+- **`gship/`** - Semantic commit and PR creation workflow
+- **`gpr/`** - GitHub pull request creation and updates
+- **`create-command/`** - Meta-command for scaffolding new commands
 
-Some existing commands (`gadd`, `gship`) currently exist as individual files. These will be migrated to directory structure following the pattern above. New commands should always use directory structure.
+Each command demonstrates the standard structure with:
+- Executable in `command-name/command-name`
+- Documentation in `command-name/README.md`
+- Optional `lib/`, `tests/`, `examples/` subdirectories
 
 ## Migration Guide: File to Directory
 

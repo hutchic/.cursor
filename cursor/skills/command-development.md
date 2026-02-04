@@ -353,9 +353,9 @@ When AI (Cursor Copilot) is developing commands:
 - Follows all repository conventions
 - Generates other commands with same structure
 
-### Legacy Commands
+### All Commands Now Use Directory Structure
 
-Existing commands (`gadd`, `gship`, `gpr`) currently use individual files. These represent legacy structure and should be migrated to directories. **All new commands must use directory structure.**
+All commands (`gadd`, `gship`, `gpr`, `create-command`) now follow the self-contained directory pattern with executable + README.md + optional lib/tests/examples subdirectories.
 
 ## Anti-Patterns to Avoid
 
