@@ -45,20 +45,20 @@ Successfully implemented the `/gadd` smart staging command as specified in the P
 | Bucket | Description | Examples |
 |--------|-------------|----------|
 | deps | Dependencies | package.json, yarn.lock, requirements.txt |
-| src | Source code | *.py,*.js, *.java,*.go |
-| tests | Test files | test_*.py,*.test.js, __tests__/ |
+| src | Source code | *.py, *.js, *.java, *.go |
+| tests | Test files | test_*.py, *.test.js, __tests__/ |
 | docs | Documentation | README.md, *.md, docs/ |
 | ci | CI/CD configs | .github/, .gitlab-ci.yml, Jenkinsfile |
-| config | Config files | *.yaml,*.json, Dockerfile |
+| config | Config files | *.yaml, *.json, Dockerfile |
 | misc | Other files | Anything not matched above |
 
 ## Key Features
 
-1. __Deterministic Ordering__: Buckets always presented in same order (deps → src → config → tests → ci → docs → misc)
-2. __Safe Operations__: Never commits, pushes, or modifies Git config
-3. __Clear Feedback__: Shows exactly what was staged with diff stats
-4. __Input Validation__: Validates bucket names and handles errors gracefully
-5. __Edge Case Handling__: Properly handles empty repos, conflicts, and invalid inputs
+1. **Deterministic Ordering**: Buckets always presented in same order (deps → src → config → tests → ci → docs → misc)
+2. **Safe Operations**: Never commits, pushes, or modifies Git config
+3. **Clear Feedback**: Shows exactly what was staged with diff stats
+4. **Input Validation**: Validates bucket names and handles errors gracefully
+5. **Edge Case Handling**: Properly handles empty repos, conflicts, and invalid inputs
 
 ## Code Quality
 

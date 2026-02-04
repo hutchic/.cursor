@@ -50,11 +50,11 @@ gadd group=misc    # Stage only miscellaneous files
 
 - **Logical Grouping**: Automatically classifies files into buckets
   - `deps`: Lockfiles and dependency manifests (package-lock.json, Gemfile.lock, etc.)
-  - `src`: Application/runtime code (*.py,*.js, *.java,*.go, etc.)
-  - `tests`: Test files and fixtures (test_*.py,*.test.js, **tests**/, etc.)
+  - `src`: Application/runtime code (*.py, *.js, *.java, *.go, etc.)
+  - `tests`: Test files and fixtures (test_*.py, *.test.js, __tests__/, etc.)
   - `docs`: Documentation files (README, *.md, docs/, etc.)
   - `ci`: CI/CD configs (.github/, .gitlab-ci.yml, Jenkinsfile, etc.)
-  - `config`: Configuration files (*.yaml,*.json, Dockerfile, etc.)
+  - `config`: Configuration files (*.yaml, *.json, Dockerfile, etc.)
   - `misc`: Anything not matched by above buckets
 
 - **Safety Checks**:
