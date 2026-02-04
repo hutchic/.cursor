@@ -20,7 +20,7 @@ jobs:
     - uses: actions/checkout@v4.2.2
     - uses: actions/setup-python@v5.4.0
       with:
-        python-version: '3.8'
+        python-version: '3.9'
     - run: pip install 'virtualenv<20.11.0'
     - uses: pre-commit/action@v3.0.1
       with:
