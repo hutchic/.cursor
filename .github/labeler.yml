@@ -1,0 +1,9 @@
+---
+csv:
+- '**/*.csv'
+docs:
+- '**/*.md'
+github_actions:
+- .github/**
+python:
+- '**/*.py'

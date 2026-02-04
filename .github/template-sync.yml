@@ -1,0 +1,22 @@
+---
+additional:
+- template-docker
+- template-github-release
+- template-php
+- template-python
+- template-terraform
+
+files:
+- '!README.md'
+- '!.gitignore'
+- '!.pre-commit-config.yaml'
+- '!.yamllint'
+- '!.secrets.baseline'
+- '!.github/pull.yml'
+- '!.github/dependabot.yml'
+- '!.github/template-sync.yml'
+- '!.github/workflows/pre-commit-update.yml'
+- '!.github/settings.yml'
+- '!.github/labeler.yml'
+- '!.github/workflows/pre-commit.yml'
+- '!.github/workflows/sync.yml'

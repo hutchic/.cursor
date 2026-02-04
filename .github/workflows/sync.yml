@@ -1,0 +1,21 @@
+---
+name: Sync the template repository
+
+on: # yamllint disable-line rule:truthy
+  pull_request:
+  push:
+    branches: main
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Queue
+      uses: ahmadnassri/action-workflow-queue@v1.2
+    - name: Checkout
+      uses: actions/checkout@v4.2.2
+    - name: Sync
+      uses: ahmadnassri/action-template-repository-sync@v2.6.6
+      with:
+        github-token: ${{ secrets.GH_TOKEN }}
