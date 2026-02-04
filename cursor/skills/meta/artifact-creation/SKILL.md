@@ -37,10 +37,10 @@ Guide the creation of artifacts from patterns, ensuring proper structure, cross-
 
 #### For Skills
 
-- Use `cursor/templates/skill-template.md`
+When creating a **skill**, you MUST use the [skill-creator](.cursor/skills/skill-creator/SKILL.md) skill first. Follow its guidance for SKILL.md anatomy, frontmatter (name, description), progressive disclosure, and when to add scripts/references/assets. Then use `cursor/templates/skill-template.md` for this repo’s structure and cross-references.
+
 - Create folder structure: `skill-name/SKILL.md`
-- Include proper frontmatter (name, description)
-- Add optional directories if needed (scripts, references, assets)
+- Apply skill-creator before filling content
 
 #### For Commands
 
@@ -118,6 +118,7 @@ When creating artifacts:
 
 ## Related Artifacts
 
+- [Skill Creator](.cursor/skills/skill-creator/SKILL.md) – Use when creating skills (anatomy, frontmatter, progressive disclosure)
 - [Artifact Creation Rule](.cursor/rules/meta/artifact-creation.mdc)
 - [Organization Rule](.cursor/rules/meta/organization.mdc)
 - [Cross-Referencing Rule](.cursor/rules/meta/cross-referencing.mdc)

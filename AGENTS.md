@@ -210,9 +210,11 @@ This repository includes meta processes for self-improvement:
 - `/update-cross-references` - Maintain cross-references
 - `/validate-organization` - Validate repository organization
 - `/generate-docs-index` - Generate documentation indexes
+- `/commit` - Run terse semantic commit workflow (stage → message → pre-commit → commit)
 
 ### Meta Skills
 
+- `terse-semantic-commits` - Use when committing or suggesting a commit message; Conventional Commits format, terse, imperative (see [CONTRIBUTING.md](CONTRIBUTING.md) and the skill)
 - `conversation-analysis` - Analyze AI chat conversations
 - `pattern-extraction` - Extract reusable patterns
 - `artifact-creation` - Guide artifact creation

@@ -21,35 +21,37 @@ Interactively create an artifact (rule, skill, command, or subagent) from a patt
    - **Command**: Manual workflows, checklists
    - **Subagent**: Complex tasks, context isolation
 
-3. **Choose template**: Select appropriate template:
+3. **If the artifact type is Skill**: Apply the [skill-creator](.cursor/skills/skill-creator/SKILL.md) skill. Follow its guidance for SKILL.md structure, frontmatter, and when to add scripts/references/assets. Then use `cursor/templates/skill-template.md` for repo structure. For other artifact types, continue to step 4.
+
+4. **Choose template**: Select appropriate template:
    - `cursor/templates/rule-template.md`
    - `cursor/templates/skill-template.md`
    - `cursor/templates/command-template.md`
    - `cursor/templates/subagent-template.md`
 
-4. **Create structure**: Use template to create artifact with:
+5. **Create structure**: Use template to create artifact with:
    - Proper frontmatter/metadata
    - Clear structure and sections
    - Pattern-specific content
    - Examples where helpful
 
-5. **Organize**: Place artifact in appropriate location:
+6. **Organize**: Place artifact in appropriate location:
    - Follow naming conventions
    - Use appropriate category
    - Follow directory structure
 
-6. **Add cross-references**: Include references to:
+7. **Add cross-references**: Include references to:
    - Related artifacts
    - Relevant documentation
    - Related templates
 
-7. **Update documentation**: Add to:
+8. **Update documentation**: Add to:
    - Category documentation
    - Master index
    - Usage guides
    - Example sections
 
-8. **Validate**: Verify artifact:
+9. **Validate**: Verify artifact:
    - Structure is correct
    - References are valid
    - Documentation is updated
@@ -59,6 +61,7 @@ Interactively create an artifact (rule, skill, command, or subagent) from a patt
 
 - [ ] Pattern clearly identified
 - [ ] Artifact type selected
+- [ ] If skill: applied the [skill-creator](.cursor/skills/skill-creator/SKILL.md) skill
 - [ ] Template chosen and used
 - [ ] Structure created properly
 - [ ] Content added
@@ -105,6 +108,7 @@ You can specify artifact type when invoking:
 
 ## Related Artifacts
 
+- [Skill Creator](.cursor/skills/skill-creator/SKILL.md) – Required when creating skills
 - [Artifact Creation Rule](.cursor/rules/meta/artifact-creation.mdc)
 - [Artifact Creation Skill](.cursor/skills/meta/artifact-creation/SKILL.md)
 - [Artifact Creator Subagent](.cursor/agents/meta/artifact-creator.md)
