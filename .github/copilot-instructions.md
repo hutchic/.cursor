@@ -179,9 +179,28 @@ pre-commit run --all-files
 4. Push to remote and create PR
 5. Automated labeling based on changed files
 6. Required status checks must pass
-7. PR title must follow Conventional Commits format (e.g., `feat:`, `fix:`, `docs:`)
+7. PR title must follow Conventional Commits format - **terse and semantic** (see [CONTRIBUTING.md](../CONTRIBUTING.md#pull-request-titles) for details)
 8. Squash merge to `main`
 9. Branch automatically deleted
+
+### Pull Request Title Requirements
+
+**CRITICAL for AI Agents**: All pull request titles MUST be:
+
+- **Semantic**: Follow [Conventional Commits](https://www.conventionalcommits.org/) format: `type(scope): description`
+- **Terse**: Keep under 50 characters when possible
+- **Descriptive**: Clearly summarize the essence of the change
+- **Imperative mood**: Use "add" not "added" or "adds"
+
+**Examples:**
+- ✅ `feat(api): add user search endpoint`
+- ✅ `fix(auth): resolve token expiry bug`
+- ✅ `docs(readme): update installation steps`
+- ❌ `Added new feature` (not semantic)
+- ❌ `Update files` (too vague)
+- ❌ `Fixed a bug in the authentication module that was causing tokens to expire` (too verbose)
+
+For comprehensive guidelines, see [CONTRIBUTING.md](../CONTRIBUTING.md#pull-request-titles).
 
 ## Testing and Validation
 
