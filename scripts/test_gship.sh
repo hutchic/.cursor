@@ -35,16 +35,17 @@ test_skip() {
 echo "Testing gship command..."
 echo ""
 
-# Test 1: No arguments
-echo "Test 1: No arguments"
+# Test 1: No arguments (should now auto-generate)
+echo "Test 1: No arguments (auto-generation)"
 set +e
 output=$("${GSHIP_SCRIPT}" 2>&1)
 exit_code=$?
 set -e
-if [ $exit_code -ne 0 ] && echo "$output" | grep -q "Missing semantic commit message"; then
-    test_pass "Correctly errors on no arguments"
+# Should now try to auto-generate instead of erroring immediately
+if echo "$output" | grep -q "auto-generating\|Not in a git repository"; then
+    test_pass "Accepts no arguments (auto-generates or fails on git check)"
 else
-    test_fail "Should error on no arguments"
+    test_fail "Should accept no arguments and auto-generate message"
 fi
 
 # Test 2: Invalid semantic message

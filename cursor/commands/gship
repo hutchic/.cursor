@@ -4,7 +4,7 @@
 #
 # /gship - Branch + Semantic Commit + PR Command
 #
-# Creates feature branches from protected branches and commits staged changes
+# Creates feature branches from protected branches and commits changes
 # with semantic commit messages. Internally uses gadd for staging and gpr for
 # PR creation. Never bypasses hooks or signing.
 #
@@ -13,14 +13,23 @@
 #   - gpr: for pushing and creating/updating pull requests
 #
 # Usage:
-#   gship <semantic-message> [--mode=single|multi] [--no-pr]
+#   gship [<semantic-message>] [--mode=single|multi] [--no-pr]
+#
+# Sensible Defaults:
+#   - If no semantic message is provided, one is auto-generated from the changes
+#   - Creates semantic branch from protected branches automatically
+#   - Stages all files via gadd if none are staged
+#   - Commits with semantic message
+#   - Pushes to remote and creates draft PR by default
+#   - Uses GitHub MCP if available, falls back to gh CLI
+#   - Uses PR template from .github/pull_request_template.md if available
 #
 # Examples:
-#   gship "feat(api): add search endpoint"
-#   gship "fix: resolve null pointer in handler"
-#   gship "docs: update installation guide"
-#   gship "feat(auth): add OAuth support" --mode=multi
-#   gship "fix: resolve bug" --no-pr  # skip PR creation
+#   gship                                    # Auto-generate everything
+#   gship "feat(api): add search endpoint"   # Explicit message
+#   gship "fix: resolve null pointer"        # With auto-staging
+#   gship "docs: update guide" --no-pr       # Skip PR creation
+#   gship "feat(auth): add OAuth" --mode=multi
 
 set -euo pipefail
 
@@ -54,6 +63,67 @@ print_info() {
 
 print_warning() {
     echo -e "${YELLOW}$1${NC}"
+}
+
+# Function to generate semantic commit message from git diff
+generate_semantic_message() {
+    local changed_files
+    changed_files=$(git diff --cached --name-only 2>/dev/null || echo "")
+    
+    if [ -z "$changed_files" ]; then
+        echo "chore: update files"
+        return
+    fi
+    
+    # Classify the primary change type based on files
+    local has_src=false
+    local has_test=false
+    local has_docs=false
+    local has_config=false
+    local has_ci=false
+    
+    while IFS= read -r file; do
+        [ -z "$file" ] && continue
+        
+        if [[ "$file" =~ \.(md|txt)$ ]] || [[ "$file" =~ ^(README|CHANGELOG|LICENSE|CONTRIBUTING) ]]; then
+            has_docs=true
+        elif [[ "$file" =~ (test_|_test\.|\.test\.|\.spec\.|/__tests__/|/tests?/|/spec/) ]]; then
+            has_test=true
+        elif [[ "$file" =~ ^\.github/|^\.gitlab-ci\.yml|^\.circleci/|Jenkinsfile ]]; then
+            has_ci=true
+        elif [[ "$file" =~ \.(yaml|yml|json|toml|ini|conf|cfg|config)$ ]] || [[ "$file" =~ Dockerfile|docker-compose|\.(gitignore|dockerignore|editorconfig)$ ]]; then
+            has_config=true
+        elif [[ "$file" =~ \.(py|js|ts|jsx|tsx|java|go|rs|rb|php|c|cpp|h|hpp|cs|swift|kt|scala)$ ]]; then
+            has_src=true
+        fi
+    done <<< "$changed_files"
+    
+    # Generate message based on primary change type
+    local type="chore"
+    local scope=""
+    
+    if [ "$has_docs" = true ]; then
+        type="docs"
+    elif [ "$has_test" = true ]; then
+        type="test"
+    elif [ "$has_ci" = true ]; then
+        type="ci"
+    elif [ "$has_config" = true ]; then
+        type="chore"
+        scope="config"
+    elif [ "$has_src" = true ]; then
+        type="feat"
+    fi
+    
+    # Generate a brief summary
+    local file_count
+    file_count=$(echo "$changed_files" | wc -l | tr -d ' ')
+    
+    if [ -n "$scope" ]; then
+        echo "${type}(${scope}): update ${file_count} file(s)"
+    else
+        echo "${type}: update ${file_count} file(s)"
+    fi
 }
 
 # Function to find gadd command
@@ -373,12 +443,11 @@ main() {
         fi
     done
 
-    # Validate arguments
+    # Auto-generate semantic message if not provided
     if [ -z "$semantic_message" ]; then
-        print_error "Missing semantic commit message"
-        print_info "Usage: gship <semantic-message> [--mode=single|multi]"
-        print_info "Example: gship \"feat(api): add search endpoint\""
-        exit 1
+        print_info "No semantic message provided, auto-generating..."
+        semantic_message=$(generate_semantic_message)
+        print_info "Generated message: $semantic_message"
     fi
 
     # Validate mode
