@@ -11,6 +11,7 @@ This document summarizes the testing and verification of the `/gadd` smart stagi
 **Then:** All modified files are staged
 
 **Test Result:**
+
 ```bash
 $ gadd all
 Staging all changes...
@@ -39,6 +40,7 @@ Staging all changes...
 **Then:** User is prompted for each bucket and only accepted buckets are staged
 
 **Expected Behavior:**
+
 - User is prompted for each non-empty bucket
 - Buckets appear in deterministic order: deps, src, config, tests, ci, docs, misc
 - Only buckets with "y" response are staged
@@ -56,6 +58,7 @@ Staging all changes...
 **Test Results:**
 
 **Test 1: Staging docs bucket**
+
 ```bash
 $ gadd group=docs
 Staging bucket: docs (2 file(s))
@@ -68,6 +71,7 @@ Staging bucket: docs (2 file(s))
 ```
 
 **Test 2: Staging deps bucket**
+
 ```bash
 $ gadd group=deps
 Staging bucket: deps (1 file(s))
@@ -79,6 +83,7 @@ Staging bucket: deps (1 file(s))
 ```
 
 **Test 3: Staging ci bucket**
+
 ```bash
 $ gadd group=ci
 Staging bucket: ci (1 file(s))
@@ -100,6 +105,7 @@ Staging bucket: ci (1 file(s))
 **Then:** Command exits with a message and stages nothing
 
 **Test Result:**
+
 ```bash
 $ gadd
 No changes to stage
@@ -116,6 +122,7 @@ No changes to stage
 **Then:** Command exits and stages nothing
 
 **Implementation:**
+
 - Checks for conflict markers in `git status --porcelain`: `UU`, `AA`, `DD`, `AU`, `UA`, `DU`, `UD`
 - Exits with error message: "Repository has conflicts or unmerged paths"
 
@@ -129,6 +136,7 @@ No changes to stage
 **Then:** User sees cached diff stat and porcelain status
 
 **Test Result:**
+
 ```bash
 $ gadd group=docs
 Staging bucket: docs (1 file(s))
@@ -153,6 +161,7 @@ Done!
 ### Bucket Classification Verification ✓
 
 **Test Files Created:**
+
 - `package.json` → **deps** ✓
 - `src/app.py` → **src** ✓
 - `tests/test_app.py` → **tests** ✓
@@ -166,6 +175,7 @@ Done!
 All files correctly classified into their expected buckets.
 
 **Test: Test files not misclassified as src**
+
 ```bash
 # test_app.py is correctly classified as tests, not src
 $ gadd group=tests
@@ -182,6 +192,7 @@ Staging bucket: tests (1 file(s))
 ### Invalid Bucket Name Validation ✓
 
 **Test:**
+
 ```bash
 $ gadd group=invalid_bucket
 Error: Invalid bucket name 'invalid_bucket'
@@ -195,6 +206,7 @@ Valid buckets: deps, src, tests, docs, ci, config, misc
 ### Case-Insensitive Jenkinsfile Matching ✓
 
 **Implementation:**
+
 - Pattern matches both `Jenkinsfile` and `jenkinsfile`
 - Regex: `^[Jj]enkinsfile$`
 
@@ -218,6 +230,7 @@ Valid buckets: deps, src, tests, docs, ci, config, misc
 
 **CodeQL Results:** No vulnerabilities detected
 **Note:** CodeQL does not analyze bash scripts, but manual security review confirms:
+
 - No code execution vulnerabilities
 - No credential exposure
 - Safe handling of file paths
@@ -228,31 +241,37 @@ Valid buckets: deps, src, tests, docs, ci, config, misc
 ## Functional Requirements Verification
 
 ### FR-1: Working Tree Inspection ✓
+
 - Uses `git status --porcelain`
 - Exits with message when no changes
 - Exits with message when conflicts exist
 
 ### FR-2: Group Classification ✓
+
 - Files classified into 7 buckets: deps, src, tests, docs, ci, config, misc
 - Classification is path-based and deterministic
 - First match wins
 
 ### FR-3: Modes ✓
+
 - `mode=all`: Stages everything with `git add -A`
 - `mode=group` (default): Guided bucket-by-bucket prompts
 - `group=<bucket>`: Stages only specified bucket
 
 ### FR-4: Guided Staging Flow ✓
+
 - Presents buckets with file counts
 - Shows first 5 files per bucket
 - Prompts: "Stage this bucket? (y/n)"
 - Stages only confirmed buckets
 
 ### FR-5: Post-Staging Visibility ✓
+
 - Shows `git diff --cached --stat`
 - Shows `git status --porcelain`
 
 ### FR-6: Safety ✓
+
 - Never commits (confirmed)
 - Never pushes (confirmed)
 - Never modifies git config (confirmed)
@@ -262,6 +281,7 @@ Valid buckets: deps, src, tests, docs, ci, config, misc
 ## Deterministic Bucket Ordering ✓
 
 **Required Order:**
+
 1. deps
 2. src
 3. config

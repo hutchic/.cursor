@@ -11,6 +11,7 @@ Creates semantic commits and pull requests with sensible defaults. Internally us
 [Full Documentation](README_GSHIP.md)
 
 **Quick Start:**
+
 ```bash
 # Fully automated - no arguments needed!
 gship
@@ -74,6 +75,7 @@ gadd group=misc    # Stage only miscellaneous files
 #### Examples
 
 **Scenario 1: Quick staging of everything**
+
 ```bash
 $ gadd all
 Staging all changes...
@@ -81,6 +83,7 @@ Staging all changes...
 ```
 
 **Scenario 2: Guided staging with prompts**
+
 ```bash
 $ gadd
 Guided staging mode
@@ -100,6 +103,7 @@ Stage this bucket? (y/n): n
 ```
 
 **Scenario 3: Stage only documentation**
+
 ```bash
 $ gadd group=docs
 Staging bucket: docs (2 file(s))
