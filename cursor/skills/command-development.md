@@ -336,12 +336,13 @@ git commit --no-verify -m "message"
 
 When AI (Cursor Copilot) is developing commands:
 
-1. **Read existing commands first**: Understand patterns used in `gadd`, `gship`
-2. **Follow the decision matrix**: Choose file vs directory based on complexity
+1. **Read existing commands first**: Understand patterns used in repository commands
+2. **Use directory structure**: Always create self-contained directory, never standalone files
 3. **Complete documentation**: Don't skip docs - they're as important as code
 4. **Test before committing**: Verify command works as documented
 5. **Match repository style**: Use same colors, messages, patterns as existing commands
 6. **Update main README**: Add new command to `cursor/commands/README.md`
+7. **Use create-command**: Leverage `/create-command` to scaffold structure correctly
 
 ## Examples from Repository
 
