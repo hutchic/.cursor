@@ -418,16 +418,25 @@ mkdir -p cursor/commands/mycommand/{lib,tests,examples}
 
 ## Resources
 
-### External Documentation
-- [Cursor Commands Documentation](https://cursor.com/docs/context/commands)
-- [Cursor Agent Best Practices](https://cursor.com/blog/agent-best-practices)
-- [Example Repository: hamzafer/cursor-commands](https://github.com/hamzafer/cursor-commands)
+### Internal Documentation (Always Available)
 
-### Internal Documentation
+These resources are maintained in this repository and are always accessible:
+
 - [cursor/commands/README.md](commands/README.md) - Overview of available commands
 - [cursor/skills/README.md](skills/README.md) - Overview of available skills
 - [CONTRIBUTING.md](../CONTRIBUTING.md) - Contribution guidelines
 - [INSTALL.md](../INSTALL.md) - Installation instructions
+- [AGENTS.md](../AGENTS.md) - Automation agents and workflows
+
+### External Documentation (May Be Blocked)
+
+These external resources provide additional context but may be blocked by firewall rules in CI/automated environments:
+
+- [Cursor Commands Documentation](https://cursor.com/docs/context/commands) - Official Cursor IDE command documentation
+- [Cursor Agent Best Practices](https://cursor.com/blog/agent-best-practices) - Best practices guide
+- [Example Repository: hamzafer/cursor-commands](https://github.com/hamzafer/cursor-commands) - Community examples
+
+**Note**: If you're working in an automated environment (CI, GitHub Actions, AI agents) and need access to cursor.com resources, they are cached during setup steps at `/tmp/cursor-docs/`. See [../.github/CURSOR_DOCS_CACHE.md](../.github/CURSOR_DOCS_CACHE.md) for details.
 
 ## Meta Commands
 

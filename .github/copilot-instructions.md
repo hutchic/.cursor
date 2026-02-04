@@ -280,6 +280,8 @@ Place skill files in `cursor/skills/` directory following the Cursor skill forma
 
 ### External Documentation
 
+**Note**: External URLs may be blocked by firewall rules in CI/automated environments. Cursor.com documentation is cached during setup steps at `/tmp/cursor-docs/`. See [CURSOR_DOCS_CACHE.md](CURSOR_DOCS_CACHE.md) for details.
+
 - [Pre-commit Documentation](https://pre-commit.com/)
 - [GitHub Actions Documentation](https://docs.github.com/en/actions)
 - [Conventional Commits](https://www.conventionalcommits.org/)

@@ -47,3 +47,11 @@ jobs:
 
       - name: Install pre-commit hooks
         run: pre-commit install-hooks
+
+      - name: Cache Cursor documentation
+        run: |
+          mkdir -p /tmp/cursor-docs
+          # Fetch Cursor documentation before firewall is enabled
+          curl -sSL -o /tmp/cursor-docs/commands.html "https://cursor.com/docs/context/commands" || echo "Warning: Could not fetch commands documentation"
+          curl -sSL -o /tmp/cursor-docs/agent-best-practices.html "https://cursor.com/blog/agent-best-practices" || echo "Warning: Could not fetch agent best practices"
+          echo "Cursor documentation cached at /tmp/cursor-docs"
