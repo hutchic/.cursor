@@ -247,7 +247,7 @@ get_commit_log() {
     fi
 
     if [[ -z "$commits" ]]; then
-        echo "- No commits found"
+        echo "No commits found"
     else
         echo "$commits"
     fi
@@ -281,7 +281,7 @@ get_file_snippet() {
     fi
 
     # Get up to 20 lines of the file
-    head -n 20 "$file_path" | sed 's/^/    /'
+    head -n 20 "$file_path"
 }
 
 # Generate snippet based on mode
