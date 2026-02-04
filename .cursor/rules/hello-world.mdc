@@ -1,0 +1,57 @@
+---
+description: "Guidelines for using hello world artifacts. This rule establishes standards that the hello-world skill and command follow. Demonstrates how rules provide persistent guidance that skills and commands reference."
+alwaysApply: false
+---
+
+# Hello World Rule
+
+This rule establishes standards and guidelines for hello world artifacts. It demonstrates how **rules provide persistent guidance** that skills and commands can reference and follow.
+
+## When to Use
+
+- When creating or using hello world artifacts
+- When testing the relationship between rules, skills, and commands
+- As an example of how rules establish standards that other artifacts follow
+
+## Guidelines
+
+### Hello World Standards
+
+When working with hello world artifacts, follow these standards established by this rule:
+
+1. **Consistency**: All hello world artifacts should use consistent naming and structure
+2. **Simplicity**: Hello world examples should be minimal but demonstrate key concepts
+3. **Cross-Reference**: Hello world artifacts should reference each other to show relationships
+4. **Purpose**: Each hello world artifact should clearly demonstrate its artifact type
+
+### How Rules Work with Skills and Commands
+
+- **Rules provide standards**: This rule establishes what "hello world" means and how it should be used
+- **Skills implement standards**: The [hello-world skill](.cursor/skills/hello-world/SKILL.md) provides instructions that follow these standards
+- **Commands use both**: The [hello-world command](.cursor/commands/hello-world.md) creates a workflow that uses both the rule's standards and the skill's instructions
+
+## Example: Rule → Skill → Command Flow
+
+1. **Rule (this file)**: Establishes that hello world artifacts should be simple, consistent, and cross-referenced
+2. **Skill**: Provides step-by-step instructions for creating hello world artifacts, following the rule's standards
+3. **Command**: Creates a workflow that uses the skill's instructions to verify the rule's standards are met
+
+## Related Artifacts
+
+- [Hello World Skill](.cursor/skills/hello-world/SKILL.md) - Implements the instructions that follow this rule's standards
+- [Hello World Command](.cursor/commands/hello-world.md) - Creates a workflow using both this rule and the skill
+- [Hello World Subagent](.cursor/agents/hello-world.md) - Demonstrates subagent structure
+- [Rule Template](.cursor/templates/rule-template.md)
+- [Cursor Rules Documentation](docs/cursor-rules.md)
+
+## How This Demonstrates Rule → Skill → Command Relationship
+
+This rule, along with the hello-world skill and command, demonstrates:
+
+- **Rules set standards**: This rule defines what hello world means and how it should work
+- **Skills provide implementation**: The skill gives actionable steps that follow the rule
+- **Commands create workflows**: The command orchestrates using both rule and skill together
+
+## Notes
+
+This is a test/example rule. It can be safely removed or modified for testing purposes.

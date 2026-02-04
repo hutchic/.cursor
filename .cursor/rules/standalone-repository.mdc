@@ -1,0 +1,28 @@
+---
+description: "This repository is a standalone project. All Cursor rules, skills, and commands live in .cursor/. Optional: symlink skills/commands globally (e.g. ~/.cursor/skills). No install scripts."
+alwaysApply: true
+---
+
+# Standalone Repository — .cursor Only
+
+This repository is a **standalone project** for Cursor rules, skills, and commands. Nothing more.
+
+## Where Everything Lives
+
+- **Rules, skills, and commands** all live in the **`.cursor/`** directory.
+- Cursor IDE reads directly from `.cursor/`. Edit files in `.cursor/`.
+
+## Optional: Global Share
+
+To use these skills and commands in other projects, share them **only via a symlink** (e.g. `~/.cursor/skills` → this repo’s `.cursor/skills`, `~/.cursor/commands` → this repo’s `.cursor/commands`, or equivalent). No install scripts.
+
+**No other installation or setup.** No “global install” scripts, no Makefile targets that copy or “deploy” beyond documenting or creating that optional symlink.
+
+## What to Avoid
+
+- Do not add scripts that “install” or “configure” beyond documenting the optional symlink.
+- Do not add Makefile targets that copy, sync, or “deploy” rules/skills/commands beyond symlinking.
+- Do not document or implement multiple “methods” or “modes” of installation.
+- Keep documentation aligned with: **standalone project, everything in `.cursor/`.**
+
+When in doubt: **standalone project, `.cursor/` only. That’s it.**

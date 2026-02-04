@@ -6,7 +6,7 @@ Successfully implemented the `/gadd` smart staging command as specified in the P
 
 ## Deliverables
 
-### 1. Core Implementation (`cursor/commands/gadd`)
+### 1. Core Implementation (`.cursor/commands/gadd`)
 
 - ✅ Executable shell script (310 lines)
 - ✅ Three operation modes: all, guided, group-specific
@@ -94,12 +94,6 @@ gadd group=src
 gadd group=tests
 ```
 
-## Installation
-
-```bash
-ln -s "$(pwd)/cursor/commands" ~/.cursor/commands
-```
-
 ## Non-Goals (Intentionally Not Implemented)
 
 - ❌ Semantic analysis of code intent
@@ -109,8 +103,8 @@ ln -s "$(pwd)/cursor/commands" ~/.cursor/commands
 
 ## Files Modified/Created
 
-1. `cursor/commands/gadd` - Main implementation (NEW)
-2. `cursor/commands/README.md` - Usage documentation (UPDATED)
+1. `.cursor/commands/gadd` - Main implementation (NEW)
+2. `.cursor/commands/README.md` - Usage documentation (UPDATED)
 3. `TESTING.md` - Test verification summary (NEW)
 4. `SUMMARY.md` - This file (NEW)
 

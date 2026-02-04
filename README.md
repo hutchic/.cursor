@@ -1,193 +1,232 @@
-# Cursor Automation
+# Cursor Meta-Repository
 
-This repository contains Cursor IDE automation commands and utilities.
+This repository is a **self-improving meta-system** for managing Cursor rules, skills, commands, and subagents. It can analyze AI chat conversations, extract patterns, create appropriate artifacts, maintain cross-references, and keep documentation updated.
+
+## Purpose
+
+This repository serves as a **Cursor configuration meta-repository** where you can:
+
+- **Store rules, skills, commands, and subagents** for use in this project (and copy or reference them in others)
+- **Self-improve** by analyzing AI conversations and extracting patterns
+- **Maintain organization** through meta-processes that keep everything clean and cross-referenced
+- **Learn by example** through hello world artifacts that demonstrate how rules, skills, and commands work together
 
 ## Quick Start
 
-### Option 1: Automated Global Installation (Recommended)
-
-Install commands and skills globally to use them in **all projects**:
-
-```bash
-# Clone the repository
-git clone https://github.com/hutchic/.cursor.git
-cd .cursor
-
-# Run the interactive setup script
-bash scripts/setup.sh
-
-# Or use make
-make install
-```
-
-The setup script will:
-- ✅ Check dependencies (Git, GitHub CLI, etc.)
-- ✅ Create `~/.cursor/` directories
-- ✅ Symlink commands and skills
-- ✅ Verify installation
-- ✅ Guide you through any issues
-
-### Option 2: Self-Configuring (Project-Local Only)
+### Self-Configuring Structure
 
 This repository is **self-configuring** when opened in Cursor IDE:
 
 1. Clone or open this repository in Cursor
-2. The `.cursor/` directory in the project root provides immediate access to commands
+2. The `.cursor/` directory contains all artifacts and is used directly by Cursor IDE
 3. Use commands by typing `/` followed by the command name
+4. Rules, skills, and subagents are automatically detected
 
-**No manual installation required!** Commands only work in this repository.
+**No manual installation required!** Everything works immediately when you open this repository in Cursor.
 
-### Option 3: Manual Global Installation
+### Using in Other Projects
 
-If you prefer manual setup:
+Artifacts are project-local (no global install). To use them elsewhere:
 
-```bash
-git clone https://github.com/hutchic/.cursor.git
-cd .cursor
+1. **Reference this repository** in the other project's docs or AGENTS.md
+2. **Copy** the rules, skills, commands, or subagents you need into that project's `.cursor/` (or equivalent)
+3. **Use as template** — fork or copy this repo and trim to your needs
 
-# Create directories and symlink commands
-mkdir -p ~/.cursor/commands ~/.cursor/skills
-ln -sf "$(pwd)"/cursor/commands/* ~/.cursor/commands/
-ln -sf "$(pwd)"/cursor/skills/* ~/.cursor/skills/
+See [INSTALL.md](INSTALL.md).
 
-# Verify installation
-bash scripts/test_cursor_config.sh
-```
+## Available Artifacts
 
-See [INSTALL.md](INSTALL.md) for comprehensive installation instructions and troubleshooting.
+### Hello World Examples
 
-## Available Commands
+Start with the hello world examples to understand how rules, skills, and commands work together:
 
-### `/gpr` - Create or Update Pull Request
+- **[Hello World Rule](.cursor/rules/hello-world.mdc)** - Establishes standards and guidelines
+- **[Hello World Skill](.cursor/skills/hello-world/SKILL.md)** - Provides actionable instructions that implement the rule
+- **[Hello World Command](.cursor/commands/hello-world.md)** - Creates a workflow using both rule and skill
+- **[Hello World Subagent](.cursor/agents/hello-world.md)** - Demonstrates subagent structure
 
-Creates or updates a GitHub pull request for the current branch.
+These examples demonstrate the **rule → skill → command** relationship:
+- **Rules** set persistent standards (the "what" and "why")
+- **Skills** provide actionable instructions (the "how")
+- **Commands** create workflows that orchestrate both (the "when" and "in what order")
 
-**Usage:**
+### Meta Commands
 
-```
-/gpr "feat(api): add search endpoint"
-```
+Commands for self-improvement workflows (use with `/command-name`):
 
-**Features:**
+- `/process-chat` - Analyze AI chat conversations and extract patterns
+- `/create-artifact` - Interactively create rules, skills, commands, or subagents
+- `/shipit` - Stage, commit (with pre-commit), push, and open or update PR (workflow from git skills)
+- `/update-cross-references` - Maintain cross-references between artifacts
+- `/validate-organization` - Validate repository organization structure
+- `/generate-docs-index` - Generate documentation indexes
 
-- Automatically pushes the current branch
-- No duplicate PRs (updates existing PR if found)
-- Standardized PR body format
-- Works with GitHub CLI or GitHub MCP
+### Meta Skills
 
-[See full documentation](cursor/commands/gpr.md)
+Skills that help analyze and create (automatically detected or use `/skill-name`):
 
-## Repository Setup
+- `conversation-analysis` - Analyze AI chat conversations
+- `pattern-extraction` - Extract reusable patterns
+- `artifact-creation` - Guide artifact creation
+- `cross-reference-maintenance` - Maintain cross-references
 
-- detect-secrets scan > .secrets.baseline
-- set github setting
-  - allow auto-merge
-  - automatically delete head branches
-- set github branch protection rules:
-  - require a pull request before merging
-  - require status checks to pass
-    - pre-commit
-    - valid pr titles
-    - sync
-- set github secrets for actions and dependabot
-  - AUTO_MERGE_TOKEN
-  - GH_TOKEN
+### Skills.sh Integration
+
+- **find-skills** (`.cursor/skills/skills-sh/find-skills/`) - Discover and install agent skills from [skills.sh](https://skills.sh/). Use when the user asks "find a skill for X", "how do I do X", or wants to extend capabilities. Uses `npx skills find` and `npx skills add`.
+
+### Meta Rules
+
+Rules that guide the self-improvement process (always applied):
+
+- `organization` - Categorization, naming, and structure standards
+- `cross-referencing` - Reference standards and maintenance
+- `documentation` - Documentation standards
+- `artifact-creation` - Decision framework for creating artifacts
+- `automation-decomposition` - Decompose automations into discrete skills, then package into commands
+
+### Meta Subagents
+
+Subagents for complex meta operations:
+
+- `conversation-analyzer` - Analyze conversations in isolation
+- `artifact-creator` - Create artifacts from patterns
+- `cross-reference-maintainer` - Maintain cross-references
+- `documentation-updater` - Update documentation
+
+See [docs/cursor-commands.md](docs/cursor-commands.md), [docs/cursor-skills.md](docs/cursor-skills.md), [docs/cursor-rules.md](docs/cursor-rules.md), and [docs/cursor-subagents.md](docs/cursor-subagents.md) for details on each artifact type.
+
+## Self-Improvement System
+
+This repository includes a self-improving meta-system for managing Cursor configuration. You can:
+
+- **Analyze conversations**: Use `/process-chat` to analyze AI chat conversations and extract patterns
+- **Create artifacts**: Use `/create-artifact` to create rules, skills, commands, or subagents from patterns
+- **Maintain organization**: Use meta processes to keep the repository clean and organized
+- **Iterate on processes**: The system can improve itself through the same processes it manages
+
+See [Self-Improvement Workflow](docs/self-improvement-workflow.md) for the complete process, [Meta Processes Guide](docs/meta-processes.md) for using meta artifacts, and [Organization Guide](docs/organization.md) for structure details.
+
+## Repository Structure
+
+This repository uses a self-improving meta-system:
+
+- **Meta artifacts** manage the system itself (rules, skills, commands, subagents)
+- **Hello world examples** demonstrate how artifacts work together
+- **Templates** provide starting points for creating new artifacts
+- **Documentation** explains concepts, workflows, and best practices
+- **Research** documents patterns and best practices
+
+The system can analyze conversations, extract patterns, and create new artifacts automatically.
 
 ## Directory Structure
 
-- `.cursor/` - Self-configuring symlinks (automatically used by Cursor IDE)
-  - `commands/` → `../cursor/commands/`
-  - `skills/` → `../cursor/skills/`
-- `cursor/commands/` - Cursor IDE commands (source files)
-- `cursor/skills/` - Cursor IDE skills (source files)
-- `scripts/` - Utility scripts
-- `templates/` - Template files
+- `.cursor/` - All Cursor artifacts (used directly by Cursor IDE)
+  - `rules/` - Cursor rules (see [docs/cursor-rules.md](docs/cursor-rules.md))
+    - `meta/` - Meta rules for self-improvement (organization, cross-referencing, documentation, artifact-creation, automation-decomposition)
+    - `organization/` - Organization-specific rules
+    - `hello-world.mdc` - Example rule demonstrating rule structure
+    - `self-improvement.mdc` - Self-improvement guidance
+  - `skills/` - Cursor skills (see [docs/cursor-skills.md](docs/cursor-skills.md))
+    - `meta/` - Meta skills (conversation-analysis, pattern-extraction, artifact-creation, cross-reference-maintenance; skill-creator and command-creator are symlinked from `.agents/skills/`)
+    - `analysis/` - Analysis and pattern extraction skills
+    - `hello-world/` - Example skill demonstrating skill structure
+  - `commands/` - Cursor commands (see [docs/cursor-commands.md](docs/cursor-commands.md))
+    - `meta/` - Meta commands (process-chat, create-artifact, update-cross-references, validate-organization, generate-docs-index)
+    - `shipit.md` - Stage, commit, push, open or update PR
+    - `hello-world.md` - Example command demonstrating command structure
+  - `agents/` - Cursor subagents (see [docs/cursor-subagents.md](docs/cursor-subagents.md))
+    - `meta/` - Meta subagents (conversation-analyzer, artifact-creator, cross-reference-maintainer, documentation-updater)
+    - `hello-world.md` - Example subagent demonstrating subagent structure
+  - `templates/` - Reusable templates for creating artifacts
+    - `rule-template.md`, `skill-template.md`, `command-template.md`, `subagent-template.md`
+    - `self-improvement-prompt.md` - Template for analyzing conversations
+- `docs/` - Comprehensive documentation
+  - `cursor-rules.md` - Guide to Cursor Rules
+  - `cursor-commands.md` - Guide to Cursor Commands
+  - `cursor-skills.md` - Guide to Cursor Skills
+  - `cursor-subagents.md` - Guide to Cursor Subagents
+  - `meta-processes.md` - Guide to meta processes for self-improvement
+  - `organization.md` - Organization structure guide
+  - `self-improvement-workflow.md` - Step-by-step self-improvement workflow
+  - `research/` - Research documentation
+    - `cursor-best-practices.md` - Cursor IDE best practices
+    - `ai-agent-patterns.md` - AI agent patterns and self-improving systems
+    - `skills-commands-patterns.md` - Organization and structure patterns
+  - `automation-agents.md` - GitHub Actions and automation workflows
+- `AGENTS.md` - Instructions for AI coding agents (follows [AGENTS.md format](https://agents.md/))
 
-## Installation
+## Getting Started
 
-See [INSTALL.md](INSTALL.md) for detailed installation instructions.
+### Understanding the System
+
+1. **Start with Hello World**: Review the [hello world examples](.cursor/rules/hello-world.mdc) to see how rules, skills, and commands work together
+2. **Explore Meta Processes**: Read [Meta Processes Guide](docs/meta-processes.md) to understand self-improvement workflows
+3. **Try Self-Improvement**: Use `/process-chat` to analyze a conversation and see how the system extracts patterns
+
+### Using the Self-Improvement System
+
+1. **Analyze a conversation**: Use `/process-chat` with an AI chat conversation
+2. **Review suggestions**: The system will suggest artifacts to create
+3. **Create artifacts**: Use `/create-artifact` to create rules, skills, commands, or subagents
+4. **Maintain organization**: Use meta commands to keep everything organized
+
+See [Self-Improvement Workflow](docs/self-improvement-workflow.md) for the complete process.
+
+### Creating Your Own Artifacts
+
+1. **Use templates**: Start with templates in `.cursor/templates/`
+2. **Follow standards**: Use the meta rules as guidance (organization, naming, structure)
+3. **Add cross-references**: Link to related artifacts
+4. **Update documentation**: Keep docs in sync
+
+See [Organization Guide](docs/organization.md) for structure details.
 
 ## Troubleshooting & FAQ
 
 ### General Issues
 
-#### Q: Commands not showing up in Cursor IDE?
+#### Q: Artifacts not showing up in Cursor IDE?
 
 **A:** Check the following:
 
 1. **Verify repository location**: Is this repository opened as the root folder in Cursor IDE?
-2. **Check symlinks**: Run `ls -la .cursor/` to verify symlinks exist and point to `../cursor/commands` and `../cursor/skills`
-3. **Test configuration**: Run `bash scripts/test_cursor_config.sh` to verify setup
-4. **Cursor IDE version**: Ensure you're using a recent version of Cursor IDE that supports project-local `.cursor/` directories
-5. **Try global installation**: If project-local doesn't work, follow the global installation steps in [INSTALL.md](INSTALL.md)
+2. **Check structure**: Run `ls -la .cursor` to verify `.cursor/` exists and contains `rules/`, `skills/`, `commands/`, `agents/`
+3. **Cursor IDE version**: Ensure you're using a recent version of Cursor IDE that supports `.cursor/` directories
+4. **Restart Cursor**: Sometimes Cursor needs a restart to detect new artifacts
 
-#### Q: How do I verify the installation is working?
+#### Q: How do I verify the setup is working?
 
-**A:** Run the verification script:
-
-```bash
-bash scripts/test_cursor_config.sh
-```
-
-This will check:
-- `.cursor/` directory exists
-- Symlinks are valid
-- Commands are accessible
-- Configuration is committed to git
-
-#### Q: Can I use these commands in other projects?
-
-**A:** Yes! Use the global installation method:
+**A:** Check the structure:
 
 ```bash
-ln -s "$(pwd)/cursor/commands" ~/.cursor/commands
-ln -s "$(pwd)/cursor/skills" ~/.cursor/skills
+# Verify .cursor directory
+ls -la .cursor
+
+# Check artifacts exist
+ls -la .cursor/rules/
+ls -la .cursor/skills/
+ls -la .cursor/commands/
+ls -la .cursor/agents/
+
+# Try a hello world example
+# Type /hello-world in Cursor chat
 ```
 
-After global installation, commands will be available in all projects opened in Cursor IDE.
+#### Q: Can I use these artifacts in other projects?
+
+**A:** Yes! You can:
+
+1. **Reference this repository**: Point other projects to artifacts in this repository
+2. **Copy specific artifacts**: Copy rules, skills, commands, or subagents you need
+3. **Use as template**: Use this repository as a template for project-specific configurations
+
+See [INSTALL.md](INSTALL.md) for more details.
 
 ### Platform-Specific Issues
 
-#### Q: Symlinks not working on Windows?
+#### Q: .cursor not detected on Windows?
 
-**A:** Windows requires special handling for symlinks:
-
-**Option 1: Enable Developer Mode (Recommended)**
-1. Open Settings → Update & Security → For Developers
-2. Enable "Developer Mode"
-3. Re-clone the repository
-
-**Option 2: Use Administrator Privileges**
-```powershell
-git clone -c core.symlinks=true https://github.com/hutchic/.cursor.git
-```
-
-**Option 3: Manual Symlink Creation**
-```powershell
-# From PowerShell with admin privileges
-cd .cursor
-cmd /c mklink /D commands ..\cursor\commands
-cmd /c mklink /D skills ..\cursor\skills
-```
-
-**Option 4: Use Global Installation**
-If symlinks continue to fail, use the global installation method instead.
-
-See [INSTALL.md](INSTALL.md#windows) for detailed Windows instructions.
-
-#### Q: Getting "permission denied" errors on Linux/macOS?
-
-**A:** Check file permissions:
-
-```bash
-# Make scripts executable
-chmod +x scripts/*.sh
-chmod +x cursor/commands/*
-
-# Verify permissions
-ls -la scripts/
-ls -la cursor/commands/
-```
+**A:** Ensure the repository is cloned with the `.cursor` directory present (it is a normal directory in this repo). If you use symlinks for global sharing, see [INSTALL.md](INSTALL.md) for optional setup.
 
 ### Dependency Issues
 
@@ -230,8 +269,6 @@ winget install GitHub.cli
 gh auth login
 ```
 
-See [cursor/commands/gpr.md](cursor/commands/gpr.md#requirements) for more details.
-
 #### Q: How do I set up pre-commit hooks?
 
 **A:** Install and configure pre-commit:
@@ -249,77 +286,67 @@ pre-commit run --all-files
 
 See [.github/PRE_COMMIT_SETUP.md](.github/PRE_COMMIT_SETUP.md) for detailed setup instructions.
 
-### Command-Specific Issues
+### Self-Improvement Issues
 
-#### Q: `/gpr` command fails with "neither gh nor MCP available"?
+#### Q: How do I analyze a conversation?
 
-**A:** You need to install and authenticate with GitHub CLI:
+**A:** Use the process-chat command:
 
-```bash
-# Install gh (see above for platform-specific instructions)
-# Then authenticate
-gh auth login
-```
+1. Type `/process-chat` in Cursor chat
+2. Paste your AI chat conversation
+3. Review the analysis and artifact suggestions
+4. Create suggested artifacts using `/create-artifact`
 
-Alternatively, configure GitHub MCP if you prefer that over GitHub CLI.
+#### Q: How do I know which artifact type to create?
 
-#### Q: `/gpr` fails to push to remote?
+**A:** Use the artifact-creation rule as guidance:
 
-**A:** Check the following:
+- **Rule**: Persistent guidance, domain knowledge, standards
+- **Skill**: Domain knowledge with scripts, automation
+- **Command**: Manual workflows, checklists
+- **Subagent**: Complex tasks, context isolation
 
-1. **Remote is configured**: `git remote -v` should show your GitHub repository
-2. **Authentication works**: `gh auth status` should show you're logged in
-3. **Branch has commits**: Ensure you've made commits on your branch
-4. **Network connectivity**: Check your internet connection
+See [Artifact Creation Rule](.cursor/rules/meta/artifact-creation.mdc) for the complete decision framework.
 
-#### Q: Pull request titles are failing validation?
+#### Q: How do I maintain cross-references?
 
-**A:** PR titles must follow [Conventional Commits](https://www.conventionalcommits.org/) format:
+**A:** Use the update-cross-references command:
 
-**Format:** `<type>(<scope>): <description>`
+1. Type `/update-cross-references` in Cursor chat
+2. The system will scan for missing or broken references
+3. Review and apply suggested fixes
 
-**Examples:**
-- ✅ `feat(api): add search endpoint`
-- ✅ `fix(auth): resolve token expiry`
-- ✅ `docs: update installation guide`
-- ❌ `Added new feature` (not semantic)
-- ❌ `Update files` (too vague)
+Or use the cross-reference-maintainer subagent for comprehensive maintenance.
 
-See [CONTRIBUTING.md](CONTRIBUTING.md#pull-request-titles) for complete guidelines.
+### Artifact Creation Issues
 
-### Configuration Issues
+#### Q: How do I create a new artifact?
 
-#### Q: How do I configure this for CI/CD?
+**A:** Use the create-artifact command:
 
-**A:** Use the non-interactive setup mode:
+1. Type `/create-artifact` in Cursor chat
+2. Describe the pattern or need
+3. Follow the guided process to create the artifact
+4. The system will use appropriate templates and add cross-references
 
-```bash
-# Run setup script non-interactively
-bash scripts/setup.sh --non-interactive --install-deps
+#### Q: Can I customize existing artifacts?
 
-# Or use make
-make install
-```
+**A:** Yes! All artifacts are in the `.cursor/` directory:
 
-See the "Automated Setup" section in [INSTALL.md](INSTALL.md) for details.
+1. **Rules**: Edit `.mdc` files in `.cursor/rules/`
+2. **Skills**: Edit `SKILL.md` files in `.cursor/skills/`
+3. **Commands**: Edit `.md` files in `.cursor/commands/`
+4. **Subagents**: Edit `.md` files in `.cursor/agents/`
 
-#### Q: Can I customize the commands?
+Remember to update cross-references and documentation when modifying artifacts.
 
-**A:** Yes! Commands are just bash scripts in `cursor/commands/`:
+#### Q: Where are artifacts stored?
 
-1. Edit existing commands in `cursor/commands/`
-2. Add new commands as executable files
-3. Document them in the command's `.md` file
-4. Test with the verification scripts
+**A:** Artifact locations:
 
-#### Q: Where are configuration files stored?
-
-**A:** Configuration locations:
-
-- **Project-specific**: `.cursor/` in repository root (symlinks to `cursor/`)
-- **Global**: `~/.cursor/` in your home directory
-- **Git config**: `.git/config` for repository settings
-- **GitHub CLI**: `~/.config/gh/` for gh authentication
+- **Artifacts**: `.cursor/` directory (rules, skills, commands, agents)
+- **Templates**: `.cursor/templates/` for creating new artifacts
+- **Documentation**: `docs/` for guides and references
 
 ### Getting Help
 
@@ -328,10 +355,18 @@ See the "Automated Setup" section in [INSTALL.md](INSTALL.md) for details.
 **A:** Documentation is organized as follows:
 
 - **[README.md](README.md)** - Quick start and overview
+- **[AGENTS.md](AGENTS.md)** - Instructions for AI coding agents (follows [AGENTS.md format](https://agents.md/))
 - **[INSTALL.md](INSTALL.md)** - Detailed installation instructions
 - **[CONTRIBUTING.md](CONTRIBUTING.md)** - Contribution guidelines and PR title format
-- **[AGENTS.md](AGENTS.md)** - Automation agents and workflows
-- **[cursor/commands/](cursor/commands/)** - Individual command documentation
+- **[docs/cursor-rules.md](docs/cursor-rules.md)** - Guide to Cursor Rules: what they're good for and best practices
+- **[docs/cursor-commands.md](docs/cursor-commands.md)** - Guide to Cursor Commands: creating reusable workflows
+- **[docs/cursor-skills.md](docs/cursor-skills.md)** - Guide to Cursor Skills: extending AI agents with specialized capabilities
+- **[docs/cursor-subagents.md](docs/cursor-subagents.md)** - Guide to Cursor Subagents: specialized AI assistants for complex tasks
+- **[docs/meta-processes.md](docs/meta-processes.md)** - Guide to meta processes for self-improvement
+- **[docs/organization.md](docs/organization.md)** - Organization structure guide
+- **[docs/self-improvement-workflow.md](docs/self-improvement-workflow.md)** - Step-by-step self-improvement workflow
+- **[docs/automation-agents.md](docs/automation-agents.md)** - GitHub Actions and automation workflows
+- **[.cursor/commands/](.cursor/commands/)** - Individual command documentation
 - **[.github/copilot-instructions.md](.github/copilot-instructions.md)** - Project standards and guidelines
 
 #### Q: I found a bug or have a feature request?
@@ -364,16 +399,16 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 1. Click "Use this template" on GitHub
 2. Clone your new repository
 3. The `.cursor/` directory will automatically work
-4. Customize commands in `cursor/commands/` to your needs
+4. Customize commands in `.cursor/commands/` to your needs
 
 #### Q: How do I add new commands?
 
 **A:**
 
-1. Create a new executable file in `cursor/commands/`:
+1. Create a new executable file in `.cursor/commands/`:
    ```bash
-   touch cursor/commands/mycommand
-   chmod +x cursor/commands/mycommand
+   touch .cursor/commands/mycommand
+   chmod +x .cursor/commands/mycommand
    ```
 
 2. Add a shebang and implementation:
@@ -384,20 +419,26 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 
 3. Document it with a `.md` file:
    ```bash
-   # cursor/commands/mycommand.md
+   # .cursor/commands/mycommand.md
    # Your command documentation
    ```
 
-4. Test the command works through the symlink:
+4. Test the command:
    ```bash
    bash .cursor/commands/mycommand
    ```
 
-#### Q: What's the difference between commands and skills?
+#### Q: What's the difference between rules, skills, commands, and subagents?
 
-**A:**
+**A:** See the hello world examples for a complete demonstration:
 
-- **Commands**: Executable scripts that perform actions (e.g., `/gpr` to create PRs)
-- **Skills**: Reusable knowledge or patterns that Cursor AI can reference
-- Both are accessed through the `.cursor/` directory
-- Commands are in `cursor/commands/`, skills are in `cursor/skills/`
+- **Rules**: Persistent guidance and standards (the "what" and "why")
+  - Example: [Hello World Rule](.cursor/rules/hello-world.mdc) establishes standards
+- **Skills**: Actionable instructions that implement rules (the "how")
+  - Example: [Hello World Skill](.cursor/skills/hello-world/SKILL.md) provides steps
+- **Commands**: Workflows that orchestrate rules and skills (the "when" and "in what order")
+  - Example: [Hello World Command](.cursor/commands/hello-world.md) creates a workflow
+- **Subagents**: Specialized AI assistants for complex tasks (context isolation)
+  - Example: [Hello World Subagent](.cursor/agents/hello-world.md) demonstrates structure
+
+The hello world examples show how they work together: **Rule → Skill → Command**
