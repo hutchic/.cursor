@@ -6,7 +6,7 @@
 
 ## Features
 
-- ✅ **Protected Branch Detection**: Automatically creates a feature branch when on `main`, `master`, `trunk`, `develop`, or `release/*`
+- ✅ **Protected Branch Detection**: Automatically creates a feature branch when on `main`, `master`, `trunk`, `develop`, or branches starting with `release/`
 - ✅ **Semantic Commit Enforcement**: Validates commit messages follow semantic conventions
 - ✅ **Hook & Signing Safety**: Never bypasses pre-commit hooks or GPG signing
 - ✅ **Clean Branch Naming**: Generates normalized branch names from semantic messages
@@ -74,7 +74,7 @@ gship "test: add integration tests"
 
 ## Workflow
 
-### From Protected Branch (main/master/trunk/develop/release/*)
+### From Protected Branch (main/master/trunk/develop/release/...)
 
 1. Stage your changes: `git add <files>`
 2. Run: `gship "feat(api): add endpoint"`

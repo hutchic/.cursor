@@ -61,13 +61,13 @@ check_git_repo() {
 check_staged_changes() {
     local staged_files
     staged_files=$(git diff --cached --name-only)
-    
+
     if [ -z "$staged_files" ]; then
         print_error "No staged changes found"
         print_info "Please stage your changes first with 'git add' or '/gadd'"
         exit 1
     fi
-    
+
     echo "$staged_files"
 }
 
@@ -79,24 +79,24 @@ get_current_branch() {
 # Function to check if current branch is protected
 is_protected_branch() {
     local current_branch="$1"
-    
+
     # Check if HEAD is detached
     if [ "$current_branch" = "HEAD" ]; then
         return 0
     fi
-    
+
     # Check against protected patterns
     for pattern in "${PROTECTED_BRANCHES[@]}"; do
         if [ "$current_branch" = "$pattern" ]; then
             return 0
         fi
     done
-    
-    # Check for release/* pattern
+
+    # Check for release/* pattern (branches starting with release/)
     if [[ "$current_branch" =~ ^release/ ]]; then
         return 0
     fi
-    
+
     return 1
 }
 
@@ -106,7 +106,7 @@ is_protected_branch() {
 normalize_branch_name() {
     local message="$1"
     local branch_name
-    
+
     # Extract type, scope, and summary
     # Pattern: type(scope): summary or type: summary
     if [[ "$message" =~ ^([a-z]+)\(([^\)]+)\):[[:space:]]*(.+)$ ]]; then
@@ -124,19 +124,19 @@ normalize_branch_name() {
         print_info "Example: 'feat(api): add search' or 'fix: resolve bug'"
         exit 1
     fi
-    
+
     # Lowercase
     branch_name=$(echo "$branch_name" | tr '[:upper:]' '[:lower:]')
-    
+
     # Replace non-alphanumeric with hyphens
     branch_name=$(echo "$branch_name" | sed 's/[^a-z0-9/-]/-/g')
-    
+
     # Collapse duplicate hyphens
     branch_name=$(echo "$branch_name" | sed 's/-\+/-/g')
-    
+
     # Remove leading/trailing hyphens
     branch_name=$(echo "$branch_name" | sed 's/^-//;s/-$//')
-    
+
     echo "$branch_name"
 }
 
@@ -145,21 +145,31 @@ normalize_branch_name() {
 create_branch_if_needed() {
     local current_branch="$1"
     local semantic_message="$2"
-    
+
     if is_protected_branch "$current_branch"; then
         local new_branch
         new_branch=$(normalize_branch_name "$semantic_message")
-        
-        print_info "Current branch '$current_branch' is protected"
+
+        if [ "$current_branch" = "HEAD" ]; then
+            print_info "HEAD is detached - creating new branch"
+        else
+            print_info "Current branch '$current_branch' is protected"
+        fi
         print_info "Creating new branch: $new_branch"
-        
+
         if git show-ref --verify --quiet "refs/heads/$new_branch"; then
             print_error "Branch '$new_branch' already exists"
             print_info "Please use a different semantic message or switch to the existing branch"
             exit 1
         fi
-        
-        git checkout -b "$new_branch" > /dev/null 2>&1
+
+        if ! git checkout -b "$new_branch" 2>/tmp/gship-error.log; then
+            print_error "Failed to create branch '$new_branch'"
+            cat /tmp/gship-error.log >&2
+            rm -f /tmp/gship-error.log
+            exit 1
+        fi
+        rm -f /tmp/gship-error.log
         print_success "Created and switched to branch: $new_branch"
         WORKING_BRANCH="$new_branch"
     else
@@ -171,10 +181,10 @@ create_branch_if_needed() {
 # Function to validate semantic message format
 validate_semantic_message() {
     local message="$1"
-    
+
     # Valid semantic types
     local valid_types="feat|fix|docs|style|refactor|perf|test|chore|build|ci|revert"
-    
+
     if [[ "$message" =~ ^($valid_types)(\([^\)]+\))?:[[:space:]]*(.+)$ ]]; then
         return 0
     else
@@ -190,9 +200,9 @@ validate_semantic_message() {
 # Sets global variable: COMMIT_HASH
 create_commit() {
     local message="$1"
-    
+
     print_info "Creating commit with message: $message"
-    
+
     # Use plain git commit with no bypass flags
     if git commit -m "$message"; then
         COMMIT_HASH=$(git rev-parse --short HEAD)
@@ -210,10 +220,10 @@ create_commit() {
 # Function to handle multi-commit mode
 handle_multi_commit() {
     local semantic_message="$1"
-    
+
     print_warning "Multi-commit mode is not yet fully implemented"
     print_info "Falling back to single-commit mode"
-    
+
     create_commit "$semantic_message"
 }
 
@@ -222,7 +232,7 @@ print_summary() {
     local branch="$1"
     local commit_hash="$2"
     local message="$3"
-    
+
     echo ""
     print_success "=== Commit Summary ==="
     echo "Branch: $branch"
@@ -235,11 +245,11 @@ print_summary() {
 main() {
     # Check if we're in a git repository
     check_git_repo
-    
+
     # Parse arguments
     local semantic_message=""
     local mode="single"
-    
+
     for arg in "$@"; do
         if [[ "$arg" =~ ^--mode= ]]; then
             mode="${arg#--mode=}"
@@ -247,7 +257,7 @@ main() {
             semantic_message="$arg"
         fi
     done
-    
+
     # Validate arguments
     if [ -z "$semantic_message" ]; then
         print_error "Missing semantic commit message"
@@ -255,43 +265,44 @@ main() {
         print_info "Example: gship \"feat(api): add search endpoint\""
         exit 1
     fi
-    
+
     # Validate mode
     if [ "$mode" != "single" ] && [ "$mode" != "multi" ]; then
         print_error "Invalid mode: $mode"
         print_info "Valid modes: single, multi"
         exit 1
     fi
-    
+
     # Validate semantic message format
     validate_semantic_message "$semantic_message"
-    
+
     # Check for staged changes
     print_info "Checking for staged changes..."
     local staged_files
     staged_files=$(check_staged_changes)
     local file_count
-    file_count=$(echo "$staged_files" | wc -l)
+    # Count lines correctly (handles single file case)
+    file_count=$(echo "$staged_files" | grep -c "^" || echo "0")
     print_success "Found $file_count staged file(s)"
-    
+
     # Get current branch
     local current_branch
     current_branch=$(get_current_branch)
     print_info "Current branch: $current_branch"
-    
+
     # Create branch if needed
     create_branch_if_needed "$current_branch" "$semantic_message"
-    
+
     # Create commit(s)
     if [ "$mode" = "multi" ]; then
         handle_multi_commit "$semantic_message"
     else
         create_commit "$semantic_message"
     fi
-    
+
     # Print summary
     print_summary "$WORKING_BRANCH" "$COMMIT_HASH" "$semantic_message"
-    
+
     print_success "Done!"
 }
 
