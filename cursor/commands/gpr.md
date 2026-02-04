@@ -1,6 +1,6 @@
 # Create or Update Pull Request
 
-This command creates or updates a GitHub pull request for the current branch.
+This command creates or updates a GitHub pull request for the current branch. By default, creates **draft** PRs.
 
 ## Usage
 
@@ -12,6 +12,7 @@ With options:
 
 ```bash
 /gpr "fix(auth): resolve token expiry" --snippet-mode file --snippet-path src/auth.py
+/gpr "feat: ready for review" --ready  # Create as ready for review (not draft)
 ```
 
 ## What it does
@@ -20,8 +21,9 @@ With options:
 2. Pushes the current branch to remote (with upstream if needed)
 3. Detects whether to use `gh` CLI or GitHub MCP
 4. Checks if a PR already exists for the branch
-5. Creates a new PR or updates the existing one
-6. Generates a standardized PR body with:
+5. Creates a new **draft** PR (or ready PR with `--ready`) or updates the existing one
+6. Uses PR template from `.github/pull_request_template.md` if available
+7. Generates a standardized PR body with:
    - Summary
    - List of commits
    - Validation checklist
@@ -47,6 +49,8 @@ With options:
 
 - `--snippet-content CONTENT`: Custom content when using `paste` mode
   - Example: `--snippet-content "See detailed commit messages"`
+
+- `--ready`: Create PR as ready for review instead of draft (default is draft)
 
 ## Requirements
 

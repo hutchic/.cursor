@@ -2,35 +2,39 @@
 
 ## Overview
 
-`/gship` is a command that safely creates semantic commits and pull requests in one step. It's a composite command that internally uses `gadd` for staging and `gpr` for PR creation. It automatically creates feature branches when you're on a protected branch and enforces semantic commit message standards.
+`/gship` is a command with sensible defaults that creates semantic commits and pull requests in one step. It's a composite command that internally uses `gadd` for staging and `gpr` for PR creation. It automatically creates feature branches when you're on a protected branch and can auto-generate semantic commit messages if not provided.
 
 ### Internal Architecture
 
 `gship` delegates to two other commands:
 - **`gadd`**: For intelligent file staging (automatically stages all files if none are staged)
-- **`gpr`**: For pushing branches and creating/updating GitHub pull requests
+- **`gpr`**: For pushing branches and creating/updating GitHub pull requests (draft by default)
 
 This ensures that any updates to `gadd` or `gpr` logic automatically benefit `gship` without code duplication.
 
 ## Features
 
+- ✅ **Sensible Defaults**: Run with no arguments for fully automated workflow
+- ✅ **Auto-Generated Semantic Messages**: Analyzes changes to create appropriate commit messages
 - ✅ **Automatic Staging**: Uses `gadd` to stage files if none are staged
 - ✅ **Protected Branch Detection**: Automatically creates a feature branch when on `main`, `master`, `trunk`, `develop`, or branches starting with `release/`
 - ✅ **Semantic Commit Enforcement**: Validates commit messages follow semantic conventions
 - ✅ **Hook & Signing Safety**: Never bypasses pre-commit hooks or GPG signing
 - ✅ **Clean Branch Naming**: Generates normalized branch names from semantic messages
-- ✅ **Automatic PR Creation**: Uses `gpr` to push and create/update pull requests
+- ✅ **Automatic Draft PR Creation**: Uses `gpr` to push and create/update draft pull requests
+- ✅ **PR Template Support**: Uses `.github/pull_request_template.md` if available
+- ✅ **GitHub MCP Support**: Uses GitHub MCP if available, falls back to gh CLI
 - ✅ **Clear Error Messages**: Provides helpful feedback when something goes wrong
 
 ## Usage
 
 ```bash
-gship "<semantic-message>" [--mode=single|multi] [--no-pr]
+gship [<semantic-message>] [--mode=single|multi] [--no-pr]
 ```
 
 ### Arguments
 
-- `<semantic-message>`: A semantic commit message in the format `type(scope): summary` or `type: summary`
+- `<semantic-message>`: Optional. A semantic commit message in the format `type(scope): summary` or `type: summary`. If not provided, auto-generated from changes.
 - `--mode`: Optional. Either `single` (default) or `multi` (experimental)
 - `--no-pr`: Optional. Skip PR creation (commit only)
 
@@ -49,6 +53,20 @@ gship "<semantic-message>" [--mode=single|multi] [--no-pr]
 - `revert`: Reverting previous changes
 
 ## Examples
+
+### Fully Automated (No Arguments)
+
+```bash
+# Let gship handle everything automatically
+gship
+
+# What happens:
+# 1. Auto-generates semantic message from changes (e.g., "feat: update 3 file(s)")
+# 2. Stages all files via gadd
+# 3. Creates branch from semantic message if on protected branch
+# 4. Commits with generated message
+# 5. Pushes and creates draft PR with PR template
+```
 
 ### Basic Usage
 
