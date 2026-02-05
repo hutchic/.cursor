@@ -10,7 +10,7 @@ Produce commit messages that follow [Conventional Commits](https://www.conventio
 ## When to Use
 
 - Use when committing changes and a commit message is needed
-- Use when a terse semantic commit is required (e.g. shipit, PR workflows)
+- Use when a terse semantic commit is required (e.g. commit workflows, PR creation)
 
 ## Format
 

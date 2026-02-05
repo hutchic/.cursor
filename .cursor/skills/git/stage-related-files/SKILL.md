@@ -9,9 +9,9 @@ Group changes logically for `git add` and decide when to split into one or more 
 
 ## When to Use
 
-- Use when staging files for commit (e.g. as part of shipit or any commit workflow)
-- Use when grouping related changes into logical commits
+- Use when staging files for commit or when grouping related changes into logical commits
 - Use when deciding whether to make one commit or several
+- Use in any workflow that requires staging (e.g. commit workflows, hooks, commands)
 
 ## Instructions
 

@@ -275,7 +275,7 @@ Create a command when:
 
 ### Multi-Step Workflows Composed from Skills
 
-The [shipit command](.cursor/commands/shipit.md) is an example of a multi-step workflow that orchestrates discrete skills: it uses the stage-related-files, terse-semantic-commits, and open-pr skills to stage changes, commit (with pre-commit), push, and open or update a PR. See the [Automation Decomposition Rule](.cursor/rules/meta/automation-decomposition.mdc) for the pattern of decomposing automations into skills then composing them in a command.
+The [shipit command](.cursor/commands/shipit.md) is an example of a multi-step workflow that orchestrates discrete skills: it uses the ensure-feature-branch, stage-related-files, terse-semantic-commits, and open-pr skills to ensure a feature/bug branch (creating one if on mainline or release), stage changes, commit (with pre-commit), push, and open or update a PR. See the [Automation Decomposition Rule](.cursor/rules/meta/automation-decomposition.mdc) for the pattern of decomposing automations into skills then composing them in a command.
 
 ### Example 1: Pull Request Creation
 

@@ -55,6 +55,7 @@ Decision framework for creating rules, skills, commands, and subagents.
 - Automatically detected by agent
 - Progressive loading (references/assets)
 - Portable across projects
+- Decomposable: usable on their own or in any automation; describe "When to Use" by capability, not by a specific command
 
 ### Create a Command When
 
