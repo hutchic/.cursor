@@ -89,6 +89,15 @@ Detailed instructions for the agent.
 | `metadata` | No | Arbitrary key-value mapping for additional metadata. |
 | `disable-model-invocation` | No | When `true`, the skill is only included when explicitly invoked via `/skill-name`. The agent will not automatically apply it based on context. |
 
+### Decomposability: Skills as Standalone Capabilities
+
+Skills should be **decomposable**: usable on their own and when composed in commands, hooks, or other automations. Avoid coupling a skill to a single command or workflow.
+
+- **Do**: Describe "When to Use" in terms of the capability (e.g. "use when you need to ensure a feature branch before committing" or "use when staging files for commit").
+- **Don't**: Tie the skill to one command (e.g. "use at the start of shipit" or "run in step 2 of the deploy command"). That prevents the skill from being reused in other flows or invoked independently.
+
+This keeps skills portable and reusable across projects and workflows. Commands and automations then orchestrate skills in order without the skills depending on those orchestrators.
+
 ### Complete Skill Example
 
 Here's a complete example of a skill structure:

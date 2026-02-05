@@ -1,16 +1,17 @@
 ---
 name: ensure-feature-branch
-description: "Ensure we're on a feature or bug branch before committing. If current branch is mainline (main, master, dev) or a release branch (release/*), create and checkout a new branch. Use when about to run shipit or commit/push so work is never committed directly to mainline or release."
+description: "Ensure we're on a feature or bug branch. If current branch is mainline (main, master, dev) or a release branch (release/*), create and checkout a new branch. Use when a workflow or user request should avoid committing or pushing directly to mainline or release."
 ---
 
 # Ensure Feature Branch Skill
 
-Before staging and committing, ensure the current branch is a feature or bug branch. If it is a mainline or release branch, create and checkout a new branch so commits are not made on mainline/release.
+Ensure the current branch is a feature or bug branch. If it is a mainline or release branch, create and checkout a new branch so commits are not made on mainline/release. Use this skill on its own or as part of any automation (e.g. pre-commit hook, command, or manual request).
 
 ## When to Use
 
-- Use at the start of shipit (before stage/commit) when the workflow should not commit to mainline or release
-- Use when the user asks to commit/push and you should avoid pushing directly to main or dev
+- Use when you need to ensure work is not committed or pushed directly to mainline or release
+- Use when the user asks to commit/push and the current branch is main, master, dev, or release/*
+- Use in any workflow that requires a feature/bug branch before subsequent steps (e.g. stage, commit, push)
 
 ## Mainline and Release Branches
 
@@ -31,7 +32,7 @@ Repos may use different default branch names (e.g. `trunk`, `development`). If t
 
 ## Notes
 
-- Run this **before** staging and committing so the first commit lands on the new branch.
+- When used in a multi-step flow (e.g. before stage → commit → push), run this first so the first commit lands on the new branch.
 - Do not create a branch if already on a non-mainline, non-release branch (e.g. existing `feat/xyz` or an updatecli branch).
 
 ## Related Artifacts

@@ -39,6 +39,7 @@ Each of these is a candidate for a **skill** (or a simple step if there is no re
 - One skill = one capability, one "how."
 - Skills are reusable across commands and contexts.
 - Keep skills focused so they can be composed in different workflows.
+- **Decomposable and standalone**: Each skill should be usable on its own and when composed in commands, hooks, or other automations. Describe "When to Use" in terms of the capability (e.g. "use when you need to ensure a feature branch")—not in terms of a specific command (e.g. avoid "use at the start of shipit").
 
 ### 3. Create a Command That Orchestrates
 
@@ -58,6 +59,7 @@ Each of these is a candidate for a **skill** (or a simple step if there is no re
 - Don't implement a multi-step workflow as a single bespoke command that inlines all the "how."
 - Don't implement a multi-step workflow as a single monolithic skill.
 - Don't skip decomposition because "it's just one workflow"—the skills are reusable and the mental model stays clear.
+- Don't tie a skill's "When to Use" to a single command (e.g. "use at the start of shipit"). Skills are composable; they may be run independently or by any automation.
 
 ## Example: Commit-and-PR Workflow
 
