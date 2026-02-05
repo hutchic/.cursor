@@ -54,6 +54,16 @@ Extract reusable patterns from conversations and code, determine appropriate art
 - Domain-specific knowledge
 - Environment-specific configurations
 
+#### Hook Patterns (Cursor agent loop)
+
+- **Gating**: What the agent is allowed or forbidden to do (shell commands, file reads, MCP calls) → `beforeShellExecution`, `beforeReadFile`, `beforeMCPExecution`, etc.
+- **Post-edit automation**: Run something after every file edit (format, lint) → `afterFileEdit`, `afterTabFileEdit`
+- **Auditing**: Log or observe agent actions → `postToolUse`, `afterShellExecution`, `afterMCPExecution`
+- **Session context**: Inject env or context at conversation start → `sessionStart`
+- **Tab vs Agent policy**: Different rules for inline Tab vs Agent → Tab-specific hooks (`beforeTabFileRead`, `afterTabFileEdit`)
+
+When a pattern fits hook behavior, suggest **hooks** as the outcome (with event(s) and command-based vs prompt-based). See [Cursor Hooks](docs/research/cursor-hooks.md).
+
 ### Artifact Type Determination
 
 Use decision framework:
@@ -61,6 +71,7 @@ Use decision framework:
 - **Skill**: Domain knowledge with scripts, automation needs
 - **Command**: Manual workflows, checklists, step-by-step
 - **Subagent**: Complex tasks, context isolation, parallel work
+- **Hooks**: Behavior that must run automatically in the agent loop (gate, format after edit, audit, inject context)—configure via `.cursor/hooks.json` and scripts
 
 ### Organization Suggestions
 
@@ -104,4 +115,5 @@ Use decision framework:
 - [Conversation Analysis Skill](.cursor/skills/meta/conversation-analysis/SKILL.md)
 - [Artifact Creation Skill](.cursor/skills/meta/artifact-creation/SKILL.md)
 - [Artifact Creation Rule](.cursor/rules/meta/artifact-creation.mdc)
+- [Cursor Hooks](docs/research/cursor-hooks.md) – When to recommend hooks (agent-loop automation, gating, auditing)
 - [Pattern Extraction Research](docs/research/ai-agent-patterns.md)

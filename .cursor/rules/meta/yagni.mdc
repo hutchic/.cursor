@@ -1,0 +1,66 @@
+---
+description: "You Aren't Gonna Need It. Don't add abstraction, schema, or generic infrastructure until at least two concrete use cases need it. Use when designing or reviewing plans and code."
+alwaysApply: true
+---
+
+# YAGNI Rule
+
+Do not add a new abstraction (factory, strategy enum, generic table, or "platform" layer) until at least two concrete use cases need it. One use case can be implemented directly or with minimal, local structure; introduce the abstraction when adding the second.
+
+## When This Applies
+
+- When designing a new table, service, or module that will "support many future cases"
+- When adding a factory, strategy pattern, or plugin system "so we can add more later"
+- When reviewing a plan or PR that introduces generic infrastructure before a second use case exists
+- When tempted to "build it right once" for a single current requirement
+
+## Guidelines
+
+### Primary Guideline
+
+**One concrete use case → no new abstraction.** Implement the one case in the simplest way that works (e.g. one validator in code, one function, one row type). When you add a **second** use case that would duplicate that logic or structure, then extract the abstraction (factory, config table, strategy enum).
+
+### For Validators Specifically
+
+- **One validator (e.g. affirmative):** Implement in code or with minimal config (e.g. one row, one function). No need yet for `validation_configs`, `validation_strategy` enum, or `createValidatorFromConfig`.
+- **Second validator (e.g. name or gender):** Now consider a small factory or shared config shape to avoid duplication. Still prefer the smallest abstraction that serves both.
+- **Third and beyond:** A config-driven factory and DB-backed validators become justified; avoid building them for "one validator + maybe more later."
+
+### Questions to Ask
+
+- "Do we have two (or more) concrete use cases that need this abstraction today?"
+- "Can we ship the current requirement with a one-off implementation and refactor when we add the next?"
+- "What is the smallest change that satisfies the current need?"
+
+### What to Defer
+
+- Generic "all validators" table → until you have at least two validator types to store
+- Strategy enum and routing layer → until you have at least two strategies in active use
+- Caching, invalidation, and lifecycle → until the simple path exists and profiling shows a need
+- Plugin or provider abstraction → until you have a second provider or second consumer that requires it
+
+## Examples
+
+### Prefer
+
+- **Affirmative only:** One validator (e.g. regex + LLM) in code or a single config entry; wire it into the flow; ship. No factory.
+- **Affirmative + name:** Two validators; now add a small factory or config shape so both use the same execution pattern. Still minimal (e.g. one table or one registry, not a full platform).
+- **Many validators + operators:** Full config-driven engine, strategy enum, DB-backed validators—when the number of validators and the need to change them without code deploys justifies it.
+
+### Avoid
+
+- **One validator in scope:** Building `validation_configs`, `validation_strategy` (regex / llm / two_tier), and a config-driven factory "so we can add more validators later." YAGNI: add the factory when you add the second validator.
+- **One LLM use case:** Building a full provider abstraction and provider config table before a second provider or second consumer exists. Wire the one integration first; abstract when you have two.
+
+## Exceptions
+
+- **Proven reuse:** You are copying a minimal, already-shipped abstraction from another project that has two or more use cases.
+- **Contract or interface:** A required interface (e.g. from a library or client) may force a shape; implement the minimum that satisfies the interface.
+- **Explicit decision:** The team documents a decision to build the abstraction now (e.g. for a fixed deadline that includes "platform ready"); then YAGNI is suspended for that scope only.
+
+## Related Artifacts
+
+- [MVP-First Rule](.cursor/rules/meta/mvp-first.mdc) – Demonstrable slice before infrastructure
+- [Artifact Creation Rule](.cursor/rules/meta/artifact-creation.mdc)
+- [Organization Rule](.cursor/rules/meta/organization.mdc)
+- [Cursor Rules Documentation](docs/cursor-rules.md)

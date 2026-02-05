@@ -1,0 +1,73 @@
+---
+description: "Do not declare work complete until you have run the stated verification (e.g. tests, smoke test, plan step) and reported the result. Use when implementing plans, completing tasks, or summarizing deliverables."
+alwaysApply: true
+---
+
+# Verify-Before-Done Rule
+
+Do not mark work complete or say implementation is done until the **stated** verification has been **executed** and the **outcome** has been reported. Verification means the agent (or human) actually runs the commands and inspects the results—not adding automation for something else to verify later.
+
+## When This Applies
+
+- When completing a task, plan, or to-do that has verification steps (e.g. "run tests", "run smoke test")
+- When summarizing what was implemented and whether it works
+- When a plan or task list says "run X after implementation" or "then run Y to verify"
+- When the user could reasonably ask "did you run it? what was the result?"
+
+## Guidelines
+
+### Primary Guideline
+
+**Run the verification, then report the result, before saying the work is complete.** If the plan says "run `make test/smoke/...` after implementation," run it and report pass/fail (and any errors or logs) before marking the task or implementation done. Listing "how to run" in a summary does not substitute for actually running it.
+
+### What "Stated" Verification Means
+
+- Whatever the plan, task, or your own summary says should be run (e.g. "run this make target", "run the test suite", "run E2E") counts.
+- If the plan says "Run X after implementation," X must be run before claiming the plan or task is complete.
+- When there is an obvious verification step (e.g. tests for code changes, smoke test for a new script), run it as part of completing the task—do not wait for the user to ask.
+
+### Manual Verification Only
+
+- This rule is about **behavior**: run the verification and report. It does not require adding new automated checks or pipelines.
+- "Verification" here means the agent (or human) actually runs the commands and inspects results (exit code, output, logs). It does not mean "we added a script so something else can verify later."
+
+### Before Claiming Done
+
+- Execute the verification step(s) that the plan, task, or context implies.
+- Report the outcome: pass or fail, and if relevant, key output or errors.
+- Only then mark the task complete or state that the implementation is done.
+
+## Examples
+
+### Prefer
+
+- Implement the feature → run the tests (or smoke test, or plan verification step) → report "Tests passed" or "Test X failed with …" → then mark the task done and summarize.
+- When a plan says "Run `make test/smoke/35-bootstrap-metric-e2e` after implementation," run that command, capture the result, and include it in your summary before saying the work is complete.
+
+### Avoid
+
+- Implementing code, writing "Summary of what was implemented" and "How to run the new smoke test," marking the task done, and never running the smoke test.
+- Marking a plan or to-do complete when the plan explicitly says "run X after implementation" and X was not run.
+- Saying "the implementation is complete" or "task 5 is done" without having run the relevant tests or verification and reported the outcome.
+
+## Exceptions
+
+- **No verification stated:** If the task or plan has no verification step and none is implied by context, you may complete and summarize without running additional commands. When in doubt, run the obvious check (e.g. tests for code changes).
+- **User explicitly defers:** If the user says to skip verification or to run it themselves, you may mark your part done and say that verification is left to them.
+
+## Hard enforcement (by design)
+
+Rules alone can be skipped. For **by-design** enforcement so verification cannot easily be skipped, prefer one or more of:
+
+- **Pre-commit runs tests** — Hook in `.pre-commit-config.yaml` runs the test suite; commit fails if tests fail. Pair with project rule: never use `--no-verify`; CI runs same checks.
+- **Cursor hook gates `git commit`** — `beforeShellExecution` matcher for `git commit`; script runs tests and returns deny (exit 2) on failure. See [Cursor Hooks](https://cursor.com/docs/agent/hooks).
+- **Single path to commit** — Document only `make commit` (or script) that runs tests → pre-commit → git commit; pre-commit still enforces if someone runs raw `git commit`.
+- **CI as gate** — Branch protection requires CI (including tests) to pass before merge; does not stop agents from claiming "done" before merge, but prevents unverified code from merging.
+
+Prefer adding one or more of these in projects that have a test suite; keep the rule as behavioral guidance in parallel.
+
+## Related Artifacts
+
+- [Self-Improvement Rule](.cursor/rules/self-improvement.mdc) – Learn from mistakes; verify assumptions before suggesting
+- [Artifact Creation Rule](.cursor/rules/meta/artifact-creation.mdc)
+- [Cursor Rules Documentation](docs/cursor-rules.md)

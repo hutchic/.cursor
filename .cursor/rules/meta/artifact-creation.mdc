@@ -101,6 +101,17 @@ Is the task simple and single-purpose?
         └─ No → Rule
 ```
 
+### Consider Cursor Hooks When
+
+The behavior must run **automatically in the agent loop** (before/after specific agent or Tab actions), not only when the user or context invokes it:
+
+- **Gating**: Block or allow shell commands, file reads, or MCP calls → hooks (e.g. `beforeShellExecution`, `beforeReadFile`, `beforeMCPExecution`)
+- **Post-edit automation**: Format or lint after every file edit → hooks (`afterFileEdit`, `afterTabFileEdit`)
+- **Auditing**: Log or observe agent tool use → hooks (`postToolUse`, `afterShellExecution`, `afterMCPExecution`)
+- **Session context**: Inject env or context at conversation start → hooks (`sessionStart`)
+
+If the pattern fits these, recommend **Cursor hooks** (`.cursor/hooks.json` and scripts) in addition to or instead of a rule/skill/command. For events, config, and prompt-based vs command-based, see [Cursor Hooks](https://cursor.com/docs/agent/hooks) and [Third Party Hooks](https://cursor.com/docs/agent/third-party-hooks).
+
 ## Naming and Organization Standards
 
 ### Naming
@@ -174,3 +185,4 @@ Plans that add skills or commands should explicitly require these creator skills
 - [Skill-creator Skill](.cursor/skills/meta/skill-creator/SKILL.md) – Use when creating new skills
 - [Command-creator Skill](.cursor/skills/meta/command-creator/SKILL.md) – Use when creating new commands (Cursor paths: `.cursor/commands/`)
 - [Cursor Best Practices](docs/research/cursor-best-practices.md)
+- [Cursor Hooks (official)](https://cursor.com/docs/agent/hooks) – When to recommend hooks instead of or in addition to rules/skills/commands

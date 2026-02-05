@@ -1,5 +1,5 @@
 ---
-description: "This repository is a standalone project. All Cursor rules, skills, and commands live in .cursor/. Optional: symlink skills/commands globally (e.g. ~/.cursor/skills). No install scripts."
+description: "This repository is a standalone project. All Cursor rules, skills, and commands live in .cursor/. Optional: symlink for global share, or run scripts/install-self-improvement.sh to copy the self-improvement bundle into another project."
 alwaysApply: true
 ---
 
@@ -12,17 +12,20 @@ This repository is a **standalone project** for Cursor rules, skills, and comman
 - **Rules, skills, and commands** all live in the **`.cursor/`** directory.
 - Cursor IDE reads directly from `.cursor/`. Edit files in `.cursor/`.
 
-## Optional: Global Share
+## Optional: Use in Other Projects
 
-To use these skills and commands in other projects, share them **only via a symlink** (e.g. `~/.cursor/skills` → this repo’s `.cursor/skills`, `~/.cursor/commands` → this repo’s `.cursor/commands`, or equivalent). No install scripts.
+To use these artifacts in other projects:
 
-**No other installation or setup.** No “global install” scripts, no Makefile targets that copy or “deploy” beyond documenting or creating that optional symlink.
+- **Symlink** (e.g. `~/.cursor/skills` → this repo's `.cursor/skills`, or equivalent), or
+- **Copy the self-improvement bundle** by running `scripts/install-self-improvement.sh` from this repo with the target project path. That script copies the bundle into the target so the target stays self-contained and portable. This is the only exception to "no install scripts."
+
+**No other installation or setup.** No other scripts that copy or "deploy," no Makefile targets that copy or deploy beyond this one documented method for the bundle.
 
 ## What to Avoid
 
-- Do not add scripts that “install” or “configure” beyond documenting the optional symlink.
-- Do not add Makefile targets that copy, sync, or “deploy” rules/skills/commands beyond symlinking.
-- Do not document or implement multiple “methods” or “modes” of installation.
+- Do not add scripts that "install" or "configure" except the single self-improvement install script above.
+- Do not add Makefile targets that copy, sync, or "deploy" rules/skills/commands.
+- Do not document or implement additional "methods" or "modes" of installation.
 - Keep documentation aligned with: **standalone project, everything in `.cursor/`.**
 
-When in doubt: **standalone project, `.cursor/` only. That’s it.**
+When in doubt: **standalone project, `.cursor/` only. That's it.**

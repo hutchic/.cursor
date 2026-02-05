@@ -1,0 +1,68 @@
+---
+description: "Prefer a demonstrable slice before adding infrastructure. Use when planning features, phases, or tasks so the first deliverable is something that can be shown, not only 'the platform is in place'."
+alwaysApply: true
+---
+
+# MVP-First Rule
+
+Before adding generic infrastructure (factories, strategy enums, new tables for "all" use cases), implement one end-to-end slice that delivers a single demonstrable outcome. Prefer "wire one thing and show it works" over "build the platform, then plug in features."
+
+## When This Applies
+
+- When given a PRD, epic, or multi-phase implementation plan
+- When starting a new feature area or "Phase N"
+- When the next task is infrastructure (factory, abstraction layer, schema for future use cases)
+- When the only outcome of a phase would be "the infrastructure is in place"
+
+## Guidelines
+
+### Primary Guideline
+
+**Each phase or task should end with something you can demonstrate.** If the only outcome is "the factory is in place" or "the schema is ready," that is not a complete phase—the phase should include the smallest path to a working, demonstrable slice.
+
+### What "Demonstrable" Means
+
+- **User-visible:** A user can do one new thing and see a result (e.g. say "yes" and the bot treats it as affirmative).
+- **Operator-visible:** An operator can see a new capability or config in action (e.g. one validator working end-to-end).
+- **Not demonstrable:** "Validator factory exists," "DB table exists," "abstraction layer is wired"—unless paired with at least one concrete flow that uses it and can be shown.
+
+### Order of Work
+
+1. **First slice:** Pick one user story or one flow; implement the smallest path (e.g. wire one integration, one validator, one success path); demo it.
+2. **Then generalize:** Add abstraction, config, or schema when you have a second concrete use case that needs it—or when the first slice clearly proves the need.
+
+### What to Defer
+
+- Full schema for "all" future validators → until you add the second validator
+- Generic factory / strategy routing → until you have at least two validation types to support
+- Caching, invalidation, and edge-case handling → until the simple path is working and measured
+
+## Examples
+
+### Prefer
+
+- **Slice 1:** Wire LangChain (or equivalent) to OpenAI; add one affirmative validator ("user gave an affirmative response"); show it working in the onboarding flow. No `validation_configs` table yet; one validator in code or minimal config.
+- **Slice 2:** Add a second validator (e.g. name); now introduce a small factory or config shape to avoid duplication.
+- **Later:** Full config-driven platform, strategy enum, DB-driven validators—when the number of validators and operators justifies it.
+
+### Avoid
+
+- **Phase 1:** Create `validation_configs`, `llm_provider_configs`, migrations.
+- **Phase 2:** LLM abstraction layer.
+- **Phase 3:** Schema registry.
+- **Phase 4:** Config-driven validator factory, caching, multi-strategy routing.
+- **Phase 5:** Migrate validators to config.
+
+That sequence delivers no demonstrable feature until late; prefer inverting so the first deliverable is "affirmative (or one validator) works with LLM, end-to-end."
+
+## Exceptions
+
+- **Stakeholder requirement:** An explicit decision to build platform-first (e.g. contract or compliance) overrides this rule when documented.
+- **Reuse from another project:** If copying a proven, minimal slice (one flow + one integration) from elsewhere, that can count as the first slice.
+
+## Related Artifacts
+
+- [YAGNI Rule](.cursor/rules/meta/yagni.mdc) – Don't add abstraction until you have two use cases
+- [Artifact Creation Rule](.cursor/rules/meta/artifact-creation.mdc)
+- [Automation Decomposition Rule](.cursor/rules/meta/automation-decomposition.mdc) – Decompose into skills/commands; MVP-first applies to what you build first
+- [Cursor Rules Documentation](docs/cursor-rules.md)

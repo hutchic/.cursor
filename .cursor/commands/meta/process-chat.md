@@ -20,12 +20,13 @@ Process an AI chat conversation to analyze patterns, extract reusable knowledge,
    - Workflow patterns
    - Domain-specific knowledge
    - Opportunities for standardization
+   - **Candidate Cursor hooks**: Behavior that should run in the agent loop (e.g. gate shell/MCP/file reads, run formatters after edits, audit agent actions, inject session context). When applicable, suggest hook event(s) and whether command-based or prompt-based—see [Cursor Hooks](docs/research/cursor-hooks.md).
 
 3. **Review suggestions**: Review the analysis and artifact suggestions:
    - Pattern descriptions
-   - Recommended artifact types
-   - Suggested names and locations
-   - Content outlines
+   - Recommended artifact types (rule, skill, command, subagent, or **hooks**)
+   - Suggested names and locations (for hooks: `.cursor/hooks.json` and scripts in `.cursor/hooks/`)
+   - Content outlines (for hooks: which events, command vs prompt, matchers)
 
 4. **Create artifacts**: For each suggested artifact:
    - Use appropriate template
@@ -87,6 +88,7 @@ You can provide additional context when invoking this command:
 - [Pattern Extraction Skill](.cursor/skills/meta/pattern-extraction/SKILL.md)
 - [Create Artifact Command](.cursor/commands/meta/create-artifact.md)
 - [Conversation Analyzer Subagent](.cursor/agents/meta/conversation-analyzer.md)
+- [Cursor Hooks](docs/research/cursor-hooks.md) – When to recommend hooks when processing transcripts
 - [Self-Improvement Prompt Template](cursor/templates/self-improvement-prompt.md)
 - [Self-Improvement Workflow](docs/self-improvement-workflow.md)
 
@@ -94,6 +96,7 @@ You can provide additional context when invoking this command:
 
 - Use the self-improvement prompt template for structured analysis
 - Review suggestions before creating artifacts
-- Always use templates for consistency
+- **Consider hooks** when patterns involve gating agent actions, post-edit automation, auditing, or session context—see [Cursor Hooks](docs/research/cursor-hooks.md) for when and why to use hooks and prompt-based vs command-based.
+- Always use templates for consistency (rules, skills, commands, subagents); hooks are configured via `.cursor/hooks.json` and scripts.
 - Update documentation as you create artifacts
 - Optional export format for conversation transcripts: `chats/yyyy-mm-dd-description.md`
