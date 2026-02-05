@@ -99,7 +99,25 @@ pre-commit install
 ls -la .git/hooks/pre-commit
 ```
 
-### CI failing but local checks pass
+### CI failing but I never saw it fail locally
+
+This usually happens for one of two reasons:
+
+1. **Pre-commit wasn't run before push**
+   CI runs `pre-commit run --all-files` on the committed tree. If you never run that locally (e.g. you commit via an agent or tool that doesn't run hooks), CI will be the first place that runs it. **Fix:** Run `pre-commit run --all-files` before every push and fix or commit any changes it makes.
+
+2. **Auto-fixes weren't committed**
+   Some hooks (e.g. `trailing-whitespace`, `end-of-file-fixer`) **modify** files. If you run pre-commit locally, it can fix files in your working tree; if you then commit only the files you intended to change and leave those fixes unstaged, CI still sees the unfixed version and fails. **Fix:** After `pre-commit run --all-files`, run `git status` and add/commit any files that pre-commit changed.
+
+To match CI exactly before pushing:
+
+```bash
+pre-commit run --all-files
+git status   # add and commit any modified files
+git push
+```
+
+### CI failing but local checks pass (environment mismatch)
 
 ```bash
 # Update pre-commit hooks to match CI

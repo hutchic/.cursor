@@ -56,23 +56,23 @@ The main agent does not need a separate “orchestrator subagent”; it **is** t
 
 ### 2. Subagent Definitions (Sketch)
 
-- **architect**  
-  - **Description**: “Writes Architecture Decision Records (ADRs). Use when a feature or change needs an ADR before implementation.”  
+- **architect**
+  - **Description**: “Writes Architecture Decision Records (ADRs). Use when a feature or change needs an ADR before implementation.”
   - **Instructions**: Given a feature/change request, write an ADR (context, decision, consequences) and save to `docs/adr/YYYY-MM-DD-<slug>.md`. Return the path.
 
-- **tester**  
-  - **Description**: “Defines test plans, runs manual QA (browser, curl, CLI), and develops/adapts automated tests. Use for test planning, manual verification, and test automation.”  
-  - **Instructions**:  
-    - **Test plan mode**: From ADR/requirements, write a test plan (scenarios, manual steps, desired automated coverage) and save to `docs/test-plans/<slug>.md`.  
-    - **Manual QA mode**: Run the test plan manually (use browser MCP, terminal for curl/CLI). Report pass/fail per scenario; if fail, report clearly so coder can fix.  
+- **tester**
+  - **Description**: “Defines test plans, runs manual QA (browser, curl, CLI), and develops/adapts automated tests. Use for test planning, manual verification, and test automation.”
+  - **Instructions**:
+    - **Test plan mode**: From ADR/requirements, write a test plan (scenarios, manual steps, desired automated coverage) and save to `docs/test-plans/<slug>.md`.
+    - **Manual QA mode**: Run the test plan manually (use browser MCP, terminal for curl/CLI). Report pass/fail per scenario; if fail, report clearly so coder can fix.
     - **Automated mode**: Add or adapt automated tests from the test plan, run the test suite. Report results; if fail, report so coder or tester can fix.
 
-- **coder**  
-  - **Description**: “Implements features from an ADR and test plan. Use when implementation is ready and ADR + test plan exist.”  
+- **coder**
+  - **Description**: “Implements features from an ADR and test plan. Use when implementation is ready and ADR + test plan exist.”
   - **Instructions**: Read the given ADR and test plan paths. Implement to satisfy both. Do not change the test plan or ADR unless asked.
 
-- **code-reviewer**  
-  - **Description**: “Reviews new code for DRY, YAGNI, and refactoring. Use after implementation, before QA.”  
+- **code-reviewer**
+  - **Description**: “Reviews new code for DRY, YAGNI, and refactoring. Use after implementation, before QA.”
   - **Instructions**: Review the current changes (diff). Suggest or apply refactors for DRY/YAGNI and clarity. Report what was changed.
 
 ### 3. Handoff Artifacts
@@ -93,7 +93,7 @@ So: manual QA is either the tester subagent running commands and reporting, or t
 
 ### 5. “Send Back” Semantics
 
-- Tester (manual or automated) **returns a clear result**: “PASS” or “FAIL: <description>”.
+- Tester (manual or automated) **returns a clear result**: “PASS” or “FAIL: `&lt;description&gt;`”.
 - Main agent (orchestrator), when following the pipeline command, **interprets FAIL** and:
   - Re-invokes **coder** with: “Tester reported: FAIL: … Fix the implementation and tell me when done.”
   - Or re-invokes **tester** with: “Automated tests failed: … Fix the tests or the test run and re-run.”

@@ -224,11 +224,11 @@ Claude event names are mapped to Cursor (e.g. `PreToolUse` → `preToolUse`, `Us
 
 Cursor lists ecosystem partners that provide hooks-based integrations:
 
-- **MCP governance:** MintMCP, Oasis Security, Runlayer  
-- **Code security:** Corridor, Semgrep  
-- **Dependency security:** Endor Labs  
-- **Agent safety:** Snyk  
-- **Secrets:** 1Password  
+- **MCP governance:** MintMCP, Oasis Security, Runlayer
+- **Code security:** Corridor, Semgrep
+- **Dependency security:** Endor Labs
+- **Agent safety:** Snyk
+- **Secrets:** 1Password
 
 See [Hooks for security and platform teams](https://cursor.com/blog/hooks-partners) and the [Hooks docs](https://cursor.com/docs/agent/hooks#partner-integrations) for details.
 
@@ -260,6 +260,7 @@ Cursor hooks could, for example, run a formatter **after** the agent edits a fil
 
 ## Related Artifacts
 
+- [DX Mechanisms Report](dx-mechanisms-report.md) – Options, pros/cons, and guidance for pre-commit, Cursor hooks, rules, skills, commands, and subagents; sweet spot and ROI
 - [Cursor Best Practices](cursor-best-practices.md) – Rules, skills, commands, subagents
 - [PRE_COMMIT_SETUP](../../.github/PRE_COMMIT_SETUP.md) – Git pre-commit setup (different from Cursor hooks)
 - [Cursor Hooks (official)](https://cursor.com/docs/agent/hooks)
