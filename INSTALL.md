@@ -17,6 +17,10 @@ To use the same artifacts elsewhere:
 - **Reference** this repo in that project's docs or AGENTS.md.
 - **Use as template** — fork or copy this repo and trim to your needs.
 
+### Self-improvement in other projects
+
+To give another Cursor project the ability to **retrospect and self-improve** (analyze conversations, extract patterns, create/update rules, skills, commands, subagents, hooks, and docs), use the **self-improvement bundle**. Run the interactive script from this repo: `./scripts/install-self-improvement.sh /path/to/your/project`. It copies the bundle into the target (no symlinks), so the target stays portable. See [Self-Improvement Bundle](docs/self-improvement-bundle.md) for the full file list and manual copy steps.
+
 ## Prerequisites
 
 | Tool | Purpose |
