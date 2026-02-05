@@ -2,7 +2,7 @@
 
 ## Overview
 
-Run the full flow: stage related changes, run pre-commit, commit with a terse semantic message, push, then create a PR (or update the PR description if one already exists). This command orchestrates the stage-related-files, terse-semantic-commits, and open-pr skills.
+Run the full flow: ensure we're on a feature/bug branch (create one if on mainline or release), stage related changes, run pre-commit, commit with a terse semantic message, push, then create a PR (or update the PR description if one already exists). This command orchestrates the ensure-feature-branch, stage-related-files, terse-semantic-commits, and open-pr skills.
 
 ## When to Use
 
@@ -11,13 +11,15 @@ Run the full flow: stage related changes, run pre-commit, commit with a terse se
 
 ## Steps
 
-1. **Stage**: Use the [stage-related-files](.cursor/skills/git/stage-related-files/SKILL.md) skill to group changes and stage them (one or more logical groups; multiple `git add` + commit cycles if the user wants multiple commits, or one group for "shipit in one commit").
+1. **Ensure feature branch**: Use the [ensure-feature-branch](.cursor/skills/git/ensure-feature-branch/SKILL.md) skill. If the current branch is mainline (e.g. main, master, dev) or a release branch (e.g. release/*), create and checkout a new feature/bug branch before proceeding. If already on a feature or bug branch, continue.
 
-2. **Commit**: For each staged group, use the [terse-semantic-commits](.cursor/skills/git/terse-semantic-commits/SKILL.md) skill to produce the commit message. Run `pre-commit run --all-files` (fix any failures), then `git commit -m "..."`. Repeat if multiple groups were chosen.
+2. **Stage**: Use the [stage-related-files](.cursor/skills/git/stage-related-files/SKILL.md) skill to group changes and stage them (one or more logical groups; multiple `git add` + commit cycles if the user wants multiple commits, or one group for "shipit in one commit").
 
-3. **Push**: Push the current branch: `git push -u origin <branch>` on first push, otherwise `git push`. If push is rejected (e.g. remote has new commits), pull or rebase as needed, then push again.
+3. **Commit**: For each staged group, use the [terse-semantic-commits](.cursor/skills/git/terse-semantic-commits/SKILL.md) skill to produce the commit message. Run `pre-commit run --all-files` (fix any failures), then `git commit -m "..."`. Repeat if multiple groups were chosen.
 
-4. **PR**: Use the [open-pr](.cursor/skills/git/open-pr/SKILL.md) skill: if no PR exists for this branch, create one with a terse semantic title and body from the project template; if a PR already exists, ensure the description (and title if needed) is up to date.
+4. **Push**: Push the current branch: `git push -u origin <branch>` on first push, otherwise `git push`. If push is rejected (e.g. remote has new commits), pull or rebase as needed, then push again.
+
+5. **PR**: Use the [open-pr](.cursor/skills/git/open-pr/SKILL.md) skill: if no PR exists for this branch, create one with a terse semantic title and body from the project template; if a PR already exists, ensure the description (and title if needed) is up to date.
 
 ## Parameters
 
@@ -29,6 +31,7 @@ Optional context after the command to guide staging:
 
 ## Checklist
 
+- [ ] On a feature/bug branch (ensure-feature-branch used if started on mainline or release)
 - [ ] Changes staged using the stage-related-files skill
 - [ ] Pre-commit run and passing
 - [ ] Commit(s) made with terse semantic message(s)
@@ -37,6 +40,7 @@ Optional context after the command to guide staging:
 
 ## Related Artifacts
 
+- [Ensure Feature Branch Skill](.cursor/skills/git/ensure-feature-branch/SKILL.md)
 - [Stage Related Files Skill](.cursor/skills/git/stage-related-files/SKILL.md)
 - [Terse Semantic Commits Skill](.cursor/skills/git/terse-semantic-commits/SKILL.md)
 - [Open PR Skill](.cursor/skills/git/open-pr/SKILL.md)

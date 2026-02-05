@@ -39,6 +39,7 @@ Each of these is a candidate for a **skill** (or a simple step if there is no re
 - One skill = one capability, one "how."
 - Skills are reusable across commands and contexts.
 - Keep skills focused so they can be composed in different workflows.
+- **Decomposable and standalone**: Each skill should be usable on its own and when composed in commands, hooks, or other automations. Describe "When to Use" in terms of the capability (e.g. "use when you need to ensure a feature branch")—not in terms of a specific command (e.g. avoid "use at the start of shipit").
 
 ### 3. Create a Command That Orchestrates
 
@@ -58,6 +59,7 @@ Each of these is a candidate for a **skill** (or a simple step if there is no re
 - Don't implement a multi-step workflow as a single bespoke command that inlines all the "how."
 - Don't implement a multi-step workflow as a single monolithic skill.
 - Don't skip decomposition because "it's just one workflow"—the skills are reusable and the mental model stays clear.
+- Don't tie a skill's "When to Use" to a single command (e.g. "use at the start of shipit"). Skills are composable; they may be run independently or by any automation.
 
 ## Example: Commit-and-PR Workflow
 
@@ -65,14 +67,14 @@ Each of these is a candidate for a **skill** (or a simple step if there is no re
 
 **Right:**
 
-- **Skills:** e.g. stage-related-files (how to group), terse-semantic-commits (format and rules), open-pr (title/body and tooling). Push can be a step or a tiny skill.
-- **Command:** e.g. "Run commit-and-pr: (1) Use stage-related-files skill, (2) Use terse-semantic-commits skill and run commit, (3) Push, (4) Use open-pr skill (or command) to open the PR."
+- **Skills:** e.g. ensure-feature-branch (create branch if on mainline/release), stage-related-files (how to group), terse-semantic-commits (format and rules), open-pr (title/body and tooling). Push can be a step or a tiny skill.
+- **Command:** e.g. "Run commit-and-pr: (1) Use ensure-feature-branch skill, (2) Use stage-related-files skill, (3) Use terse-semantic-commits skill and run commit, (4) Push, (5) Use open-pr skill (or command) to open the PR."
 
-The [shipit command](.cursor/commands/shipit.md) implements this workflow using the stage-related-files, terse-semantic-commits, and open-pr skills.
+The [shipit command](.cursor/commands/shipit.md) implements this workflow using the ensure-feature-branch, stage-related-files, terse-semantic-commits, and open-pr skills.
 
 ## Related Artifacts
 
-- [Shipit Command](.cursor/commands/shipit.md) – Example: stage, commit, push, open or update PR (uses stage-related-files, terse-semantic-commits, open-pr skills)
+- [Shipit Command](.cursor/commands/shipit.md) – Example: ensure feature branch, stage, commit, push, open or update PR (uses ensure-feature-branch, stage-related-files, terse-semantic-commits, open-pr skills)
 - [Artifact Creation Rule](.cursor/rules/meta/artifact-creation.mdc) – When to create a rule, skill, command, or subagent
 - [Hello World Rule](.cursor/rules/hello-world.mdc) – Rule → skill → command relationship
 - [Create Artifact Command](.cursor/commands/meta/create-artifact.md) – Creating new artifacts
