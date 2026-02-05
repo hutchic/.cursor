@@ -43,7 +43,6 @@ REQUIRED_DOCS=(
   "docs/self-improvement-workflow.md"
   "docs/meta-processes.md"
   "docs/organization.md"
-  "docs/research/cursor-hooks.md"
   "docs/cursor-rules.md"
   "docs/cursor-commands.md"
   "docs/cursor-skills.md"

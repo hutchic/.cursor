@@ -110,7 +110,7 @@ The behavior must run **automatically in the agent loop** (before/after specific
 - **Auditing**: Log or observe agent tool use → hooks (`postToolUse`, `afterShellExecution`, `afterMCPExecution`)
 - **Session context**: Inject env or context at conversation start → hooks (`sessionStart`)
 
-If the pattern fits these, recommend **Cursor hooks** (`.cursor/hooks.json` and scripts) in addition to or instead of a rule/skill/command. See [Cursor Hooks](docs/research/cursor-hooks.md) for when to use hooks, which events exist, and prompt-based vs command-based.
+If the pattern fits these, recommend **Cursor hooks** (`.cursor/hooks.json` and scripts) in addition to or instead of a rule/skill/command. For events, config, and prompt-based vs command-based, see [Cursor Hooks](https://cursor.com/docs/agent/hooks) and [Third Party Hooks](https://cursor.com/docs/agent/third-party-hooks).
 
 ## Naming and Organization Standards
 
@@ -175,7 +175,6 @@ Plans that add skills or commands should explicitly require these creator skills
 
 ## Related Artifacts
 
-- [DX Mechanisms Report](docs/research/dx-mechanisms-report.md) – Options, pros/cons, sweet spot, and ROI for pre-commit, hooks, rules, skills, commands, subagents
 - [Automation Decomposition Rule](.cursor/rules/meta/automation-decomposition.mdc) – Decompose automations into discrete skills, then package into commands
 - [Organization Rule](.cursor/rules/meta/organization.mdc)
 - [Cross-Referencing Rule](.cursor/rules/meta/cross-referencing.mdc)
@@ -186,4 +185,4 @@ Plans that add skills or commands should explicitly require these creator skills
 - [Skill-creator Skill](.cursor/skills/meta/skill-creator/SKILL.md) – Use when creating new skills
 - [Command-creator Skill](.cursor/skills/meta/command-creator/SKILL.md) – Use when creating new commands (Cursor paths: `.cursor/commands/`)
 - [Cursor Best Practices](docs/research/cursor-best-practices.md)
-- [Cursor Hooks](docs/research/cursor-hooks.md) – When to recommend hooks instead of or in addition to rules/skills/commands
+- [Cursor Hooks (official)](https://cursor.com/docs/agent/hooks) – When to recommend hooks instead of or in addition to rules/skills/commands

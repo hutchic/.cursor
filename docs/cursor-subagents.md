@@ -472,6 +472,5 @@ If you're on a legacy request-based plan, you must enable [Max Mode](https://cur
 - [Cursor Rules Documentation](docs/cursor-rules.md) - Related feature for persistent AI instructions
 - [Meta Processes Guide](docs/meta-processes.md) - Self-improvement processes including meta subagents
 - [Organization Guide](docs/organization.md) - How subagents are organized in this repository
-- [Subagent Orchestration: Dev Pipeline](docs/research/subagent-orchestration-dev-pipeline.md) - Research on orchestrating architect, tester, coder, reviewer in a chunked flow with ADR and test plan handoffs
 - [AGENTS.md](AGENTS.md) - Agent instructions for this repository
 - [Subagents in this project](.cursor/agents/) - Project-specific subagents

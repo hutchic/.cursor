@@ -121,6 +121,6 @@ The system will:
 - [Self-Improvement Workflow](docs/self-improvement-workflow.md)
 - [Organization Guide](docs/organization.md)
 - [Cursor Best Practices](docs/research/cursor-best-practices.md)
-- [Cursor Hooks](docs/research/cursor-hooks.md)
+- [Cursor Hooks](https://cursor.com/docs/agent/hooks) (official docs; artifact-creation rule describes when to recommend hooks)
 - [AI Agent Patterns](docs/research/ai-agent-patterns.md)
 - [Skills/Commands Patterns](docs/research/skills-commands-patterns.md)

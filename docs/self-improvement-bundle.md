@@ -86,7 +86,6 @@ Meta artifacts link to these docs. Include at least the following so links resol
 | `docs/self-improvement-workflow.md` | Step-by-step self-improvement workflow |
 | `docs/meta-processes.md` | Overview of meta rules, skills, commands, subagents |
 | `docs/organization.md` | Organization and structure |
-| `docs/research/cursor-hooks.md` | When to recommend Cursor hooks (referenced by analysis/creation) |
 | `docs/cursor-rules.md` | Cursor rules (referenced in templates) |
 | `docs/cursor-commands.md` | Cursor commands (referenced in templates) |
 | `docs/cursor-skills.md` | Cursor skills (referenced in templates) |
@@ -100,7 +99,7 @@ Meta artifacts link to these docs. Include at least the following so links resol
 
 ### 7. Hooks
 
-This repository **does not ship** any Cursor hooks (no `.cursor/hooks.json` or `.cursor/hooks/` scripts). The meta artifacts and `docs/research/cursor-hooks.md` describe **when to recommend** hooks (e.g. gating shell, post-edit formatting, auditing). To enable self-improvement that suggests hooks, you only need the docs and meta artifacts above; the target project can add its own `.cursor/hooks.json` and scripts when it chooses.
+This repository **does not ship** any Cursor hooks (no `.cursor/hooks.json` or `.cursor/hooks/` scripts). The [artifact-creation rule](.cursor/rules/meta/artifact-creation.mdc) describes **when to recommend** hooks (e.g. gating shell, post-edit formatting, auditing); for events and config see [Cursor Hooks](https://cursor.com/docs/agent/hooks). The target project can add its own `.cursor/hooks.json` and scripts when it chooses.
 
 ### 8. Optional: skill-creator and command-creator
 
@@ -142,4 +141,3 @@ If you don’t include them, create-artifact and artifact-creation still work fo
 - [INSTALL.md](../INSTALL.md) – Project-local usage and copying into other projects
 - [Self-Improvement Workflow](self-improvement-workflow.md)
 - [Meta Processes Guide](meta-processes.md)
-- [Packaging options](plans/self-improvement-packaging-options.md) – Ways to package/release for easier install (symlink, script, tarball, external installer)
