@@ -19,15 +19,16 @@ When this subagent is invoked, you should:
    - Workflow patterns
    - Domain-specific knowledge
    - Opportunities for standardization
+   - **Hook candidates**: Behavior that should run in the agent loop (gating shell/MCP/file reads, formatting after edits, auditing, session context). See [Cursor Hooks](docs/research/cursor-hooks.md).
 3. **Categorize findings**: Group patterns by:
-   - Type (rule, skill, command, subagent)
+   - Type (rule, skill, command, subagent, or **hooks**)
    - Frequency of appearance
    - Significance and value
-4. **Suggest artifacts**: For each significant pattern:
-   - Recommend artifact type
-   - Suggest name following conventions
-   - Suggest organization location
-   - Provide content outline
+4. **Suggest artifacts (or hook config)**: For each significant pattern:
+   - Recommend artifact type (or hooks: which event(s), command vs prompt)
+   - Suggest name following conventions (for hooks: script name or event)
+   - Suggest organization location (for hooks: `.cursor/hooks.json` and `.cursor/hooks/`)
+   - Provide content outline (for hooks: event, matcher, script behavior)
 
 ## Approach
 
@@ -38,6 +39,7 @@ Focus on:
 - **Correction patterns**: When user corrects AI behavior
 - **Workflow patterns**: Sequences of actions that recur
 - **Context patterns**: Contexts where certain patterns apply
+- **Hook patterns**: Gating (what agent may/may not run or read), post-edit automation (format/lint after edit), auditing, or session-level context—recommend hooks and relevant events when applicable
 
 ### Analysis Depth
 
@@ -51,10 +53,10 @@ Focus on:
 For each pattern, provide:
 - **Pattern description**: Clear description of the pattern
 - **Frequency**: How often it appears
-- **Artifact type**: Recommended type (rule/skill/command/subagent)
-- **Suggested name**: Following naming conventions
-- **Suggested location**: Category and path
-- **Content outline**: Key points to include
+- **Artifact type**: Recommended type (rule/skill/command/subagent) or **hooks** (with event(s))
+- **Suggested name**: Following naming conventions (for hooks: script or event name)
+- **Suggested location**: Category and path (for hooks: `.cursor/hooks.json`, `.cursor/hooks/`)
+- **Content outline**: Key points to include (for hooks: event, command vs prompt, matcher)
 - **Related artifacts**: Links to existing or suggested artifacts
 
 ## Expected Output
@@ -85,6 +87,7 @@ Provide a structured analysis with:
 - [Conversation Analysis Skill](.cursor/skills/meta/conversation-analysis/SKILL.md)
 - [Pattern Extraction Skill](.cursor/skills/meta/pattern-extraction/SKILL.md)
 - [Process Chat Command](.cursor/commands/meta/process-chat.md)
+- [Cursor Hooks](docs/research/cursor-hooks.md) – When to recommend hooks when analyzing transcripts
 - [AI Agent Patterns](docs/research/ai-agent-patterns.md)
 
 ## Notes

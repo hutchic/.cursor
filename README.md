@@ -150,6 +150,7 @@ The system can analyze conversations, extract patterns, and create new artifacts
   - `self-improvement-workflow.md` - Step-by-step self-improvement workflow
   - `research/` - Research documentation
     - `cursor-best-practices.md` - Cursor IDE best practices
+    - `cursor-hooks.md` - Cursor agent hooks (observe/control agent loop)
     - `ai-agent-patterns.md` - AI agent patterns and self-improving systems
     - `skills-commands-patterns.md` - Organization and structure patterns
   - `automation-agents.md` - GitHub Actions and automation workflows

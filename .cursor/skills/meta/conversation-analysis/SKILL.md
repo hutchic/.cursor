@@ -35,20 +35,29 @@ Look for:
 ### Categorization
 
 For each pattern identified:
-- **Determine artifact type**: Rule, Skill, Command, or Subagent
+- **Determine artifact type**: Rule, Skill, Command, Subagent, or **Cursor hooks** (when behavior should run in the agent loop)
 - **Assess frequency**: How often the pattern appears
-- **Evaluate significance**: Is it worth creating an artifact?
-- **Suggest organization**: Where should the artifact be placed?
+- **Evaluate significance**: Is it worth creating an artifact (or hook config)?
+- **Suggest organization**: Where should the artifact be placed? For hooks: `.cursor/hooks.json` and `.cursor/hooks/` scripts (project) or user config
+
+**Consider Cursor hooks** when the pattern involves:
+- Gating or allowing specific agent actions (e.g. blocking shell commands, file reads, or MCP calls)
+- Running something automatically after every file edit (e.g. format, lint)
+- Auditing or logging agent behavior (shell, MCP, tool use)
+- Injecting context or env at session start
+- Different policy for Tab vs Agent (e.g. redact secrets for Tab only)
+
+When hooks might apply, note the relevant hook event(s) (e.g. `beforeShellExecution`, `afterFileEdit`) and suggest command-based vs prompt-based. See [Cursor Hooks](docs/research/cursor-hooks.md) for when to use hooks and which events exist.
 
 ### Output Format
 
 For each pattern, provide:
 - **Pattern description**: What the pattern is
 - **Frequency**: How often it appears
-- **Artifact type**: Recommended type (rule/skill/command/subagent)
-- **Suggested name**: Following naming conventions
-- **Suggested location**: Category and path
-- **Content outline**: Key points to include
+- **Artifact type**: Recommended type (rule/skill/command/subagent) or **hooks** (with suggested hook event(s))
+- **Suggested name**: Following naming conventions (for hooks: script name or hook event name)
+- **Suggested location**: Category and path (for hooks: `.cursor/hooks.json` and e.g. `.cursor/hooks/script.sh`)
+- **Content outline**: Key points to include (for hooks: which event, command vs prompt, matcher if applicable)
 
 ## Examples
 
@@ -90,4 +99,5 @@ For each pattern, provide:
 - [Artifact Creation Skill](.cursor/skills/meta/artifact-creation/SKILL.md)
 - [Process Chat Command](.cursor/commands/meta/process-chat.md)
 - [Conversation Analyzer Subagent](.cursor/agents/meta/conversation-analyzer.md)
+- [Cursor Hooks](docs/research/cursor-hooks.md) – When to recommend hooks when processing transcripts
 - [AI Agent Patterns](docs/research/ai-agent-patterns.md)
