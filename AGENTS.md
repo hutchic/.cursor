@@ -181,7 +181,7 @@ Required secrets are configured in repository settings (not in code):
    pre-commit run --all-files
    ```
 
-4. **Commit fixes** made by pre-commit
+4. **Commit fixes** made by pre-commit. Use `git commit -m "..."` only; do not use `--trailer`.
 
 5. **Create PR** with semantic title
 
