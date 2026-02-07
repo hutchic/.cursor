@@ -14,8 +14,8 @@ Create a new PR with a terse semantic title and body matching the project templa
 
 ## Prerequisites
 
-- **GitHub CLI (`gh`)**: Installed and authenticated (`gh auth status`)
-- **Pushed branch**: Branch must be pushed before creating or updating the PR
+- **GitHub access**: GitHub MCP configured and enabled, or GitHub CLI (`gh`) installed and authenticated (`gh auth status`).
+- **Pushed branch**: Branch must be pushed before creating or updating the PR.
 
 ## PR Title
 
@@ -27,21 +27,22 @@ Align with [.github/pull_request_template.md](.github/pull_request_template.md):
 
 ## Create Flow (No PR Yet)
 
-1. Check for existing PR: `gh pr view` or `gh pr list --head <branch>`. If a PR exists, use Update flow instead
-2. Compose terse semantic title and body from commits/diff
-3. Create: `gh pr create --title "..." --body "..."` (or `--body-file`)
+1. Check for existing PR (MCP: e.g. list/read PRs by head branch; or `gh pr view` / `gh pr list --head <branch>`). If a PR exists, use Update flow instead.
+2. Compose terse semantic title and body from commits/diff.
+3. Create PR: use GitHub MCP create-pull-request when MCP is available; otherwise `gh pr create --title "..." --body "..."` (or `--body-file`).
 
 ## Update Flow (PR Exists)
 
-1. Get current PR: `gh pr view` (title and body)
-2. Compare with what the body/title should be given current commits/diff
-3. If outdated: `gh pr edit --body "..."` and optionally `--title "..."`
+1. Get current PR (MCP: pull request read; or `gh pr view` for title and body).
+2. Compare with what the body/title should be given current commits/diff.
+3. If outdated: use GitHub MCP update-pull-request when MCP is available; otherwise `gh pr edit --body "..."` and optionally `--title "..."`.
 
 Only update when description or title is inaccurate or incomplete.
 
 ## Tooling
 
-Prefer **GitHub CLI (`gh`)**. If not available, instruct the user to install and authenticate.
+- **Prefer GitHub MCP** when it is configured, enabled, and has access: use MCP tools to create or update PRs (e.g. create pull request, update pull request, pull request read). This keeps the flow in the agent and avoids depending on a local `gh` auth.
+- **Otherwise use GitHub CLI (`gh`)**: installed and authenticated (`gh auth status`). If `gh` is not available, instruct the user to install and authenticate.
 
 ## Related Artifacts
 
