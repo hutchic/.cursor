@@ -1,0 +1,23 @@
+---
+description: When committing, run pre-commit and never use --no-verify. Fix pre-commit failures before committing.
+globs: **/*
+alwaysApply: true
+---
+
+# Commit Workflow
+
+## Core Principle
+
+When the user or agent commits changes, run pre-commit (e.g. `pre-commit run --all-files` or on staged files). Never use `--no-verify`. If pre-commit fails, fix the reported issues and run again; do not bypass hooks.
+
+## Requirements
+
+- Stage changes as appropriate (e.g. `git add` for the files being committed).
+- Run pre-commit before completing the commit (e.g. `pre-commit run --all-files`).
+- If pre-commit fails: address the failure (fix lint, format, tests, or other hook requirements); re-run pre-commit until it passes.
+- Do not use `git commit --no-verify` or equivalent to skip hooks.
+
+## Related Artifacts
+
+- [Verify-before-done](.cursor/rules/meta/verify-before-done.mdc) — Do not mark work complete without running verification.
+- [AGENTS.md](../../AGENTS.md) — Project-specific commit and pre-commit setup.

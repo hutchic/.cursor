@@ -57,11 +57,12 @@ Do not mark work complete or say implementation is done until the **stated** ver
 
 ## Hard enforcement (by design)
 
-Rules alone can be skipped. For **by-design** enforcement so verification cannot easily be skipped (e.g. pre-commit that runs tests, or a Cursor hook that gates `git commit` until tests pass), see [Verify-Before-Done: Hard Enforcement Options](docs/research/verify-before-done-enforcement.md). Prefer adding one or more of those mechanisms in projects that have a test suite; keep the rule as behavioral guidance in parallel.
+Rules alone can be skipped. For **by-design** enforcement so verification cannot easily be skipped (e.g. pre-commit that runs tests, or a Cursor hook that runs verification when the agent is done), see [Verify-Before-Done: Hard Enforcement Options](docs/research/verify-before-done-enforcement.md). When choosing a Cursor hook: **run verification on every agent completion** (any "done") → use the **stop** hook (run verification on stop, return `followup_message` on failure so the agent continues). **Gate only a specific "mark done" command** (e.g. task-master) → use **beforeShellExecution** with a matcher. Do not default to beforeShellExecution when the requirement is "whenever the agent is done" or "for any reason." Prefer adding one or more enforcement mechanisms in projects that have a test suite; keep the rule as behavioral guidance in parallel.
 
 ## Related Artifacts
 
-- [Verify-Before-Done: Hard Enforcement Options](docs/research/verify-before-done-enforcement.md) – Pre-commit, Cursor hooks, single path to commit, and other by-design options
+- [Verify-Before-Done: Hard Enforcement Options](docs/research/verify-before-done-enforcement.md) – Pre-commit, Cursor hooks (including **stop** for "every completion" vs **beforeShellExecution** for a specific command), single path to commit, and other by-design options
+- [Cursor Hooks](docs/research/cursor-hooks.md) – **Verify-before-done: which hook event?** (choose stop vs beforeShellExecution; do not default to beforeShellExecution when the goal is "whenever done")
 - [Self-Improvement Rule](.cursor/rules/self-improvement.mdc) – Learn from mistakes; verify assumptions before suggesting
 - [Artifact Creation Rule](.cursor/rules/meta/artifact-creation.mdc)
 - [Cursor Rules Documentation](docs/cursor-rules.md)

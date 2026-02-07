@@ -192,6 +192,17 @@ Example (prompt-based):
 
 - **stop** – When agent loop ends; can return `followup_message` to auto-submit next user message (subject to `loop_limit`).
 
+## Verify-before-done: which hook event?
+
+When the goal is to **run verification (e.g. `make clean && make test`) when the agent is "done" and throw the result back to the agent if it fails**, choose the hook event deliberately. **Do not default to beforeShellExecution** when the requirement is "whenever the agent completes" or "for any reason."
+
+| Goal | Use this hook | Why |
+|------|----------------|-----|
+| **Run verification on every agent completion** (any "done", regardless of which command ran) | **stop** | Fires when the agent loop ends (completed, aborted, or error). Run verification in the script; if it fails, return `followup_message` so Cursor auto-submits a message and the agent continues. Cursor caps auto follow-ups (e.g. 5) to avoid infinite loops. No matcher needed. |
+| **Gate only a specific "mark done" shell command** (e.g. `task-master set-status ... done`) | **beforeShellExecution** with matcher | Fires only when that command is about to run. Run verification; allow or deny. Use when you explicitly want verification only when that command is used. |
+
+If the requirement is "whenever the agent is done, run verification and keep the agent going until tests pass," use the **stop** hook first. Use **beforeShellExecution** when you intentionally want to gate a single command (e.g. task-master) and not run on every completion. See [Verify-before-done enforcement](verify-before-done-enforcement.md) and the [verify-on-stop-prompt-hook template](../../.cursor/templates/verify-on-stop-prompt-hook/README.md) (done hook, prompt-based).
+
 ## Matchers
 
 - **preToolUse (and other tool hooks):** filter by tool type — `Shell`, `Read`, `Write`, `Grep`, `MCP`, `Task`, etc.

@@ -3,12 +3,19 @@
 # Install the self-improvement bundle from this repo into a target project by
 # copying files (no symlinks). The target stays self-contained and portable.
 # Run from this repo: ./scripts/install-self-improvement.sh [TARGET_DIR]
+# Use --dry-run to print what would be installed without writing files.
 #
 set -euo pipefail
 
 # Resolve script dir and repo root (parent of scripts/)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+
+DRY_RUN=0
+if [[ "${1:-}" == "--dry-run" ]]; then
+  DRY_RUN=1
+  shift
+fi
 
 # Expand leading ~ to HOME (bash does not expand ~ when it's in a variable)
 expand_tilde() {
@@ -31,7 +38,7 @@ abs_path() {
   fi
 }
 
-# Required bundle paths under repo (relative to REPO_ROOT)
+# Required bundle paths under repo (relative to REPO_ROOT) - must exist for check_repo
 REQUIRED_CURSOR_DIRS=(
   ".cursor/rules/meta"
   ".cursor/skills/meta"
@@ -39,6 +46,9 @@ REQUIRED_CURSOR_DIRS=(
   ".cursor/agents/meta"
   ".cursor/templates"
 )
+# Optional: hooks (if present in repo)
+CURSOR_HOOKS=".cursor/hooks"
+CURSOR_HOOKS_JSON=".cursor/hooks.json"
 REQUIRED_DOCS=(
   "docs/self-improvement-workflow.md"
   "docs/meta-processes.md"
@@ -122,10 +132,14 @@ any_exist_in_target() {
   return 1
 }
 
-# Copy directory: remove existing dest if present, then cp -r
+# Copy directory: remove existing dest if present, then cp -r (no-op if DRY_RUN)
 copy_dir() {
   local src="$1"
   local dest="$2"
+  if [[ "$DRY_RUN" -eq 1 ]]; then
+    echo "Would copy dir: $src -> $dest"
+    return
+  fi
   if [[ -e "$dest" ]]; then
     rm -rf "$dest"
   fi
@@ -133,10 +147,14 @@ copy_dir() {
   cp -r "$src" "$dest"
 }
 
-# Copy file: mkdir -p parent, cp
+# Copy file: mkdir -p parent, cp (no-op if DRY_RUN)
 copy_file() {
   local src="$1"
   local dest="$2"
+  if [[ "$DRY_RUN" -eq 1 ]]; then
+    echo "Would copy file: $src -> $dest"
+    return
+  fi
   mkdir -p "$(dirname "$dest")"
   cp "$src" "$dest"
 }
@@ -145,9 +163,15 @@ main() {
   local target_raw="${1:-}"
   local target_path
   local include_optional_docs=false
+  local install_rules=true
+  local install_hooks=false
+  local install_subagents=true
 
   echo "Self-improvement bundle installer"
   echo "  Repo: $REPO_ROOT"
+  if [[ "$DRY_RUN" -eq 1 ]]; then
+    echo "  Mode: --dry-run (no files will be written)"
+  fi
   echo ""
 
   check_repo
@@ -163,6 +187,21 @@ main() {
   echo "  Target: $target_path"
   echo ""
 
+  if prompt_yn "Install rules from this repo into target's .cursor/rules/?" 0; then
+    install_rules=true
+  else
+    install_rules=false
+  fi
+  if [[ -d "$REPO_ROOT/$CURSOR_HOOKS" || -f "$REPO_ROOT/$CURSOR_HOOKS_JSON" ]]; then
+    if prompt_yn "Install hooks (e.g. .cursor/hooks, hooks.json) into target?" 1; then
+      install_hooks=true
+    fi
+  fi
+  if prompt_yn "Install subagents (agents) into target's .cursor/agents/?" 0; then
+    install_subagents=true
+  else
+    install_subagents=false
+  fi
   if ! prompt_yn "Include optional docs (cursor-best-practices, ai-agent-patterns, skills-commands-patterns)?" 1; then
     include_optional_docs=false
   else
@@ -170,13 +209,19 @@ main() {
   fi
 
   # Build list of paths we will copy
-  local all_cursor_dirs=("${REQUIRED_CURSOR_DIRS[@]}")
+  local all_cursor_dirs=()
+  all_cursor_dirs+=(".cursor/skills/meta" ".cursor/commands/meta" ".cursor/templates")
+  [[ "$install_rules" == true ]] && all_cursor_dirs+=(".cursor/rules/meta")
+  [[ "$install_subagents" == true ]] && all_cursor_dirs+=(".cursor/agents/meta")
+  [[ "$install_hooks" == true && -d "$REPO_ROOT/$CURSOR_HOOKS" ]] && all_cursor_dirs+=("$CURSOR_HOOKS")
+  [[ "$install_hooks" == true && -f "$REPO_ROOT/$CURSOR_HOOKS_JSON" ]] && all_cursor_dirs+=("$CURSOR_HOOKS_JSON")
+
   local all_docs=("${REQUIRED_DOCS[@]}")
   if [[ "$include_optional_docs" == true ]]; then
     all_docs+=("${OPTIONAL_DOCS[@]}")
   fi
 
-  # Check for existing paths
+  # Check for existing paths (only among paths we will copy)
   local existing_cursor=()
   local existing_docs=()
   for d in "${all_cursor_dirs[@]}"; do
@@ -198,7 +243,10 @@ main() {
   fi
 
   echo "Will copy:"
-  echo "  .cursor/rules/meta, skills/meta, commands/meta, agents/meta, templates"
+  echo "  .cursor/skills/meta, commands/meta, templates"
+  [[ "$install_rules" == true ]] && echo "  .cursor/rules/meta"
+  [[ "$install_subagents" == true ]] && echo "  .cursor/agents/meta"
+  [[ "$install_hooks" == true ]] && echo "  .cursor/hooks (and/or hooks.json if present)"
   echo "  Required docs (8 files)"
   if [[ "$include_optional_docs" == true ]]; then
     echo "  Optional docs (3 files)"
@@ -209,11 +257,17 @@ main() {
     exit 0
   fi
 
-  # Copy .cursor dirs
+  # Copy .cursor dirs and files
   for d in "${all_cursor_dirs[@]}"; do
     if [[ "$d" == ".cursor/templates" ]]; then
-      mkdir -p "$target_path/.cursor/templates"
-      cp -r "$REPO_ROOT/.cursor/templates"/* "$target_path/.cursor/templates/"
+      if [[ "$DRY_RUN" -eq 1 ]]; then
+        echo "Would copy dir: $REPO_ROOT/.cursor/templates/* -> $target_path/.cursor/templates/"
+      else
+        mkdir -p "$target_path/.cursor/templates"
+        cp -r "$REPO_ROOT/.cursor/templates"/* "$target_path/.cursor/templates/"
+      fi
+    elif [[ -f "$REPO_ROOT/$d" ]]; then
+      copy_file "$REPO_ROOT/$d" "$target_path/$d"
     else
       copy_dir "$REPO_ROOT/$d" "$target_path/$d"
     fi
@@ -225,11 +279,15 @@ main() {
   done
 
   echo ""
-  echo "Done. Bundle installed into: $target_path"
-  echo "The target project is self-contained and safe to clone elsewhere."
-  echo ""
-  echo "Commands available: /process-chat, /create-artifact, /update-cross-references, /validate-organization, /generate-docs-index"
-  echo "See docs/self-improvement-workflow.md and docs/meta-processes.md in the target project."
+  if [[ "$DRY_RUN" -eq 1 ]]; then
+    echo "Dry run complete. No files were written."
+  else
+    echo "Done. Bundle installed into: $target_path"
+    echo "The target project is self-contained and safe to clone elsewhere."
+    echo ""
+    echo "Commands available: /process-chat, /create-artifact, /update-cross-references, /validate-organization, /generate-docs-index"
+    echo "See docs/self-improvement-workflow.md and docs/meta-processes.md in the target project."
+  fi
 }
 
 main "$@"

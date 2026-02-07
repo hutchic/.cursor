@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "hooks": {
+    "stop": [
+      {
+        "type": "prompt",
+        "prompt": "You are evaluating whether the agent completed its task with verification. When the agent loop ends (this stop event), decide: did the agent run the project verification (e.g. make clean && make test) and clearly report that it passed?\n\nIf the agent did NOT run verification, or reported that tests failed, or there is no clear evidence in the context that verification ran and passed, return {\"ok\": false, \"reason\": \"Run make clean && make test and fix any failures before considering the task done. Then continue.\"} so the agent receives that as a follow-up and keeps working.\n\nIf verification clearly ran and passed (agent showed command output or stated tests passed), return {\"ok\": true}.\n\nHook input (status, loop_count, etc.): $ARGUMENTS",
+        "timeout": 30,
+        "loop_limit": 5
+      }
+    ]
+  }
+}

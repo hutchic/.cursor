@@ -360,6 +360,7 @@ Adopt the sweet spot first; then add hooks or subagents only when a clear need a
 - [Cursor Hooks](cursor-hooks.md) — Events, config, when to use hooks vs rules/skills/commands
 - [Cursor Best Practices](cursor-best-practices.md) — Rules, skills, commands, subagents
 - [Verify-Before-Done: Hard Enforcement](verify-before-done-enforcement.md) — Pre-commit and Cursor hooks for verification
+- [Revive DX implementation guidance](revive-dx-implementation-guidance.md) — Audit, what went wrong, order of implementation, and pointers to deliverable assets (templates, install script, rules)
 - [Artifact Creation rule](../../.cursor/rules/meta/artifact-creation.mdc) — When to create a rule, skill, command, subagent, or recommend hooks
 - [Automation Decomposition rule](../../.cursor/rules/meta/automation-decomposition.mdc) — Decompose into skills, compose in commands
 - [PRE_COMMIT_SETUP](../../.github/PRE_COMMIT_SETUP.md) — Git pre-commit setup (this repo)

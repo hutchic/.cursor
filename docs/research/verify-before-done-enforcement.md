@@ -1,6 +1,6 @@
 # Verify-Before-Done: Hard Enforcement Options
 
-The [Verify-Before-Done rule](../../.cursor/rules/meta/verify-before-done.mdc) gives behavioral guidance. In practice, **hard requirements often work better**—e.g. a failing pre-commit that forces agents to run tests. This doc lists options to enforce verification by design so the agent cannot easily skip it.
+The [Verify-Before-Done rule](../../.cursor/rules/meta/verify-before-done.mdc) gives behavioral guidance. In practice, **hard requirements often work better**—e.g. a failing pre-commit that forces agents to run tests. This doc lists options to enforce verification by design so the agent cannot easily skip it. For the **receipt-file + hook** approach (dedicated file test harnesses touch, gate at "mark done"), see [Verify-before-done hard requirement research](verify-before-done-hard-requirement-research.md).
 
 ## Options (strongest to softest)
 
@@ -25,6 +25,18 @@ The [Verify-Before-Done rule](../../.cursor/rules/meta/verify-before-done.mdc) g
 **Pros:** Enforcement inside the agent loop; agent cannot commit without tests having just passed.
 **Cons:** Requires Cursor; every commit attempt runs tests (can be slow); need a clear matcher so only `git commit` is gated.
 **Bypass risk:** Low unless the agent uses a different path (e.g. external git client). Document "use Cursor / this workflow for commits."
+
+---
+
+### 2a. Cursor hook: **stop** (done) — prompt-based, no script
+
+**What:** Use Cursor’s **stop** hook with **type: "prompt"**. When the agent loop ends, an LLM evaluates whether the agent ran verification (e.g. `make clean && make test`) and passed. If not, the hook returns `ok: false` and a `reason` that Cursor sends as a follow-up message so the agent continues (up to `loop_limit`, e.g. 5). No script to maintain—policy is in the prompt.
+
+**How:** Use the [verify-on-stop-prompt-hook template](../../.cursor/templates/verify-on-stop-prompt-hook/README.md): copy the `stop` entry from `hooks.json.snippet` into `.cursor/hooks.json`. The prompt instructs the LLM to return `{"ok": false, "reason": "..."}` when verification wasn’t run or didn’t pass, and `{"ok": true}` when it did. No script file; edit the prompt in the snippet to match your verification command.
+
+**Pros:** Done hook that runs on every agent completion; no script; easy to tweak the policy by editing the prompt.
+**Cons:** Evaluation is inferential (LLM reads context), not a direct run of tests; agent could claim tests passed without running them. For a hard guarantee that tests actually ran, you would need a command-based hook (script that runs verification); no such template is provided in this repo at this time.
+**Bypass risk:** Medium (LLM can be fooled). Use when you prefer a prompt-only, no-script setup and accept inferential enforcement.
 
 ---
 
@@ -91,3 +103,6 @@ This repo (`.cursor` config) is mostly markdown and config; it may not have a te
 - [Verify-Before-Done Rule](../../.cursor/rules/meta/verify-before-done.mdc)
 - [Cursor Hooks](cursor-hooks.md) – for `beforeShellExecution` and matchers
 - [PRE_COMMIT_SETUP](../../.github/PRE_COMMIT_SETUP.md) – git pre-commit (separate from Cursor hooks)
+- [Revive DX implementation guidance](revive-dx-implementation-guidance.md)
+- [Verify-on-stop-prompt-hook template](../../.cursor/templates/verify-on-stop-prompt-hook/README.md) — **done** hook (stop) with **prompt** only, no script
+- [Cursor Hooks](cursor-hooks.md) — **Verify-before-done: which hook event?** (stop vs beforeShellExecution)
