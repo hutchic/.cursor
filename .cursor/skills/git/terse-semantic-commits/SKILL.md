@@ -28,6 +28,7 @@ Produce commit messages that follow [Conventional Commits](https://www.conventio
 2. Lowercase description, no trailing period
 3. Derive type/scope from changed files and edits (e.g. `auth/` → scope `auth`)
 4. One commit message per staged group when used with stage-related-files
+5. Use only `git commit -m "..."` for the message; do not use `--trailer`
 
 ## Examples
 
