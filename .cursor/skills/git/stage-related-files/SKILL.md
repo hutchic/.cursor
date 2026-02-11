@@ -25,9 +25,13 @@ Group by **logical change**: one feature/fix/docs refactor per commit when possi
 ### Steps
 
 1. Run `git status` to see modified, added, and deleted files
-2. Propose groupings (paths or patterns) based on the criteria above
-3. For each group, run `git add <paths>`. Avoid staging everything in one blob unless it truly is one logical change
-4. Run `git status` again to verify what is staged
+2. **Exclude research documents and plan files** from staging:
+   - Files matching `*research*.md` (e.g. `docs/cloud-build-cache-research.md`)
+   - Files matching `plan*.txt` or `*.plan.md`
+   - These are one-off documents created during tasks and should not be committed
+3. Propose groupings (paths or patterns) based on the criteria above, excluding the research/plan files
+4. For each group, run `git add <paths>`. Avoid staging everything in one blob unless it truly is one logical change
+5. Run `git status` again to verify what is staged (confirm research/plan files are not included)
 
 ### Single vs Multiple Commits
 

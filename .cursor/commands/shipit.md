@@ -13,7 +13,7 @@ Run the full flow: ensure we're on a feature/bug branch (create one if on mainli
 
 1. **Ensure feature branch**: Use the [ensure-feature-branch](.cursor/skills/git/ensure-feature-branch/SKILL.md) skill. If the current branch is mainline (e.g. main, master, dev) or a release branch (e.g. release/*), create and checkout a new feature/bug branch before proceeding. If already on a feature or bug branch, continue.
 
-2. **Stage**: Use the [stage-related-files](.cursor/skills/git/stage-related-files/SKILL.md) skill to group changes and stage them (one or more logical groups; multiple `git add` + commit cycles if the user wants multiple commits, or one group for "shipit in one commit").
+2. **Stage**: Use the [stage-related-files](.cursor/skills/git/stage-related-files/SKILL.md) skill to group changes and stage them (one or more logical groups; multiple `git add` + commit cycles if the user wants multiple commits, or one group for "shipit in one commit"). **Note**: Research documents (`*research*.md`, `plan*.txt`, `*.plan.md`) are automatically excluded from staging as they are one-off task documents.
 
 3. **Commit**: For each staged group, use the [terse-semantic-commits](.cursor/skills/git/terse-semantic-commits/SKILL.md) skill to produce the commit message. Run `pre-commit run --all-files` (fix any failures), then `git commit -m "..."`. Repeat if multiple groups were chosen.
 
