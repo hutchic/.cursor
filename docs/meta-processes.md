@@ -17,6 +17,7 @@ Rules that guide the self-improvement process:
 - **[Documentation Rule](.cursor/rules/meta/documentation.mdc)**: Documentation standards
 - **[Artifact Creation Rule](.cursor/rules/meta/artifact-creation.mdc)**: Decision framework for creating artifacts
 - **[Automation Decomposition Rule](.cursor/rules/meta/automation-decomposition.mdc)**: Decompose automations into discrete skills, then package into commands
+- **[Commit Retry on Hook Timeout Rule](.cursor/rules/meta/commit-retry-on-hook-timeout.mdc)**: When git commit times out because the hook runs long tests, retry with extended timeout; never use --no-verify
 
 ### Meta Skills
 

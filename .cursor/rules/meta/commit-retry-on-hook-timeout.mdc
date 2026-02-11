@@ -1,0 +1,49 @@
+---
+description: "When git commit times out because the pre-commit or git hook is still running (e.g. full test suite), retry with an extended timeout; never use --no-verify."
+alwaysApply: true
+---
+
+# Commit Retry on Hook Timeout Rule
+
+When you run `git commit` and the command **times out** because the pre-commit hook or `.git/hooks/pre-commit` is still running (e.g. Docker, smoke, component, or E2E tests), **retry the commit** with an extended timeout so the hook can finish. **Never use `--no-verify`** to skip hooks.
+
+## When This Applies
+
+- When `git commit` is run (e.g. as part of shipit or any commit workflow) and the shell reports a timeout
+- When the timeout is due to the git/pre-commit hook running a long test suite rather than quick lint/format checks
+- When the agent uses a fixed timeout for shell commands and the commit command exceeds it
+
+## Guidelines
+
+### Primary Guideline
+
+**Retry the commit with a longer timeout** (e.g. 10 minutes) so the hook can complete. Optionally check whether a commit was actually created before retrying (e.g. `git log -1` or `git status`) to avoid double-committing.
+
+### Do
+
+- Retry `git commit -m "..."` with an extended timeout (e.g. 10 minutes) when the first attempt timed out and the cause is the hook still running.
+- Use only `git commit -m "..."` for the message; do not add `--trailer` or other commit options that bypass hooks.
+- After retry, confirm the commit was created and report success or failure.
+
+### Never
+
+- Do **not** use `--no-verify` (or `-n`) to skip hooks when the commit timed out. User rule and project standards prohibit skipping verification.
+
+## Examples
+
+### Prefer
+
+- First attempt: `git commit -m "feat(scope): add X"` → times out. Check if commit was created; if not, retry with 10-minute timeout → commit succeeds → push and continue.
+- When implementing shipit or any commit flow: if the tool runs commit with a default timeout and the project’s hook runs tests, use (or document) an extended timeout for the commit step.
+
+### Avoid
+
+- Running `git commit --no-verify` after a timeout so the commit “succeeds” without running hooks.
+- Treating a single timeout as permanent failure without retrying with a longer timeout.
+
+## Related Artifacts
+
+- [Shipit Command](.cursor/commands/shipit.md) – Commit step uses this rule when hook runs long tests
+- [Terse Semantic Commits Skill](.cursor/skills/git/terse-semantic-commits/SKILL.md)
+- [PRE_COMMIT_SETUP](.github/PRE_COMMIT_SETUP.md) – Pre-commit and git hook setup
+- [Verify-Before-Done Rule](.cursor/rules/meta/verify-before-done.mdc) – Pre-commit as verification gate

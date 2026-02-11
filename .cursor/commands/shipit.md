@@ -15,7 +15,7 @@ Run the full flow: ensure we're on a feature/bug branch (create one if on mainli
 
 2. **Stage**: Use the [stage-related-files](.cursor/skills/git/stage-related-files/SKILL.md) skill to group changes and stage them (one or more logical groups; multiple `git add` + commit cycles if the user wants multiple commits, or one group for "shipit in one commit"). **Note**: Research documents (`*research*.md`, `plan*.txt`, `*.plan.md`) are automatically excluded from staging as they are one-off task documents.
 
-3. **Commit**: For each staged group, use the [terse-semantic-commits](.cursor/skills/git/terse-semantic-commits/SKILL.md) skill to produce the commit message. Run `pre-commit run --all-files` (fix any failures), then `git commit -m "..."`. Repeat if multiple groups were chosen.
+3. **Commit**: For each staged group, use the [terse-semantic-commits](.cursor/skills/git/terse-semantic-commits/SKILL.md) skill to produce the commit message. Run `pre-commit run --all-files` (fix any failures), then `git commit -m "..."` (do not use `--trailer`). If the commit times out because the git hook runs a long test suite, retry with an extended timeout (e.g. 10 minutes); never use `--no-verify`. See [Commit Retry on Hook Timeout rule](.cursor/rules/meta/commit-retry-on-hook-timeout.mdc). Repeat if multiple groups were chosen.
 
 4. **Push**: Push the current branch: `git push -u origin <branch>` on first push, otherwise `git push`. If push is rejected (e.g. remote has new commits), pull or rebase as needed, then push again.
 
@@ -44,6 +44,7 @@ Optional context after the command to guide staging:
 - [Stage Related Files Skill](.cursor/skills/git/stage-related-files/SKILL.md)
 - [Terse Semantic Commits Skill](.cursor/skills/git/terse-semantic-commits/SKILL.md)
 - [Open PR Skill](.cursor/skills/git/open-pr/SKILL.md)
+- [Commit Retry on Hook Timeout Rule](.cursor/rules/meta/commit-retry-on-hook-timeout.mdc)
 - [Automation Decomposition Rule](.cursor/rules/meta/automation-decomposition.mdc)
 - [CONTRIBUTING.md](CONTRIBUTING.md), [AGENTS.md](AGENTS.md)
 - [.github/PRE_COMMIT_SETUP.md](.github/PRE_COMMIT_SETUP.md)
