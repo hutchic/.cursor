@@ -277,6 +277,8 @@ Create a command when:
 
 The [shipit command](.cursor/commands/shipit.md) is an example of a multi-step workflow that orchestrates discrete skills: it uses the ensure-feature-branch, stage-related-files, terse-semantic-commits, and open-pr skills to ensure a feature/bug branch (creating one if on mainline or release), stage changes, commit (with pre-commit), push, and open or update a PR. See the [Automation Decomposition Rule](.cursor/rules/meta/automation-decomposition.mdc) for the pattern of decomposing automations into skills then composing them in a command.
 
+The [deslop command](.cursor/commands/deslop.md) is a code-cleanup workflow: compare the branch to main and remove AI-generated slop (extra comments, unnecessary defensive checks, `any` casts, style inconsistencies), then report a 1–3 sentence summary.
+
 ### Example 1: Pull Request Creation
 
 ```markdown
