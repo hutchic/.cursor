@@ -37,6 +37,10 @@ Do not mark work complete or say implementation is done until the **stated** ver
 - Report the outcome: pass or fail, and if relevant, key output or errors.
 - Only then mark the task complete or state that the implementation is done.
 
+### When You Add New Verification
+
+When you add or update verification (e.g. a new smoke script, a new test, or new manual validation steps), **run that new verification** and report the result before marking the task complete. Documenting "how to verify" or adding a script is not sufficient—you must execute it and report pass or fail. Do not present work as complete when the verification you added was never run.
+
 ## Examples
 
 ### Prefer
@@ -68,6 +72,7 @@ Prefer adding one or more of these in projects that have a test suite; keep the 
 
 ## Related Artifacts
 
+- [Reproduce-Before-Fix Rule](.cursor/rules/meta/reproduce-before-fix.mdc) – Reproduce CI/reported failures locally before fixing
 - [Self-Improvement Rule](.cursor/rules/self-improvement.mdc) – Learn from mistakes; verify assumptions before suggesting
 - [Artifact Creation Rule](.cursor/rules/meta/artifact-creation.mdc)
 - [Cursor Rules Documentation](docs/cursor-rules.md)
