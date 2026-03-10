@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "skills": {
+    "solid": {
+      "source": "ramziddin/solid-skills",
+      "sourceType": "github",
+      "computedHash": "60de610a3c143f79f69552b7da60298bb46c9e8d80ab16c4c111b025823345d1"
+    },
+    "tracer-bullets": {
+      "source": "oakoss/agent-skills",
+      "sourceType": "github",
+      "computedHash": "c97c674c7d2efadf027cc0741bddd4ff85c94c7fabe5b17e63db8a9f9852cfb1"
+    },
+    "verification-before-completion": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "computedHash": "9b446f0c7fe1cfb560b1d34439523b1a76d5f177290007b2c053a1c749a4a8ba"
+    }
+  }
+}
