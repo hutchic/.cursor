@@ -1,0 +1,55 @@
+---
+description: "When fixing a CI or reported failure, reproduce the failure locally with the same command as CI before applying the fix; then verify the fix. Do not fix from logs alone."
+alwaysApply: true
+---
+
+# Reproduce-Before-Fix Rule
+
+When fixing a CI failure or any reported failure, **reproduce the failure locally** using the same command and context as CI (or the reporter), then apply the fix, then run the check again and report the outcome. Do not fix solely from CI logs or error output without reproducing first.
+
+## When This Applies
+
+- When fixing a failure reported by CI (e.g. lint, test, build)
+- When the user reports a failure and you are about to change code to fix it
+- When you have CI log output and are tempted to edit code based only on that output
+
+## Guidelines
+
+### Primary Guideline
+
+**Reproduce → Fix → Verify.** Run the same command that failed (same working directory, same invocation as CI), confirm the failure reproduces, then apply the fix, then run the command again and report pass or fail.
+
+### Steps
+
+1. **Reproduce**: Run the exact command that failed in CI (e.g. `cd used-car-bill-of-sale && pnpm run lint`, or the Makefile target CI runs). Use the same cwd and args. Confirm you see the same error.
+2. **Fix**: Apply the code or config change to address the failure.
+3. **Verify**: Run the same command again. Report that it passed (or report the new failure and iterate).
+
+### Do
+
+- Use the same command and cwd as CI (e.g. from the CI job or Makefile).
+- Run the command locally before and after the fix so you can confirm the fix works in your environment.
+- Report the verification outcome (pass/fail and any relevant output).
+
+### Avoid
+
+- Fixing from CI log text alone without running the failing command locally.
+- Assuming a one-line change will fix the issue without re-running the check.
+- Claiming the fix works without having run the verification command.
+
+## Examples
+
+### Prefer
+
+- CI failed: `make lint` → run `make lint` (or `cd used-car-bill-of-sale && pnpm run lint`) locally → see same ESLint error → fix the file → run again → report "lint passes."
+- User reports test failure in `tests/api/foo.test.ts` → run the same test command locally → reproduce → fix → run tests again → report result.
+
+### Avoid
+
+- Reading "Error: 5:33 space-before-function-paren" in CI log, editing the file, and saying "fixed" without running `pnpm run lint` (or the project’s lint command) locally first.
+
+## Related Artifacts
+
+- [Verify-Before-Done Rule](.cursor/rules/meta/verify-before-done.mdc) – Run verification and report before marking done
+- [Self-Improvement Rule](.cursor/rules/self-improvement.mdc) – Verify assumptions before suggesting
+- [AGENTS.md](AGENTS.md) – Project verification and pre-commit
