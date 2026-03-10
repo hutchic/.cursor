@@ -207,6 +207,7 @@ This repository includes meta processes for self-improvement:
 - `/process-chat` - Analyze AI chat conversations for patterns
 - `/create-artifact` - Interactively create artifacts from patterns
 - `/shipit` - Stage, commit (with pre-commit), push, open or update PR
+- `/land-the-plane` - Wrap up and ship: sync taskmaster/beads (if in use), quality gates, deslop, then shipit
 - `/deslop` - Remove AI-generated slop from branch (diff vs main): extra comments, defensive checks, `any` casts, inconsistent style
 - `/update-cross-references` - Maintain cross-references
 - `/validate-organization` - Validate repository organization
@@ -218,6 +219,7 @@ This repository includes meta processes for self-improvement:
 - `pattern-extraction` - Extract reusable patterns
 - `artifact-creation` - Guide artifact creation
 - `cross-reference-maintenance` - Maintain cross-references
+- `land-the-plane` - Finish and ship: sync taskmaster/beads (if in use), quality gates, deslop, then shipit
 - `find-skills` - Discover and install skills from [skills.sh](https://skills.sh/) when users ask "find a skill for X" or want to extend capabilities; uses `npx skills find` and `npx skills add`
 
 ### Meta Subagents

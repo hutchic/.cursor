@@ -17,7 +17,7 @@ Run the full flow: ensure we're on a feature/bug branch (create one if on mainli
 
 3. **Commit**: For each staged group, use the [terse-semantic-commits](.cursor/skills/git/terse-semantic-commits/SKILL.md) skill to produce the commit message. Run `pre-commit run --all-files` (fix any failures), then `git commit -m "..."` (do not use `--trailer`). If the commit times out because the git hook runs a long test suite, retry with an extended timeout (e.g. 10 minutes); never use `--no-verify`. See [Commit Retry on Hook Timeout rule](.cursor/rules/meta/commit-retry-on-hook-timeout.mdc). Repeat if multiple groups were chosen.
 
-4. **Push**: Push the current branch: `git push -u origin <branch>` on first push, otherwise `git push`. If push is rejected (e.g. remote has new commits), pull or rebase as needed, then push again.
+4. **Push**: Push the current branch: `git push -u origin <branch>` on first push, otherwise `git push`. If push is rejected (e.g. remote has new commits), use [rebase-onto-main](.cursor/commands/rebase-onto-main.md) to rebase onto origin/main and resolve conflicts, then push (or pull/rebase as appropriate).
 
 5. **PR**: Use the [open-pr](.cursor/skills/git/open-pr/SKILL.md) skill: if no PR exists for this branch, create one with a terse semantic title and body from the project template; if a PR already exists, ensure the description (and title if needed) is up to date.
 
@@ -40,6 +40,7 @@ Optional context after the command to guide staging:
 
 ## Related Artifacts
 
+- [Land the Plane Command](.cursor/commands/land-the-plane.md) – Full wrap-up workflow (tasks, quality, deslop, then shipit)
 - [Ensure Feature Branch Skill](.cursor/skills/git/ensure-feature-branch/SKILL.md)
 - [Stage Related Files Skill](.cursor/skills/git/stage-related-files/SKILL.md)
 - [Terse Semantic Commits Skill](.cursor/skills/git/terse-semantic-commits/SKILL.md)

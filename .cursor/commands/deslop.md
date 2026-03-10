@@ -32,5 +32,6 @@ Check the diff against main and remove AI-generated slop introduced in this bran
 
 ## Related Artifacts
 
+- [Land the Plane Command](.cursor/commands/land-the-plane.md) – Full wrap-up workflow (tasks, quality, deslop, then shipit)
 - [Self-Improvement Rule](.cursor/rules/self-improvement.mdc) – Code quality and learning from mistakes
 - [Cursor Commands Documentation](docs/cursor-commands.md)
