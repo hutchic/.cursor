@@ -25,6 +25,7 @@ These rules define how to organize, reference, document, and create artifacts (a
 | `.cursor/rules/meta/documentation.mdc` | Documentation standards |
 | `.cursor/rules/meta/artifact-creation.mdc` | When to create rule/skill/command/subagent/hooks |
 | `.cursor/rules/meta/automation-decomposition.mdc` | Decompose automations into skills, then commands |
+| `.cursor/rules/meta/database-single-source-of-truth.mdc` | Keep runtime/tests on one canonical DB source and one canonical seed path |
 
 **Optional** (product/design guidance, not required for self-improvement):
 
