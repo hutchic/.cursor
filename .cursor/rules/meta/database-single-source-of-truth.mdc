@@ -1,0 +1,77 @@
+# Database Single Source of Truth
+
+When working on data modeling, fixtures, seeds, migrations, or test data, default to one canonical database path that both runtime and tests use.
+
+## When This Applies
+
+- Any work touching SQL migrations, schema design, or seed data
+- Any request to add or modify test/mock/demo data
+- Any change where runtime and tests both depend on DB-backed records
+- Any refactor removing TS/JSON fixture catalogs
+
+## Core Principles
+
+### 1) One Canonical Read Path
+
+- Runtime and tests must read from the same canonical tables/views.
+- Do not create parallel TS catalogs for data already represented in DB rows.
+- If API returns DB-backed objects, tests should validate against those same DB objects.
+
+### 2) One Canonical Write Path
+
+- Canonical data should be authored and seeded through migrations (or migration-owned SQL scripts).
+- Avoid seeding the same canonical dataset in multiple ways (TS constants + SQL + ad hoc script).
+- If a generator input exists (for example JSON), it must be clearly non-runtime and have a single deterministic export path.
+
+### 3) Reuse Before Creation
+
+- Before creating new table/view/function/trigger, prove why existing schema objects cannot satisfy the requirement.
+- Prefer extending existing domain objects over introducing new "helper" schema for implementation convenience.
+- New objects must be justified by a concrete domain need, not by temporary fixture mechanics.
+
+### 4) Domain-First Naming
+
+- Canonical schema object names should reflect domain meaning.
+- Avoid implementation-detail naming in canonical objects (`fixture`, `mock`, `testdata`, etc.) unless the object is explicitly ephemeral and non-canonical.
+- If migration compatibility requires temporary aliases, remove them in a follow-up migration and document the deprecation path.
+
+## Implementation Guidelines
+
+When implementing DB/data changes, follow this order:
+
+1. Identify the canonical runtime read path.
+2. Confirm tests can read from that same path.
+3. Verify existing schema sufficiency before adding objects.
+4. Implement migration changes for canonical data only.
+5. Remove duplicated seed/catalog sources (TS constants, stale snapshots, duplicate scripts).
+6. Verify runtime + tests both pass using the same canonical DB path.
+
+## Acceptance Checklist
+
+- [ ] Runtime and tests read the same canonical tables/views
+- [ ] No duplicate canonical seeding path introduced
+- [ ] New schema objects (if any) justified with reuse-first analysis
+- [ ] Canonical object names are domain-first, not implementation-first
+- [ ] Temporary compatibility objects are documented and scheduled for removal
+
+## Prefer / Avoid
+
+### Prefer
+
+- "Seed canonical rows in migration; endpoint and tests query same table/view."
+- "Reuse existing domain table and add one column/index needed for behavior."
+
+### Avoid
+
+- "Keep runtime data in DB, but maintain a second TS fixture list for tests."
+- "Create new schema named by implementation detail when existing domain objects can serve."
+- "Seed identical canonical data via multiple independent scripts."
+
+## Related Artifacts
+
+- [MVP-First Rule](.cursor/rules/meta/mvp-first.mdc)
+- [YAGNI Rule](.cursor/rules/meta/yagni.mdc)
+- [Verify-Before-Done Rule](.cursor/rules/meta/verify-before-done.mdc)
+- [Artifact Creation Rule](.cursor/rules/meta/artifact-creation.mdc)
+- [Documentation Rule](.cursor/rules/meta/documentation.mdc)
+- [Organization Rule](.cursor/rules/meta/organization.mdc)
