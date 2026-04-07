@@ -83,6 +83,7 @@ Rules that guide the self-improvement process (always applied):
 - `documentation` - Documentation standards
 - `artifact-creation` - Decision framework for creating artifacts
 - `automation-decomposition` - Decompose automations into discrete skills, then package into commands
+- `database-single-source-of-truth` - Keep runtime/tests on one canonical DB path with one canonical seed path
 
 ### Meta Subagents
 
@@ -122,7 +123,7 @@ The system can analyze conversations, extract patterns, and create new artifacts
 
 - `.cursor/` - All Cursor artifacts (used directly by Cursor IDE)
   - `rules/` - Cursor rules (see [docs/cursor-rules.md](docs/cursor-rules.md))
-    - `meta/` - Meta rules for self-improvement (organization, cross-referencing, documentation, artifact-creation, automation-decomposition)
+    - `meta/` - Meta rules for self-improvement (organization, cross-referencing, documentation, artifact-creation, automation-decomposition, database-single-source-of-truth)
     - `organization/` - Organization-specific rules
     - `hello-world.mdc` - Example rule demonstrating rule structure
     - `self-improvement.mdc` - Self-improvement guidance
